@@ -1,0 +1,7 @@
+SELECT id,
+       password,
+       created_at,
+       updated_at
+  FROM users;
+  
+DELETE FROM users WHERE id = 'shan1';
