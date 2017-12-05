@@ -2,11 +2,13 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
-const DbEngine = require("../test/helpers/dbEngine");
+const { dbEngine } = require("../test/helpers");
+const { resetData } = dbEngine;
 
 try {
-  const engine = new DbEngine();
-  engine.resetData();
+	if (process.env.NODE_ENV !== "test") {
+		resetData();
+	}
 } catch (err) {
   console.log("Error\n", err);
 }
@@ -16,8 +18,14 @@ const app = express();
 
 // middlewares
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(morgan("dev"));
+
+app.use(morgan("dev", {
+	skip: (req, res) => {
+		return process.env.NODE_ENV === "test";
+	}
+}));
 
 // routes
 app.use(routes);
@@ -26,3 +34,6 @@ app.use(routes);
 app.listen(port, () => {
   console.log("listening on port: ", port);
 });
+
+
+module.exports = app;

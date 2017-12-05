@@ -22,7 +22,7 @@ module.exports = {
       // gives no of rows here incase of sqlite3
       await knex("users").insert({ id, password });
 
-      const token = signToken(id, password);
+      const token = signToken(id);
 
       res.status(200).json({ token });
     } catch (err) {
@@ -40,8 +40,34 @@ module.exports = {
 
   signin: async (req, res) => {
     // eslint-disable-next-line
-    const { user_id, password } = req.value.body;
+    const { id, password } = req.value.body;
+    let user = [];
 
-    res.send("Logged in");
+    const sendFailureResponse = () => res.status(200).json({ 
+      token: "", 
+      status: "Server error please try again later.", 
+      errorCode: "AUT02"
+    });
+
+    try {
+      user = await knex
+        .select()
+        .from("users")
+        .where({ id, password });
+    } catch (err) {
+      return sendFailureResponse();
+    };
+
+    if (user.length !== 1) {
+      return sendFailureResponse();
+    }
+
+    const token = signToken(id);
+
+    return res.status(200).json({ 
+      token, 
+      status: "SUCCESS", 
+      errorCode: "0"
+    });
   },
 };

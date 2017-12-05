@@ -1,67 +1,68 @@
 const knex = require("../../db/knex");
 
+const { getJsonResponse, getJsonErrorResponse, FAILED, SUCCESS } = require("../helpers/response_object");
+
 module.exports = {
   getAllProducts: async (req, res) => {
-    knex
-      .select()
-      .from("products")
-      .then(todos => {
-        res.send(todos);
-      })
-      .catch(err => {
-        res.end(`Got an error. Couldn't get producst \n ${err}`);
-      });
+    try {
+      const products = await  knex
+        .select()
+        .from("products");
+      res.send(getJsonResponse(products));
+    } catch (err) {
+      res.send(getJsonErrorResponse("CP01"));
+    }
   },
   deleteProduct: async (req, res) => {
-    knex("products")
-      .where({
-        id: req.params.id,
-      })
-      .del()
-      .then(products => {
-        res.send(`No of products deleted :- ${products}`);
-      })
-      .catch(err => {
-        res.end(
-          `Got an error. Couldn't delete the product. The err is ${JSON.stringify(
-            err,
-          )}`,
-        );
-      });
+    try {
+      const noOfRowsDeleted = await knex("products")
+        .where("id", "=", req.params.id)
+        .delete();
+      res.send(getJsonResponse(noOfRowsDeleted));
+    } catch (err) {
+      res.send(getJsonErrorResponse("CP02"));
+    }      
   },
   getProductById: async (req, res) => {
-    knex
-      .select()
-      .from("products")
-      .where({
-        id: req.params.id,
-      })
-      .then(products => {
-        res.send(products);
-      })
-      .catch(err => {
-        res.end(`Got an error. Couldn't get the required product \n ${err}`);
-      });
+    try {
+      const product = await knex
+        .select()
+        .from("products")
+        .where({
+          id: req.params.id,
+        });
+      res.send(getJsonResponse(product));
+    } catch (err) {
+      res.send(getJsonErrorResponse("CP03"));
+    }
   },
   createProduct: async (req, res) => {
     const product = req.body;
 
-    knex("products")
-      .insert(product)
-      .then(() => {
-        knex
-          .select()
-          .from("products")
-          .then(products => {
-            res.send(products);
-          });
-      })
-      .catch(err => {
-        res.end(
-          `Got an error. Couldn't create the product. The error is ${JSON.stringify(
-            err,
-          )}`,
-        );
-      });
+    try {
+      await knex("products")
+        .insert(product);
+
+      const result = await knex("products")
+        .count('id as rows');
+
+      const noOfRowsAvailable = result[0].rows;
+
+      res.send(getJsonResponse(noOfRowsAvailable))
+    } catch (err) {
+      res.send(getJsonErrorResponse("CP04"));
+    }
   },
+  updateProduct: async (req, res) => {
+    const product = req.body;
+    
+    try {
+      const noOfRowsAffected = await knex("products")
+        .where("id", "=", req.params.id)
+        .update(product);
+      res.send(getJsonResponse(noOfRowsAffected));
+    } catch (err) {
+      res.send(getJsonErrorResponse("CP05"));
+    }
+  }
 };

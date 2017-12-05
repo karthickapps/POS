@@ -1,3 +1,15 @@
+
+Singleton pattern
+-----------------
+
+http://blog.mgechev.com/2014/04/16/singleton-in-javascript/
+
+
+
+
+Queries
+-------
+
 SELECT id,
        password,
        created_at,

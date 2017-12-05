@@ -14,7 +14,6 @@ router.use("/api", auth);
 // this middleware and hence needs authentication token.
 
 router.use((req, res, next) => {
-  console.log("Authentication middleware");
   passport.authenticate("jwt", { session: false })(req, res, next);
 });
 

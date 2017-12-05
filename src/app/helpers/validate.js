@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 module.exports = {
   // eslint-disable-next-line
-  validateBody: schema => (req, res, next) => {
+  validateUserInfo: schema => (req, res, next) => {
     const result = Joi.validate(req.body, schema);
     if (result.error) {
       return res.status(400).json(result.error);

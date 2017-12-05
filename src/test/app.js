@@ -1,27 +1,21 @@
-const DbEngine = require("./helpers/dbEngine");
 
-async function main() {
-  try {
-    const product = {
-      id: "crayons",
-      product_type: "writing",
-      title: "crayons",
-      user_id: 1,
-    };
-    const engine = new DbEngine();
-    engine.setTable("products");
+// During the test the env variable is set to test
+process.env.NODE_ENV = 'test';
 
-    await engine.insert(product);
+const { server, moq, helpers, setToken } = require("./common").instance;
 
-    const allProducts = await engine.getAll();
+// parent block
+describe('Accounts book API testing.', function () {
+	// Before each test we initialize with the dummy data the database
+  beforeEach(async () => { 
+  	
+  	await helpers.dbEngine.resetData();
+  	
+  	const token = await helpers.auth.signin(moq.validUser);
 
-    const rowsAffected = await engine.deleteAll();
+  	setToken(token);
+  });
 
-    console.log("allProducts => \n", allProducts);
-    console.log("rowsAffected (deleteAll) => \n", rowsAffected);
-  } catch (err) {
-    console.log("Error (app.js) :\n", err);
-  }
-}
+  require("./routes-tests");
 
-main();
+});

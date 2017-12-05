@@ -6,34 +6,36 @@ const Exception = message => {
   this.message = message;
 };
 
+const resetData = async function() {
+  try {
+    await knex.migrate.rollback();
+    await knex.migrate.latest();
+    await knex.seed.run();
+    return true;
+  } catch (err) {
+    console.log("Eror (resetData) :\n", err);
+  }
+  return false;
+}
+
 // eslint-disable-next-line
-const DbEngine = (function() {
+const SqlConnect = (function() {
   // eslint-disable-next-line
-  const DbEngine = function() {};
+  const SqlConnect = function() {};
 
   // eslint-disable-next-line
   let _tableName = null;
 
   // eslint-disable-next-line
-  DbEngine.prototype.resetData = async function() {
-    try {
-      await knex.migrate.rollback();
-      await knex.migrate.latest();
-      await knex.seed.run();
-
-      console.log("Data got restored to initial values.");
-    } catch (err) {
-      console.log("Eror (resetData) :\n", err);
-    }
-  };
+  SqlConnect.prototype.resetData = resetData;
 
   // eslint-disable-next-line
-  DbEngine.prototype.setTable = function(tableName) {
+  SqlConnect.prototype.setTable = function(tableName) {
     _tableName = tableName;
   };
 
   // eslint-disable-next-line
-  DbEngine.prototype.insert = async function(row) {
+  SqlConnect.prototype.insert = async function(row) {
     try {
       if (Array.isArray(row)) {
         throw new Exception(
@@ -43,12 +45,12 @@ const DbEngine = (function() {
 
       await knex(_tableName).insert(row);
     } catch (err) {
-      console.log(`Error (DbEngine.insert) => ${_tableName} :\n`, err);
+      console.log(`Error (SqlConnect.insert) => ${_tableName} :\n`, err);
     }
   };
 
   // eslint-disable-next-line
-  DbEngine.prototype.insertMultiple = async function(rows) {
+  SqlConnect.prototype.insertMultiple = async function(rows) {
     try {
       if (!Array.isArray(rows)) {
         throw new Exception("The input should be an array of JSON doc.");
@@ -56,22 +58,22 @@ const DbEngine = (function() {
 
       await knex(_tableName).insert(rows);
     } catch (err) {
-      console.log(`Error (DbEngine.insert) => ${_tableName} :\n`, err);
+      console.log(`Error (SqlConnect.insert) => ${_tableName} :\n`, err);
     }
   };
 
   // eslint-disable-next-line
-  DbEngine.prototype.getAll = async function() {
+  SqlConnect.prototype.getAll = async function() {
     try {
       const rows = await knex.select().from(_tableName);
       return rows;
     } catch (err) {
-      console.log(`Error (DbEngine.getAll) => ${_tableName} :\n`, err);
+      console.log(`Error (SqlConnect.getAll) => ${_tableName} :\n`, err);
     }
   };
 
   // eslint-disable-next-line
-  DbEngine.prototype.query = async function(query) {
+  SqlConnect.prototype.query = async function(query) {
     try {
       const row = await knex
         .select()
@@ -80,21 +82,21 @@ const DbEngine = (function() {
 
       return row;
     } catch (err) {
-      console.log(`Error (DbEngine.query) => ${_tableName} :\n`, err);
+      console.log(`Error (SqlConnect.query) => ${_tableName} :\n`, err);
     }
   };
 
   // eslint-disable-next-line
-  DbEngine.prototype.deleteAll = async function() {
+  SqlConnect.prototype.deleteAll = async function() {
     try {
       const noOfRowsAffected = await knex(_tableName).delete();
       return noOfRowsAffected;
     } catch (err) {
-      console.log(`Error (DbEngine.delete) => ${_tableName} :\n`, err);
+      console.log(`Error (SqlConnect.delete) => ${_tableName} :\n`, err);
     }
   };
 
-  return DbEngine;
+  return SqlConnect;
 })();
 
-module.exports = DbEngine;
+module.exports = { SqlConnect, resetData };

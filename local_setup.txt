@@ -16,7 +16,7 @@ alias node="~/Desktop/shan_scribble/tools/node/bin/node";
 
 alias npm="node ~/Desktop/shan_scribble/tools/node/lib/node_modules/npm/bin/npm-cli.js";
 
-alias api="cd ~/Desktop/shan_scribble/accounts-book/src/api";
+alias api="cd ~/Desktop/shan_scribble/accounts-book/src";
 alias ui="cd ~/Desktop/shan_scribble/accounts-book/src/ui";
 alias tools="cd ~/Desktop/shan_scribble/tools/cli";
 alias knex="node /home/interview/Desktop/shan_scribble/tools/cli/node_modules/knex/bin/cli.js";
