@@ -1,21 +1,36 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import PropTypes from "prop-types";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+import ProtectedRoute from "./components/routes/ProtectedRoute";
+import Home from "./components/Home";
+import Products from "./components/Products";
+import NotFound from "./components/NotFound";
+
+import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
+
+const App = ({ location }) => (
+	<div className="ui container" style={{ marginTop: "25px" }}>
+    <Router>
+			<Switch>
+				<Route path="/" exact component={Home} />
+				<Switch>
+					<ProtectedRoute 
+			      location={location}
+			      path="/products"
+			      exact
+			      component={Products}
+			    />
+					<Route exact={false} component={NotFound} />
+				</Switch>			
+			</Switch>
+		</Router>
+	</div>
+);
+
+App.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired
+  }).isRequired  
+};
 
 export default App;

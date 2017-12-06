@@ -16,12 +16,14 @@ alias node="~/Desktop/shan_scribble/tools/node/bin/node";
 
 alias npm="node ~/Desktop/shan_scribble/tools/node/lib/node_modules/npm/bin/npm-cli.js";
 
-alias api="cd ~/Desktop/shan_scribble/accounts-book/src";
-alias ui="cd ~/Desktop/shan_scribble/accounts-book/src/ui";
+alias api="cd ~/Desktop/shan_scribble/fullstackapp/master/accounts-book/api";
+alias ui="cd ~/Desktop/shan_scribble/fullstackapp/master/accounts-book/ui/src";
 alias tools="cd ~/Desktop/shan_scribble/tools/cli";
 alias knex="node /home/interview/Desktop/shan_scribble/tools/cli/node_modules/knex/bin/cli.js";
 
 alias node-pre-gyp="node ~/Desktop/shan_scribble/tools/cli/node_modules/node-pre-gyp/bin/node-pre-gyp";
+
+alias install="npm install";
 
 init();
 
