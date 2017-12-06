@@ -3,22 +3,22 @@ import { createLogger } from "redux-logger";
 import reducers from "./reducers";
 
 const persistedState = sessionStorage.getItem("reduxState")
-	? JSON.parse(sessionStorage.getItem("reduxState"))
-	: {};
+  ? JSON.parse(sessionStorage.getItem("reduxState"))
+  : {};
 
 const configureStore = () => {
-	const middlewares = [];
-	if (process.env.REACT_APP_ACC_BOOK !== "production") {
-		middlewares.push(createLogger());
-	}
+  const middlewares = [];
+  if (process.env.REACT_APP_ACC_BOOK !== "production") {
+    middlewares.push(createLogger());
+  }
 
-	return createStore(reducers, persistedState, applyMiddleware(...middlewares));
+  return createStore(reducers, persistedState, applyMiddleware(...middlewares));
 };
 
 const store = configureStore();
 
 store.subscribe(() => {
-	sessionStorage.setItem("reduxState", JSON.stringify(store.getState()));
+  sessionStorage.setItem("reduxState", JSON.stringify(store.getState()));
 });
 
 export default store;

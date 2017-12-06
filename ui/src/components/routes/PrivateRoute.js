@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Route, Redirect, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 class PrivateRoute extends Component {
   componentWillMount() {
@@ -26,20 +26,21 @@ class PrivateRoute extends Component {
       toRender = this.props.children;
     }
 
-    return <div>{toRender}</div>
+    return <div>{toRender}</div>;
   }
 }
 
 PrivateRoute.propTypes = {
+  // eslint-disable-next-line
   location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
+    pathname: PropTypes.string.isRequired,
   }).isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: true
+    isAuthenticated: !!state.user.token,
   };
 }
 
