@@ -3,6 +3,11 @@ const JWT = require("jsonwebtoken");
 const knex = require("../../db/knex");
 const { JWT_SECRET } = require("../configuration");
 
+const {
+  getJsonResponse,
+  getJsonErrorResponse,
+} = require("../helpers/response_object");
+
 const signToken = id =>
   JWT.sign(
     {
@@ -24,16 +29,20 @@ module.exports = {
 
       const token = signToken(id);
 
-      res.status(200).json({ token });
+      res.send(getJsonResponse({ token }));
     } catch (err) {
       if (err.errno === 19) {
-        res.send("Username already exists. Please use different name.");
-      } else {
-        res.send(
-          `Got an error. Couldn't create the user. The error is ${JSON.stringify(
-            err,
-          )}`,
+        const errorResponse = getJsonErrorResponse(
+          "CA01", 
+          "Username already exists. Please use different name."
         );
+        res.send(errorResponse);
+      } else {
+        const errorResponse = getJsonErrorResponse(
+          "CA01-B", 
+          "Internal error plase try after sometime."
+        );
+        res.send(errorResponse);
       }
     }
   },
@@ -43,31 +52,29 @@ module.exports = {
     const { id, password } = req.value.body;
     let user = [];
 
-    const sendFailureResponse = () => res.status(200).json({ 
-      token: "", 
-      status: "Server error please try again later.", 
-      errorCode: "AUT02"
-    });
-
     try {
       user = await knex
         .select()
         .from("users")
         .where({ id, password });
     } catch (err) {
-      return sendFailureResponse();
+      const errorResponse = getJsonErrorResponse(
+          "CA02-A", 
+          "Internal error plase try after sometime."
+      );
+      return res.send(errorResponse);
     };
 
     if (user.length !== 1) {
-      return sendFailureResponse();
+      const errorResponse = getJsonErrorResponse(
+          "CA02-B",
+          "Invalid credentials. Please try again"
+      );
+      return res.send(errorResponse);
     }
 
     const token = signToken(id);
 
-    return res.status(200).json({ 
-      token, 
-      status: "SUCCESS", 
-      errorCode: "0"
-    });
-  },
+    return res.send(getJsonResponse({ token }));
+  }
 };

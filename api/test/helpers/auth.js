@@ -7,30 +7,22 @@ chai.use(chaiHttp);
 
 module.exports = {
 	signin: async (user) => {
-		try {
-			const res = await chai
+		const res = await chai
 			  .request(tokenUrl)
 			  .post("/")
 			  .type("form")
 			  .send(user);
 
-			return res.body.token || null;
-		} catch (err) {
-			console.log("Error (helper.signin)\n", err);
-		}
+			return res.body.payload.token;
 	},
 
 	signup: async (user) => {
-		try {
-			const res = await chai
+		const res = await chai
 			  .request(apiUrl)
 			  .post("/signup")
 			  .type("form")
 			  .send(user);
-
-			console.log(res);
-		} catch (err) {
-			console.log("Error (helper.signup\n", err);
-		}
+			
+		return res.body.payload.token;
 	}
 }

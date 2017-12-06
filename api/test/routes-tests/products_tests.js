@@ -1,8 +1,7 @@
 const { chai, server, getToken, fetch, moq } = require("../common").instance;
 
-describe("Products route", function () {
-	describe("GET products/", function () {
-		it('it should throw unauthorized exception', async function () {
+describe("Products route (/api/products)", function () {
+	it('it should throw unauthorized exception', async function () {
 	    let response;
 	    try {
 	    	response = await chai.request(server)
@@ -51,5 +50,4 @@ describe("Products route", function () {
 
 	    chai.expect(response.body.payload).to.have.lengthOf(4);	
 	  });
-	});
 });

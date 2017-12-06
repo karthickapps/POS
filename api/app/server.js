@@ -21,11 +21,14 @@ app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use(morgan("dev", {
-	skip: (req, res) => {
-		return process.env.NODE_ENV === "test";
-	}
-}));
+app.use(
+	morgan("dev", {
+		// eslint-disable-next-line
+		skip: (req, res) => {
+			return process.env.NODE_ENV === "test";
+		}
+	})
+);
 
 // routes
 app.use(routes);

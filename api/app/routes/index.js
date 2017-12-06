@@ -3,7 +3,7 @@ const express = require("express");
 
 // eslint-disable-next-line
 const passportConf = require("../passport");
-const products = require("./products");
+const crud = require("./crud");
 const auth = require("./auth");
 
 const router = express.Router();
@@ -17,6 +17,7 @@ router.use((req, res, next) => {
   passport.authenticate("jwt", { session: false })(req, res, next);
 });
 
-router.use("/api", products);
+// All routes below this needs token for authentication.
+router.use("/api", crud);
 
 module.exports = router;
