@@ -1,0 +1,13 @@
+#login-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: calc(90vh);
+}
+
+#login {
+  min-width: 400px;
+  width: auto;
+  height: auto;
+  margin: auto;
+}

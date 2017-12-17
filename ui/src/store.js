@@ -1,3 +1,4 @@
+import thunk from "redux-thunk";
 import { createStore, applyMiddleware } from "redux";
 import { createLogger } from "redux-logger";
 import reducers from "./reducers";
@@ -11,6 +12,7 @@ const configureStore = () => {
   if (process.env.REACT_APP_ACC_BOOK !== "production") {
     middlewares.push(createLogger());
   }
+  middlewares.push(thunk);
 
   return createStore(reducers, persistedState, applyMiddleware(...middlewares));
 };

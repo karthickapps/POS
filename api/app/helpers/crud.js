@@ -83,7 +83,7 @@ class CrudRoutes {
   }
 }
 
-const getCrudRoutes = function (routeName, tableName) {
+const getCrudRoutes = (routeName, tableName) => {
   const crudRoutes = new CrudRoutes(tableName, routeName);
 
   const router = express.Router();
@@ -100,6 +100,5 @@ const getCrudRoutes = function (routeName, tableName) {
 
   return router;
 };
-
 
 module.exports = getCrudRoutes;

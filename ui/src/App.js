@@ -4,15 +4,15 @@ import PropTypes from "prop-types";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 
 import ProtectedRoute from "./components/routes/ProtectedRoute";
-import Home from "./components/Home";
-import Products from "./components/Products";
-import NotFound from "./components/NotFound";
+import LoginPage from "./components/login/LoginPage";
+import Products from "./components/products/Products";
+import NotFound from "./components/exceptions/NotFound";
 
 const App = ({ location }) => (
-  <div className="ui container" style={{ marginTop: "25px" }}>
+  <div>
     <Router>
       <Switch>
-        <Route path="/" exact component={Home} />
+        <Route path="/" exact component={LoginPage} />
         <Switch>
           <ProtectedRoute
             location={location}

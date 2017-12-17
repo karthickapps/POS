@@ -6,6 +6,7 @@ const Exception = message => {
   this.message = message;
 };
 
+// eslint-disable-next-line
 const resetData = async function() {
   try {
     await knex.migrate.rollback();
@@ -16,7 +17,7 @@ const resetData = async function() {
     console.log("Eror (resetData) :\n", err);
   }
   return false;
-}
+};
 
 // eslint-disable-next-line
 const SqlConnect = (function() {

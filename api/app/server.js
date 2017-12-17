@@ -3,12 +3,13 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const routes = require("./routes");
 const { dbEngine } = require("../test/helpers");
+
 const { resetData } = dbEngine;
 
 try {
-	if (process.env.NODE_ENV !== "test") {
-		resetData();
-	}
+  if (process.env.NODE_ENV !== "test") {
+    resetData();
+  }
 } catch (err) {
   console.log("Error\n", err);
 }
@@ -22,12 +23,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(
-	morgan("dev", {
-		// eslint-disable-next-line
-		skip: (req, res) => {
-			return process.env.NODE_ENV === "test";
-		}
-	})
+  morgan("dev", {
+    // eslint-disable-next-line
+    skip: (req, res) => {
+      return process.env.NODE_ENV === "test";
+    },
+  }),
 );
 
 // routes
@@ -37,6 +38,5 @@ app.use(routes);
 app.listen(port, () => {
   console.log("listening on port: ", port);
 });
-
 
 module.exports = app;
