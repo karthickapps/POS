@@ -1,11 +1,21 @@
 import React, { Component } from "react";
 import { Menu } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { logout } from "../../../actions/user";
+
 import "./header.css";
 
-export default class Header extends Component {
+class Header extends Component {
   state = {};
 
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+  onSettings = (e, { name }) => {
+    this.setState({ activeItem: name });
+  };
+
+  onLogout = (e, { name }) => {
+    this.setState({ activeItem: name });
+    this.props.logout();
+  };
 
   render() {
     const { activeItem } = this.state;
@@ -18,17 +28,17 @@ export default class Header extends Component {
 
         <Menu.Menu position="right">
           <Menu.Item
-            name="signup"
-            active={activeItem === "signup"}
-            onClick={this.handleItemClick}
+            name="settings"
+            active={activeItem === "settings"}
+            onClick={this.onSettings}
           >
             Settings
           </Menu.Item>
 
           <Menu.Item
-            name="help"
-            active={activeItem === "help"}
-            onClick={this.handleItemClick}
+            name="logout"
+            active={activeItem === "logout"}
+            onClick={this.onLogout}
           >
             Sign out
           </Menu.Item>
@@ -37,3 +47,5 @@ export default class Header extends Component {
     );
   }
 }
+
+export default connect(null, { logout })(Header);

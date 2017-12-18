@@ -5,7 +5,7 @@ import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import LoginPage from "./components/login/LoginPage";
-import Products from "./components/products/Products";
+import Home from "./components/home/Home";
 import NotFound from "./components/exceptions/NotFound";
 
 const App = ({ location }) => (
@@ -16,9 +16,9 @@ const App = ({ location }) => (
         <Switch>
           <ProtectedRoute
             location={location}
-            path="/products"
+            path="/home"
             exact
-            component={Products}
+            component={Home}
           />
           <Route exact={false} component={NotFound} />
         </Switch>
@@ -29,8 +29,8 @@ const App = ({ location }) => (
 
 App.propTypes = {
   location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
-  }).isRequired,
+    pathname: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export default App;

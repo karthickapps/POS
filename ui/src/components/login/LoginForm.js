@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { Form, Segment, Button } from "semantic-ui-react";
+import { Form, Segment, Button, Message } from "semantic-ui-react";
 import "./login.css";
 
 class LoginForm extends Component {
   state = {
     data: {
       id: "",
-      password: "",
+      password: ""
     },
     errors: {},
-    loading: false,
+    loading: false
   };
 
   onChange = e => {
     this.setState({
-      data: { ...this.state.data, [e.target.name]: e.target.value },
+      data: { ...this.state.data, [e.target.name]: e.target.value }
     });
   };
 
@@ -30,12 +30,17 @@ class LoginForm extends Component {
       this.setState({ loading: true });
       this.props.submit(this.state.data).catch(() => {
         this.setState({
-          errors: { response: "Invalid credentials" },
-          loading: false,
+          errors: { global: "Invalid credentials, please try again." },
+          loading: false
         });
+        this.clear();
       });
+    } else {
+      this.clear();
     }
   };
+
+  clear = () => this.setState({ data: { id: "", password: "" } });
 
   validate = data => {
     const errors = {};
@@ -55,6 +60,12 @@ class LoginForm extends Component {
           </Segment>
           <Segment attached>
             <Form size="small" onSubmit={this.onSubmit} loading={loading}>
+              {errors.global && (
+                <Message negative>
+                  <Message.Header>Something went wrong</Message.Header>
+                  <p>{errors.global}</p>
+                </Message>
+              )}
               <Form.Input
                 id="id"
                 name="id"
@@ -91,7 +102,7 @@ class LoginForm extends Component {
 }
 
 LoginForm.propTypes = {
-  submit: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired
 };
 
 export default LoginForm;
