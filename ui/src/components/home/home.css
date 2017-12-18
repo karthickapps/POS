@@ -1,4 +1,5 @@
 #container {
-  height: calc(100vh - 36px);
+  min-height: calc(100vh - 36px);
+  height: auto;
   padding-bottom: 0px;
 }

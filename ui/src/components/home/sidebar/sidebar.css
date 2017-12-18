@@ -1,8 +1,10 @@
 #menu {
-  height: calc(100vh - 50px);
+  min-height: calc(100vh - 50px);
+  height: auto;
   border-radius: 0px;
   box-shadow: none;
   background: #fafafa8f;
+  padding-bottom: 0px;
 }
 
 #menu:first-child {
