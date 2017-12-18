@@ -1,0 +1,36 @@
+#menu {
+  height: calc(100vh - 50px);
+  border-radius: 0px;
+  box-shadow: none;
+  background: #fafafa8f;
+}
+
+#menu:first-child {
+  padding-top: 10px;
+}
+
+#menu > .item {
+  padding: 1.3em 1.14285714em;
+}
+
+#menu > .active {
+  border-left: 7px solid #6335ca;
+  border-radius: 0px;
+  margin-left: -1px;
+  padding-left: 15px;
+}
+
+#menu > .active.item:hover {
+  background: #6335ca;
+  color: white;
+}
+
+#menu > .item > div > i.icon {
+  margin-right: 10px;
+  margin-left: -10px;
+  color: #464a4c;
+}
+
+#menu > .active.item:hover > div > i.icon {
+  color: white;
+}
