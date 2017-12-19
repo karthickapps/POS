@@ -5,7 +5,6 @@ import { withRouter } from "react-router-dom";
 
 class PrivateRoute extends Component {
   componentWillMount() {
-    console.log(this.props.history);
     this.validationCheck();
   }
 
@@ -33,14 +32,14 @@ class PrivateRoute extends Component {
 PrivateRoute.propTypes = {
   // eslint-disable-next-line
   location: PropTypes.shape({
-    pathname: PropTypes.string.isRequired,
+    pathname: PropTypes.string.isRequired
   }).isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state) {
   return {
-    isAuthenticated: !!state.user.token,
+    isAuthenticated: !!state.user.token
   };
 }
 

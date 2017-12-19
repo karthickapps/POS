@@ -1,19 +1,13 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { withRouter } from "react-router";
 import { Menu, Icon } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import "./sidebar.css";
 
 class Sidebar extends Component {
   state = {};
 
   handleItemClick = (e, { name }) => this.setState({ activeItem: name });
-
-  onProduct = (e, { name }) => {
-    this.handleItemClick(e, { name });
-    this.props.history.push("/products");
-    console.log("shaan");
-  };
 
   render() {
     const { activeItem } = this.state;
@@ -30,6 +24,7 @@ class Sidebar extends Component {
             Settings
           </div>
         </Menu.Item>
+
         <Menu.Item
           name="customers"
           active={activeItem === "customers"}
@@ -40,16 +35,20 @@ class Sidebar extends Component {
             Customers
           </div>
         </Menu.Item>
+
         <Menu.Item
+          as={Link}
+          to="/products"
           name="products"
           active={activeItem === "products"}
-          onClick={this.onProduct}
+          onClick={this.handleItemClick}
         >
           <div>
             <Icon name="currency" size="large" />
             Products
           </div>
         </Menu.Item>
+
         <Menu.Item
           name="pos"
           active={activeItem === "pos"}
@@ -64,11 +63,5 @@ class Sidebar extends Component {
     );
   }
 }
-
-Sidebar.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
-};
 
 export default withRouter(Sidebar);

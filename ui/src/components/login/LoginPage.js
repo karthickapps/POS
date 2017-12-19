@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import LoginForm from "./LoginForm";
 import { login } from "../../actions/user";
@@ -33,4 +34,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { login })(LoginPage);
+export default withRouter(connect(mapStateToProps, { login })(LoginPage));

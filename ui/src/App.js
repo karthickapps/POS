@@ -1,37 +1,23 @@
 import React from "react";
-// import PropTypes from "prop-types";
-
-import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
-
-import ProtectedRoute from "./components/routes/ProtectedRoute";
-import LoginPage from "./components/login/LoginPage";
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
 import Home from "./components/home/Home";
-import NotFound from "./components/exceptions/NotFound";
-import Products from "./components/products/Products";
+import LoginPage from "./components/login/LoginPage";
 
-const App = ({ location }) => (
-  <div>
-    <Router>
-      <Switch>
-        <Route path="/" exact component={LoginPage} />
-        <Switch>
-          <ProtectedRoute
-            location={location}
-            path="/home"
-            exact
-            component={Home}
-          />
-          <Route exact={false} component={NotFound} />
-        </Switch>
-      </Switch>
-    </Router>
-  </div>
-);
+const App = props => {
+  const checkForAuth = () => {
+    if (props.isLoggedIn) {
+      return <Home />;
+    }
+    return <LoginPage />;
+  };
+  return <div>{checkForAuth()}</div>;
+};
 
-// App.propTypes = {
-//   location: PropTypes.shape({
-//     pathname: PropTypes.string.isRequired
-//   }).isRequired
-// };
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: !!state.user.token
+  };
+}
 
-export default App;
+export default withRouter(connect(mapStateToProps, null)(App));
