@@ -15,8 +15,10 @@ const App = props => {
 };
 
 function mapStateToProps(state) {
+  const isLoggedIn = state.user !== undefined ? !!state.user.token : false;
+
   return {
-    isLoggedIn: !!state.user.token
+    isLoggedIn
   };
 }
 

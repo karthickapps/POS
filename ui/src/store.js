@@ -3,16 +3,18 @@ import { createStore, applyMiddleware } from "redux";
 import { createLogger } from "redux-logger";
 import reducers from "./reducers";
 
-const persistedState = sessionStorage.getItem("reduxState")
-  ? JSON.parse(sessionStorage.getItem("reduxState"))
+const persistedState = sessionStorage.getItem("appstate")
+  ? JSON.parse(sessionStorage.getItem("appstate"))
   : {};
 
 const configureStore = () => {
   const middlewares = [];
+
+  middlewares.push(thunk);
+
   if (process.env.REACT_APP_ACC_BOOK !== "production") {
     middlewares.push(createLogger());
   }
-  middlewares.push(thunk);
 
   return createStore(reducers, persistedState, applyMiddleware(...middlewares));
 };
@@ -20,7 +22,7 @@ const configureStore = () => {
 const store = configureStore();
 
 store.subscribe(() => {
-  sessionStorage.setItem("reduxState", JSON.stringify(store.getState()));
+  sessionStorage.setItem("appstate", JSON.stringify(store.getState()));
 });
 
 export default store;

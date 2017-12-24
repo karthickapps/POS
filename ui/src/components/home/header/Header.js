@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router";
 import { Menu } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { logout } from "../../../actions/user";
@@ -15,6 +16,7 @@ class Header extends Component {
   onLogout = (e, { name }) => {
     this.setState({ activeItem: name });
     this.props.logout();
+    this.props.history.push("/login");
   };
 
   render() {
@@ -48,4 +50,4 @@ class Header extends Component {
   }
 }
 
-export default connect(null, { logout })(Header);
+export default connect(null, { logout })(withRouter(Header));

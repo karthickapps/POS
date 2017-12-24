@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Segment } from "semantic-ui-react";
 import { withRouter, Switch, Route } from "react-router";
 
 import Header from "./header/Header";
@@ -17,12 +17,16 @@ class Home extends Component {
             <Grid.Column width={3} style={{ marginBottom: 0 }}>
               <Sidebar />
             </Grid.Column>
-            <Grid.Column width={13} style={{ marginBottom: 0 }}>
-              <div>
+            <Grid.Column
+              id="grid-wrapper"
+              width={13}
+              style={{ marginBottom: 0 }}
+            >
+              <Segment id="segment-container" color="violet">
                 <Switch>
                   <Route exact path="/products" component={Products} />
                 </Switch>
-              </div>
+              </Segment>
             </Grid.Column>
           </Grid.Row>
         </Grid>

@@ -1,4 +1,7 @@
 import axios from "axios";
+import setAuthorizationHeader from "../utils";
+
+setAuthorizationHeader(sessionStorage.getItem("token"));
 
 export default {
   user: {
@@ -12,5 +15,17 @@ export default {
           return token;
         }
       })
+  },
+  products: {
+    fetchAll: () =>
+      axios
+        .get("/api/products")
+        .then(res => {
+          console.log(res.data.payload);
+          return res.data.payload;
+        })
+        .catch(() => {
+          throw new { error: "Unable to fetch the products" }();
+        })
   }
 };

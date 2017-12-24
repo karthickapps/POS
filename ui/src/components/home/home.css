@@ -3,3 +3,24 @@
   height: auto;
   padding-bottom: 0px;
 }
+
+#grid-wrapper {
+  margin-top: 10px;
+  padding-left: 0px;
+}
+
+#segment-container {
+  margin-right: 10px;
+  border-radius: 0px;
+  min-height: calc(100vh - 60px);
+}
+
+.ui.grey.header {
+  color: #1b1c1d !important;
+  font-weight: lighter;
+  font-size: 10.5pt;
+}
+
+.ui.grey.dividing.header {
+  border-bottom: 0.5px solid #76767652;
+}

@@ -20,6 +20,7 @@ export const login = credentials => dispatch =>
   });
 
 export const logout = () => dispatch => {
+  sessionStorage.removeItem("token");
   setAuthorizationHeader();
   dispatch(userLoggedOut());
 };
