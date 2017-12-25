@@ -1,0 +1,17 @@
+.searchbar {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.ui.action.input.searchbar > .button,
+.ui.action.input.searchbar > .buttons > .button {
+  margin-right: 15px;
+}
+
+.ui.action.input.searchbar > input:focus {
+  border-color: #6335ca70;
+}
+
+.ui.action.input.searchbar:not([class*="left action"]) input:focus {
+  border-right-color: #6335ca70 !important;
+}

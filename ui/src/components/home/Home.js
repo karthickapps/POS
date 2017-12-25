@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Grid, Segment } from "semantic-ui-react";
-import { withRouter, Switch, Route } from "react-router";
+import { Switch, Route } from "react-router";
 
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
@@ -35,4 +35,4 @@ class Home extends Component {
   }
 }
 
-export default withRouter(Home);
+export default Home;

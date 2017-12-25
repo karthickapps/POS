@@ -12,22 +12,16 @@ class Sidebar extends Component {
   render() {
     const { activeItem } = this.state;
 
+    const isActive = name =>
+      activeItem === name || this.props.location.pathname === `/${name}`;
+
     return (
       <Menu fluid vertical id="menu">
         <Menu.Item
-          name="settings"
-          active={activeItem === "settings"}
-          onClick={this.handleItemClick}
-        >
-          <div>
-            <Icon name="settings" size="large" />
-            Settings
-          </div>
-        </Menu.Item>
-
-        <Menu.Item
+          as={Link}
+          to="/customers"
           name="customers"
-          active={activeItem === "customers"}
+          active={isActive("customers")}
           onClick={this.handleItemClick}
         >
           <div>
@@ -40,7 +34,7 @@ class Sidebar extends Component {
           as={Link}
           to="/products"
           name="products"
-          active={activeItem === "products"}
+          active={isActive("products")}
           onClick={this.handleItemClick}
         >
           <div>
@@ -50,8 +44,10 @@ class Sidebar extends Component {
         </Menu.Item>
 
         <Menu.Item
+          as={Link}
+          to="/pos"
           name="pos"
-          active={activeItem === "pos"}
+          active={isActive("pos")}
           onClick={this.handleItemClick}
         >
           <div>

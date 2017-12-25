@@ -20,10 +20,7 @@ export default {
     fetchAll: () =>
       axios
         .get("/api/products")
-        .then(res => {
-          console.log(res.data.payload);
-          return res.data.payload;
-        })
+        .then(res => res.data.payload)
         .catch(() => {
           throw new { error: "Unable to fetch the products" }();
         })
