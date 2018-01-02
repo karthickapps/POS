@@ -12,14 +12,14 @@
 }
 
 #menu > .item {
-  padding: 1.2em 1.14285714em;
+  padding: 1.2em 2.3em;
 }
 
 #menu > .active {
-  border-left: 7px solid #6335ca;
+  border-left: 4px solid #6335ca;
   border-radius: 0px;
   margin-left: -1px;
-  padding-left: 15px;
+  padding-left: 2.1em;
 }
 
 #menu > .active.item:hover {

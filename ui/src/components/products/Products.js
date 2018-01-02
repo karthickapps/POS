@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Tab } from "semantic-ui-react";
 
-import { Titlebar, Loader, Searchbox, Datagrid } from "../controls";
+import Dialog from "./Dialog";
+import { Loader, Searchbox, Datagrid } from "../controls";
 import { fetchAllProducts } from "../../actions/products";
 import "./products.css";
 
 class Products extends Component {
   state = {
-    isLoading: false
+    isLoading: false,
+    canShowDialog: false,
+    headerText: "Create Product"
   };
 
   componentDidMount() {
@@ -31,6 +35,15 @@ class Products extends Component {
     console.log(id);
   };
 
+  onCreateNew = () => {
+    console.log("hey new product");
+    this.setState({ canShowDialog: true });
+  };
+
+  onDialogClose = () => {
+    this.setState({ canShowDialog: false });
+  };
+
   render() {
     const datasource = {
       headers: ["Id", "Title", "Price", "Measure", "Product type", "Action"],
@@ -43,12 +56,38 @@ class Products extends Component {
       data: this.props.products
     };
 
+    const panes = [
+      {
+        menuItem: "Products",
+        render: () => (
+          <Tab.Pane>
+            <Loader isLoading={this.state.isLoading} />
+            <Searchbox
+              searchText="Enter product id..."
+              onCreateNew={this.onCreateNew}
+            />
+            <Datagrid datasource={datasource} />
+            <Dialog
+              canShow={this.state.canShowDialog}
+              onClose={this.onDialogClose}
+              headerText={this.state.headerText}
+            />
+          </Tab.Pane>
+        )
+      },
+      {
+        menuItem: "Product Type",
+        render: () => <Tab.Pane>Tab 2 Content</Tab.Pane>
+      }
+    ];
+
     return (
       <div>
-        <Titlebar title="Products" />
-        <Loader isLoading={this.state.isLoading} />
-        <Searchbox searchText="Enter product id..." />
-        <Datagrid datasource={datasource} />
+        <Tab
+          menu={{ secondary: true, pointing: true }}
+          id="tabContainer"
+          panes={panes}
+        />
       </div>
     );
   }
