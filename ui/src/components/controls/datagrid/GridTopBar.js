@@ -1,14 +1,14 @@
 import React from "react";
 import { Input, Button, Icon } from "semantic-ui-react";
-import "./controls.css";
+import "../controls.css";
 
 const Searchbox = ({
   onSearch,
   onCreateNew,
+  onFetachAll,
   value,
   onChange,
-  searchText = "Search...",
-  showCreateNew = true
+  searchText = "Search..."
 }) => (
   <Input
     className="searchbar"
@@ -19,11 +19,19 @@ const Searchbox = ({
     value={value}
     onChange={onChange}
   >
-    {showCreateNew === true ? (
-      <Button color="violet" onClick={onCreateNew} size="mini">
+    <Button.Group>
+      <Button
+        color="violet"
+        onClick={onFetachAll}
+        size="small"
+        style={{ marginRight: 0 }}
+      >
+        Fetch All
+      </Button>
+      <Button onClick={onCreateNew} size="small">
         Create New
       </Button>
-    ) : null}
+    </Button.Group>
 
     <input />
     <Button color="violet" icon onClick={onSearch} size="mini">

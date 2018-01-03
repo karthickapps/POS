@@ -1,52 +1,60 @@
 import React from "react";
 import { Table, Button, Icon } from "semantic-ui-react";
 
-const Datagrid = ({ datasource }) => {
-  const getHeaders = () =>
-    datasource.headers.map(col => (
-      <Table.HeaderCell key={col}>{col}</Table.HeaderCell>
-    ));
+import GridTopBar from "./GridTopBar";
 
-  const getCells = val =>
+const Datagrid = ({ datasource }) => {
+  const { headers, actions, filter, data } = datasource;
+
+  const actionButtons = val => (
+    <Table.Cell>
+      <Button.Group>
+        <Button icon size="mini" compact onClick={() => actions.onEdit(val.id)}>
+          <Icon name="write" />
+        </Button>
+        <Button
+          icon
+          size="mini"
+          color="red"
+          compact
+          onClick={() => actions.onDelete(val.id)}
+        >
+          <Icon name="trash" />
+        </Button>
+      </Button.Group>
+    </Table.Cell>
+  );
+
+  const cols = val =>
     Object.keys(val)
-      .filter(k => datasource.filter(k))
+      .filter(k => filter(k))
       .map(key => <Table.Cell key={key}>{val[key]}</Table.Cell>);
 
-  const getRows = () =>
-    datasource.data.map(val => (
+  const headerCols = () =>
+    headers.map(col => <Table.HeaderCell key={col}>{col}</Table.HeaderCell>);
+
+  const rows = () =>
+    data.map(val => (
       <Table.Row key={val.id}>
-        {getCells(val)}
-        <Table.Cell>
-          <Button.Group>
-            <Button
-              icon
-              size="mini"
-              compact
-              onClick={() => datasource.actions.onEdit(val.id)}
-            >
-              <Icon name="write" />
-            </Button>
-            <Button
-              icon
-              size="mini"
-              color="red"
-              compact
-              onClick={() => datasource.actions.onDelete(val.id)}
-            >
-              <Icon name="trash" />
-            </Button>
-          </Button.Group>
-        </Table.Cell>
+        {cols(val)}
+        {actionButtons(val)}
       </Table.Row>
     ));
 
   return (
-    <Table celled compact>
-      <Table.Header>
-        <Table.Row>{getHeaders()}</Table.Row>
-      </Table.Header>
-      <Table.Body>{getRows()}</Table.Body>
-    </Table>
+    <div>
+      <GridTopBar
+        searchText="Enter product id..."
+        onCreateNew={actions.onCreateNew}
+      />
+
+      <Table celled compact>
+        <Table.Header>
+          <Table.Row>{headerCols()}</Table.Row>
+        </Table.Header>
+        <Table.Body>{rows()}</Table.Body>
+      </Table>
+    </div>
   );
 };
 

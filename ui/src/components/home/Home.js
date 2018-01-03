@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router";
 
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
-import Products from "../products/Products";
+import ProductsContainer from "../products/ProductsContainer";
 import "./home.css";
 
 class Home extends Component {
@@ -24,7 +24,11 @@ class Home extends Component {
             >
               <Segment id="segment-container" color="violet">
                 <Switch>
-                  <Route exact path="/products" component={Products} />
+                  <Route
+                    exact
+                    path="/products"
+                    component={ProductsContainer}
+                  />
                 </Switch>
               </Segment>
             </Grid.Column>

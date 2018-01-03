@@ -3,11 +3,11 @@ import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
 
 import Dialog from "./Dialog";
-import { Loader, Searchbox, Datagrid } from "../controls";
+import { Loader, Datagrid } from "../controls";
 import { fetchAllProducts } from "../../actions/products";
 import "./products.css";
 
-class Products extends Component {
+class ProductsContainer extends Component {
   state = {
     isLoading: false,
     canShowDialog: false,
@@ -51,7 +51,8 @@ class Products extends Component {
         key !== "created_at" && key !== "updated_at" && key !== "user_id",
       actions: {
         onEdit: id => console.log(id),
-        onDelete: id => console.log(id)
+        onDelete: id => console.log(id),
+        onCreateNew: this.onCreateNew
       },
       data: this.props.products
     };
@@ -62,10 +63,6 @@ class Products extends Component {
         render: () => (
           <Tab.Pane>
             <Loader isLoading={this.state.isLoading} />
-            <Searchbox
-              searchText="Enter product id..."
-              onCreateNew={this.onCreateNew}
-            />
             <Datagrid datasource={datasource} />
             <Dialog
               canShow={this.state.canShowDialog}
@@ -101,4 +98,4 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   fetchAllProducts
-})(Products);
+})(ProductsContainer);
