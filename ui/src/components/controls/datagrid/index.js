@@ -41,19 +41,30 @@ const Datagrid = ({ datasource }) => {
       </Table.Row>
     ));
 
-  return (
-    <div>
-      <GridTopBar
-        searchText="Enter product id..."
-        onCreateNew={actions.onCreateNew}
-      />
+  const getTable = () => {
+    if (data == null) {
+      return null;
+    }
 
+    return (
       <Table celled compact>
         <Table.Header>
           <Table.Row>{headerCols()}</Table.Row>
         </Table.Header>
         <Table.Body>{rows()}</Table.Body>
       </Table>
+    );
+  };
+
+  return (
+    <div>
+      <GridTopBar
+        searchText="Enter product id..."
+        onSearch={actions.onSearch}
+        onCreateNew={actions.onCreateNew}
+        onFetchAll={actions.onFetchAll}
+      />
+      {getTable()}
     </div>
   );
 };

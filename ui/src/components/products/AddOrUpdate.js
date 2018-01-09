@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Form, Dropdown } from "semantic-ui-react";
 
+import { Dialog } from "../controls";
+
 class AddOrUpdate extends Component {
   state = {
     options: [
@@ -14,31 +16,38 @@ class AddOrUpdate extends Component {
 
   render() {
     return (
-      <Form>
-        <Form.Field>
-          <label>Id</label>
-          <input placeholder="Product Id" />
-        </Form.Field>
-        <Form.Field>
-          <label>Category</label>
-          <Dropdown
-            onChange={this.handleChange}
-            options={this.state.options}
-            placeholder="Choose an option"
-            selection
-            value={this.state.value}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>Description</label>
-          <input placeholder="Desciption" />
-        </Form.Field>
-        <Form.Field>
-          <label>Price</label>
-          <input placeholder="Price" />
-        </Form.Field>
-        <br />
-      </Form>
+      <Dialog
+        canShow={this.props.canShowDialog}
+        onClose={this.props.onDialogClose}
+        headerText={this.props.headerText}
+        onSubmit={this.props.onSubmit}
+      >
+        <Form>
+          <Form.Field>
+            <label>Id</label>
+            <input placeholder="Product Id" />
+          </Form.Field>
+          <Form.Field>
+            <label>Category</label>
+            <Dropdown
+              onChange={this.handleChange}
+              options={this.state.options}
+              placeholder="Choose an option"
+              selection
+              value={this.state.value}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Description</label>
+            <input placeholder="Desciption" />
+          </Form.Field>
+          <Form.Field>
+            <label>Price</label>
+            <input placeholder="Price" />
+          </Form.Field>
+          <br />
+        </Form>
+      </Dialog>
     );
   }
 }

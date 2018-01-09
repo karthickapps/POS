@@ -1,43 +1,69 @@
-import React from "react";
+import React, { Component } from "react";
 import { Input, Button, Icon } from "semantic-ui-react";
 import "../controls.css";
 
-const Searchbox = ({
-  onSearch,
-  onCreateNew,
-  onFetachAll,
-  value,
-  onChange,
-  searchText = "Search..."
-}) => (
-  <Input
-    className="searchbar"
-    labelPosition="right"
-    type="text"
-    placeholder={searchText}
-    action
-    value={value}
-    onChange={onChange}
-  >
-    <Button.Group>
-      <Button
-        color="violet"
-        onClick={onFetachAll}
-        size="small"
-        style={{ marginRight: 0 }}
-      >
-        Fetch All
-      </Button>
-      <Button onClick={onCreateNew} size="small">
-        Create New
-      </Button>
-    </Button.Group>
+class GridTopBar extends Component {
+  state = { searchQuery: "" };
 
-    <input />
-    <Button color="violet" icon onClick={onSearch} size="mini">
-      <Icon name="search" />
-    </Button>
-  </Input>
-);
+  handleChange = e => {
+    this.setState({ searchQuery: e.target.value });
+  };
 
-export default Searchbox;
+  onSearchClick = () => {
+    if (this.state.searchQuery.length === 0) {
+      // eslint-disable-next-line no-alert
+      alert("Please enter a text to search");
+      return;
+    }
+    this.props.onSearch(this.state.searchQuery);
+    this.setState({ searchQuery: "" });
+  };
+
+  onFetchAllClick = e => {
+    this.props.onFetchAll();
+  };
+
+  onFormSubmit = e => {
+    e.preventDefault();
+  };
+
+  render() {
+    const { onCreateNew, searchText = "Search..." } = this.props;
+
+    return (
+      <form onSubmit={this.onFormSubmit}>
+        <Input
+          className="searchbar"
+          labelPosition="right"
+          type="text"
+          placeholder={searchText}
+          value={this.state.searchQuery}
+          action
+          onChange={this.handleChange}
+        >
+          <Button.Group>
+            <Button
+              type="button"
+              color="violet"
+              onClick={this.onFetchAllClick}
+              size="small"
+              style={{ marginRight: 0 }}
+            >
+              Fetch All
+            </Button>
+            <Button type="button" onClick={onCreateNew} size="small">
+              Create New
+            </Button>
+          </Button.Group>
+
+          <input />
+          <Button color="violet" icon onClick={this.onSearchClick} size="mini">
+            <Icon name="search" />
+          </Button>
+        </Input>
+      </form>
+    );
+  }
+}
+
+export default GridTopBar;
