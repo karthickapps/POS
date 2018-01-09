@@ -2,7 +2,7 @@ const knex = require("../../db/knex");
 
 const {
   getJsonResponse,
-  getJsonErrorResponse,
+  getJsonErrorResponse
 } = require("../helpers/response_object");
 
 // TODO: Log all the errors for debugging.
@@ -11,10 +11,25 @@ class Crud {
     this.tableName = tableName;
     this.routeName = routeName;
     this.selectAll = this.selectAll.bind(this);
+    this.getItem = this.getItem.bind(this);
     this.delete = this.delete.bind(this);
     this.selectById = this.selectById.bind(this);
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
+  }
+
+  async getItem(req, res) {
+    try {
+      const rows = await knex(this.tableName).where(
+        "id",
+        "like",
+        `${req.params.query}%`
+      );
+      res.send(getJsonResponse(rows));
+    } catch (err) {
+      console.log(err);
+      res.send(getJsonErrorResponse("HE01"));
+    }
   }
 
   async selectAll(req, res) {
@@ -43,7 +58,7 @@ class Crud {
         .select()
         .from(this.tableName)
         .where({
-          id: req.params.id,
+          id: req.params.id
         });
       res.send(getJsonResponse(product));
     } catch (err) {
