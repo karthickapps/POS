@@ -27,8 +27,8 @@ app.use(
     // eslint-disable-next-line
     skip: (req, res) => {
       return process.env.NODE_ENV === "test";
-    },
-  }),
+    }
+  })
 );
 
 // routes

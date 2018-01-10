@@ -79,8 +79,8 @@ class ProductTab extends Component {
         <Datagrid datasource={this.state.datasource} />
         <AddOrUpdate
           canShowDialog={this.state.canShowDialog}
-          onSubmit={this.onSubmit}
           onDialogClose={this.onDialogClose}
+          onSubmit={this.onSubmit}
           headerText="Create Product"
         />
       </Tab.Pane>
