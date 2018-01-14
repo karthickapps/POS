@@ -3,10 +3,6 @@ module.exports = (table, knex) => {
   table.string("title").notNullable();
   table.decimal("price").notNullable();
   table
-    .string("measure_id")
-    .references("id")
-    .inTable("measure");
-  table
     .string("product_type")
     .references("type")
     .inTable("product_types");
