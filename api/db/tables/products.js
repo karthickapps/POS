@@ -1,6 +1,6 @@
 module.exports = (table, knex) => {
-  table.string("id", 35).primary();
-  table.string("title").notNullable();
+  table.string("id", 75).primary();
+  table.string("description").notNullable();
   table.decimal("price").notNullable();
   table
     .string("product_type")
@@ -11,5 +11,6 @@ module.exports = (table, knex) => {
   table
     .integer("user_id")
     .references("id")
-    .inTable("users");
+    .inTable("users")
+    .defaultTo(1);
 };

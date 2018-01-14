@@ -25,7 +25,7 @@ class Header extends Component {
     return (
       <Menu id="header" inverted color="violet">
         <Menu.Item id="logo" header name="logo">
-          My Pointofsale
+          OLYMPIC PRINTINGS
         </Menu.Item>
 
         <Menu.Menu position="right">

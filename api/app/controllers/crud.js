@@ -78,7 +78,14 @@ class Crud {
 
       res.send(getJsonResponse(noOfRowsAvailable));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE04"));
+      let message = "";
+
+      if (err.message.includes("UNIQUE constraint failed"))
+        message = `This entered ${
+          this.tableName
+        } id exists already. Please try with some other unique id.`;
+
+      res.send(getJsonErrorResponse("HE04", message));
     }
   }
 
@@ -91,6 +98,7 @@ class Crud {
         .update(product);
       res.send(getJsonResponse(noOfRowsAffected));
     } catch (err) {
+      console.log(err);
       res.send(getJsonErrorResponse("HE05"));
     }
   }

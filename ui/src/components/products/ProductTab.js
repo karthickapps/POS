@@ -3,27 +3,44 @@ import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
 
 import AddOrUpdate from "./AddOrUpdate";
-import { Loader, Datagrid } from "../controls";
+import { Loader, Datagrid, MessageBox, YesNo } from "../controls";
 import { fetchAllProducts, fetchBySearchQuery } from "../../actions/products";
+import api from "../../api";
 import "./products.css";
 
 class ProductTab extends Component {
+  productToDelete = {};
+
+  productDefault = {
+    id: "",
+    product_type: "",
+    description: "",
+    price: ""
+  };
+
+  gridSource = {
+    headers: ["Id", "Title", "Price", "Product type", "Action"],
+    filter: key =>
+      key !== "created_at" && key !== "updated_at" && key !== "user_id",
+    actions: {
+      onEdit: id => this.onEdit(id),
+      onDelete: id => this.onDelete(id),
+      onCreateNew: () => this.onCreateNew(),
+      onFetchAll: () => this.onFetchAll(),
+      onSearch: query => this.onSearch(query)
+    },
+    data: null
+  };
+
   state = {
     isLoading: false,
-    canShowDialog: false,
-    datasource: {
-      headers: ["Id", "Title", "Price", "Measure", "Product type", "Action"],
-      filter: key =>
-        key !== "created_at" && key !== "updated_at" && key !== "user_id",
-      actions: {
-        onEdit: id => console.log(id),
-        onDelete: id => console.log(id),
-        onCreateNew: () => this.onCreateNew(),
-        onFetchAll: () => this.onFetchAll(),
-        onSearch: query => this.onSearch(query)
-      },
-      data: null
-    }
+    canShowAddOrUpdate: false,
+    canShowError: false,
+    canShowConfirmDelete: false,
+    errorMessage: "",
+    isEdit: false,
+    product: this.productDefault,
+    datasource: this.gridSource
   };
 
   componentWillMount() {
@@ -45,31 +62,94 @@ class ProductTab extends Component {
       });
   };
 
-  onFetchAll = () => {
-    this.props
-      .fetchAllProducts()
-      .then(() => {
-        this.setDataSource();
-      })
-      .catch(err => {
-        console.log("fetchProducts =>", err);
-      });
-  };
-
-  onSubmit = () => {
-    console.log("onSubmit");
-  };
-
-  onDelete = id => {
-    console.log(id);
+  onFetchAll = async () => {
+    try {
+      await this.props.fetchAllProducts();
+      this.setDataSource();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   onCreateNew = () => {
-    this.setState({ canShowDialog: true });
+    this.setState({
+      canShowAddOrUpdate: true,
+      isEdit: false,
+      product: this.productDefault
+    });
   };
 
-  onDialogClose = () => {
-    this.setState({ canShowDialog: false });
+  onEdit = product => {
+    this.setState({ canShowAddOrUpdate: true, isEdit: true, product });
+  };
+
+  onDelete = product => {
+    this.productToDelete = product;
+    this.setState({ canShowConfirmDelete: true });
+  };
+
+  deleteProduct = async () => {
+    try {
+      this.setState({ canShowConfirmDelete: false, isLoading: true });
+      await api.products.deleteProduct(this.productToDelete.id);
+      this.showMessageBox("Deleted successfully.");
+    } catch (error) {
+      this.showMessageBox(error.message);
+    } finally {
+      await this.props.fetchAllProducts();
+      this.setDataSource();
+      this.setState({ isLoading: false });
+    }
+  };
+
+  onSubmitForm = async data => {
+    try {
+      this.setState({ isLoading: true });
+
+      let res = "";
+      let message = "";
+
+      if (this.state.isEdit) res = await api.products.updateProduct(data);
+      else res = await api.products.createNew(data);
+
+      console.log(res);
+
+      if (res.data.status === "FAILED") {
+        message =
+          res.data.message.length === 0
+            ? "Something went wrong. Please try again"
+            : res.data.message;
+      } else {
+        message =
+          res.data.message.length === 0
+            ? "Saved successfully."
+            : res.data.message;
+      }
+
+      this.showMessageBox(message);
+    } catch (error) {
+      this.showMessageBox(error.message);
+    } finally {
+      await this.props.fetchAllProducts();
+      this.setDataSource();
+      this.onAddOrUpdateDialogClose();
+    }
+  };
+
+  showMessageBox = message => {
+    this.setState({
+      errorMessage: message,
+      canShowError: true
+    });
+  };
+
+  onAddOrUpdateDialogClose = () => {
+    this.setState({
+      canShowAddOrUpdate: false,
+      isEdit: false,
+      products: this.productDefault,
+      isLoading: false
+    });
   };
 
   render() {
@@ -78,11 +158,25 @@ class ProductTab extends Component {
         <Loader isLoading={this.state.isLoading} />
         <Datagrid datasource={this.state.datasource} />
         <AddOrUpdate
-          canShowDialog={this.state.canShowDialog}
-          onDialogClose={this.onDialogClose}
-          onSubmit={this.onSubmit}
+          isEdit={this.state.isEdit}
+          data={this.state.product}
+          canShowDialog={this.state.canShowAddOrUpdate}
+          onDialogClose={this.onAddOrUpdateDialogClose}
+          onSubmit={this.onSubmitForm}
           headerText="Create Product"
         />
+        <MessageBox
+          message={this.state.errorMessage}
+          open={this.state.canShowError}
+          onClose={() => this.setState({ canShowError: false })}
+        />
+        {this.state.canShowConfirmDelete ? (
+          <YesNo
+            message="Are you sure want to delete the selected product?"
+            onNo={() => this.setState({ canShowConfirmDelete: false })}
+            onYes={this.deleteProduct}
+          />
+        ) : null}
       </Tab.Pane>
     );
   }

@@ -11,28 +11,28 @@ exports.seed = function(knex, Promise) {
           id: "pen",
           price: 10,
           product_type: "writing",
-          title: "pen",
+          description: "pen",
           user_id: 1
         },
         {
           id: "pencil",
           product_type: "writing",
           price: 5,
-          title: "stationery",
+          description: "stationery",
           user_id: 1
         },
         {
           id: "A4",
           price: 200,
           product_type: "printing",
-          title: "printing",
+          description: "printing",
           user_id: 1
         },
         {
           id: "A3",
           price: 350,
           product_type: "printing",
-          title: "printing",
+          description: "printing",
           user_id: 2
         }
       ]);

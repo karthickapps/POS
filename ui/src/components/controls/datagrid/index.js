@@ -9,7 +9,7 @@ const Datagrid = ({ datasource }) => {
   const actionButtons = val => (
     <Table.Cell>
       <Button.Group>
-        <Button icon size="mini" compact onClick={() => actions.onEdit(val.id)}>
+        <Button icon size="mini" compact onClick={() => actions.onEdit(val)}>
           <Icon name="write" />
         </Button>
         <Button
@@ -17,7 +17,7 @@ const Datagrid = ({ datasource }) => {
           size="mini"
           color="red"
           compact
-          onClick={() => actions.onDelete(val.id)}
+          onClick={() => actions.onDelete(val)}
         >
           <Icon name="trash" />
         </Button>
