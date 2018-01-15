@@ -67,10 +67,10 @@ class Crud {
   }
 
   async create(req, res) {
-    const product = req.body;
+    const item = req.body;
 
     try {
-      await knex(this.tableName).insert(product);
+      await knex(this.tableName).insert(item);
 
       const result = await knex(this.tableName).count("id as rows");
 
@@ -84,6 +84,7 @@ class Crud {
         message = `This entered ${
           this.tableName
         } id exists already. Please try with some other unique id.`;
+      else message = err.message;
 
       res.send(getJsonErrorResponse("HE04", message));
     }

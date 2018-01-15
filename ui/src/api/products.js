@@ -19,9 +19,9 @@ const products = {
       }),
   createNew: product => axios.post("api/products", product),
 
-  updateProduct: product => axios.put(`api/products/${product.id}`, product),
+  update: (id, product) => axios.put(`api/products/${id}`, product),
 
-  deleteProduct: id => axios.delete(`api/products/${id}`)
+  delete: id => axios.delete(`api/products/${id}`)
 };
 
 export default products;

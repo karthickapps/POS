@@ -4,7 +4,7 @@ import { Form, Dropdown } from "semantic-ui-react";
 import api from "../../api";
 import { Dialog } from "../controls";
 
-class AddOrUpdate extends Component {
+class AddOrUpdateProduct extends Component {
   state = {
     productTypes: [],
     selectedProduct: null,
@@ -25,7 +25,7 @@ class AddOrUpdate extends Component {
   getSelectedProductIndex = productType => {
     for (let idx = 0; idx < this.state.productTypes.length - 1; idx++) {
       const element = this.state.productTypes[idx];
-      if (element.type === productType) {
+      if (element.id === productType) {
         return idx;
       }
     }
@@ -38,7 +38,7 @@ class AddOrUpdate extends Component {
       const productTypes = res.map((item, idx) => {
         const temp = item;
         temp.key = idx;
-        temp.text = temp.type;
+        temp.text = temp.id;
         temp.value = idx;
         return temp;
       });
@@ -63,7 +63,7 @@ class AddOrUpdate extends Component {
       selectedProduct: value,
       data: {
         ...this.state.data,
-        product_type: this.state.productTypes[idx].type
+        product_type: this.state.productTypes[idx].id
       },
       errors: { ...this.state.errors, product_type: "" }
     });
@@ -179,4 +179,4 @@ class AddOrUpdate extends Component {
   }
 }
 
-export default AddOrUpdate;
+export default AddOrUpdateProduct;

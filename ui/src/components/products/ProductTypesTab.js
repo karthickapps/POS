@@ -2,24 +2,24 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
 
-import AddOrUpdateProduct from "./AddOrUpdateProduct";
+import AddOrUpdateProductTypes from "./AddOrUpdateProductTypes";
 import { Loader, Datagrid, MessageBox, YesNo } from "../controls";
-import { fetchAllProducts, fetchBySearchQuery } from "../../actions/products";
+import {
+  fetchAllProductTypes,
+  fetchBySearchQuery
+} from "../../actions/productTypes";
 import api from "../../api";
 import "./products.css";
 
-class ProductTab extends Component {
-  currentProduct = {};
+class ProductTypeTab extends Component {
+  currentProductType = {};
 
-  productDefault = {
-    id: "",
-    product_type: "",
-    description: "",
-    price: ""
+  productTypesDefault = {
+    id: ""
   };
 
   gridSource = {
-    headers: ["Id", "Title", "Price", "Product type", "Action"],
+    headers: ["Product Type", "Action"],
     filter: key =>
       key !== "created_at" && key !== "updated_at" && key !== "user_id",
     actions: {
@@ -39,7 +39,7 @@ class ProductTab extends Component {
     canShowConfirmDelete: false,
     errorMessage: "",
     isEdit: false,
-    product: this.productDefault,
+    productType: this.productTypesDefault,
     datasource: this.gridSource
   };
 
@@ -47,9 +47,18 @@ class ProductTab extends Component {
     this.setDataSource();
   }
 
+  onFetchAll = async () => {
+    try {
+      await this.props.fetchAllProductTypes();
+      this.setDataSource();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   setDataSource = () => {
     const datasource = this.state.datasource;
-    datasource.data = this.props.products;
+    datasource.data = this.props.productTypes;
     this.setState({ datasource });
   };
 
@@ -62,42 +71,33 @@ class ProductTab extends Component {
       });
   };
 
-  onFetchAll = async () => {
-    try {
-      await this.props.fetchAllProducts();
-      this.setDataSource();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   onCreateNew = () => {
     this.setState({
       canShowAddOrUpdate: true,
       isEdit: false,
-      product: this.productDefault
+      productType: this.productTypesDefault
     });
   };
 
-  onEdit = product => {
-    this.currentProduct.id = product.id;
-    this.setState({ canShowAddOrUpdate: true, isEdit: true, product });
+  onEdit = productType => {
+    this.currentProductType.id = productType.id;
+    this.setState({ canShowAddOrUpdate: true, isEdit: true, productType });
   };
 
-  onDelete = product => {
-    this.currentProduct = product;
+  onDelete = productType => {
+    this.currentProductType = productType;
     this.setState({ canShowConfirmDelete: true });
   };
 
   deleteProduct = async () => {
     try {
       this.setState({ canShowConfirmDelete: false, isLoading: true });
-      await api.products.delete(this.currentProduct.id);
+      await api.productTypes.delete(this.currentProductType.id);
       this.showMessageBox("Deleted successfully.");
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProducts();
+      await this.props.fetchAllProductTypes();
       this.setDataSource();
       this.setState({ isLoading: false });
     }
@@ -105,14 +105,14 @@ class ProductTab extends Component {
 
   onSubmitForm = async data => {
     try {
-      this.setState({ product: data, isLoading: true });
+      this.setState({ productType: data, isLoading: true });
 
       let res = "";
       let message = "";
 
       if (this.state.isEdit)
-        res = await api.products.update(this.currentProduct.id, data);
-      else res = await api.products.createNew(data);
+        res = await api.productTypes.update(this.currentProductType.id, data);
+      else res = await api.productTypes.createNew(data);
 
       console.log(res);
 
@@ -132,7 +132,7 @@ class ProductTab extends Component {
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProducts();
+      await this.props.fetchAllProductTypes();
       this.setDataSource();
       this.onAddOrUpdateDialogClose();
     }
@@ -149,7 +149,7 @@ class ProductTab extends Component {
     this.setState({
       canShowAddOrUpdate: false,
       isEdit: false,
-      products: this.productDefault,
+      productType: this.productTypesDefault,
       isLoading: false
     });
   };
@@ -159,13 +159,13 @@ class ProductTab extends Component {
       <Tab.Pane>
         <Loader isLoading={this.state.isLoading} />
         <Datagrid datasource={this.state.datasource} />
-        <AddOrUpdateProduct
+        <AddOrUpdateProductTypes
           isEdit={this.state.isEdit}
-          data={this.state.product}
+          data={this.state.productType}
           canShowDialog={this.state.canShowAddOrUpdate}
           onDialogClose={this.onAddOrUpdateDialogClose}
           onSubmit={this.onSubmitForm}
-          headerText="Create Product"
+          headerText="Create product type"
         />
         <MessageBox
           message={this.state.errorMessage}
@@ -174,7 +174,7 @@ class ProductTab extends Component {
         />
         {this.state.canShowConfirmDelete ? (
           <YesNo
-            message="Are you sure want to delete the selected product?"
+            message="Are you sure want to delete the selected product type?"
             onNo={() => this.setState({ canShowConfirmDelete: false })}
             onYes={this.deleteProduct}
           />
@@ -186,11 +186,11 @@ class ProductTab extends Component {
 
 function mapStateToProps(state) {
   return {
-    products: state.products
+    productTypes: state.productTypes
   };
 }
 
 export default connect(mapStateToProps, {
-  fetchAllProducts,
+  fetchAllProductTypes,
   fetchBySearchQuery
-})(ProductTab);
+})(ProductTypeTab);

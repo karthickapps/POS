@@ -7,9 +7,9 @@ exports.seed = function(knex, Promise) {
     .then(function() {
       // Inserts seed entries
       return knex("product_types").insert([
-        { type: "writing", user_id: 1 },
-        { type: "printing", user_id: 2 },
-        { type: "misc", user_id: 2 },
+        { id: "writing", user_id: 1 },
+        { id: "printing", user_id: 2 },
+        { id: "misc", user_id: 2 }
       ]);
     });
 };

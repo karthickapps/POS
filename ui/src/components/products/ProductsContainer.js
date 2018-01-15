@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Tab } from "semantic-ui-react";
 
 import ProductTab from "./ProductTab";
-import ProductTypeTab from "./ProductTypeTab";
+import ProductTypesTab from "./ProductTypesTab";
 import "./products.css";
 
 class ProductsContainer extends Component {
@@ -16,7 +16,7 @@ class ProductsContainer extends Component {
       },
       {
         menuItem: "Product Type",
-        render: () => <ProductTypeTab />
+        render: () => <ProductTypesTab />
       }
     ];
 
