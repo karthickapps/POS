@@ -6,7 +6,8 @@ import AddOrUpdateProduct from "./AddOrUpdateProduct";
 import { Loader, Datagrid, MessageBox, YesNo } from "../controls";
 import { fetchAllProducts, fetchBySearchQuery } from "../../actions/products";
 import api from "../../api";
-import "./products.css";
+
+import "../controls/commonTabs.css";
 
 class ProductTab extends Component {
   currentProduct = {};

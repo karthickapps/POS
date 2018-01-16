@@ -1,26 +1,21 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
 
-import AddOrUpdateProductTypes from "./AddOrUpdateProductTypes";
+import AddOrUpdateExpenseTypes from "./AddOrUpdateExpenseTypes";
 import { Loader, Datagrid, MessageBox, YesNo } from "../controls";
-import {
-  fetchAllProductTypes,
-  fetchBySearchQuery
-} from "../../actions/productTypes";
 import api from "../../api";
 
 import "../controls/commonTabs.css";
 
-class ProductTypeTab extends Component {
-  currentProductType = {};
+class ExpenseTypesTab extends Component {
+  currentExpenseType = {};
 
-  productTypesDefault = {
+  expenseTypeDefault = {
     id: ""
   };
 
   gridSource = {
-    headers: ["Product Type", "Action"],
+    headers: ["Expense type", "actions"],
     filter: key =>
       key !== "created_at" && key !== "updated_at" && key !== "user_id",
     actions: {
@@ -40,80 +35,72 @@ class ProductTypeTab extends Component {
     canShowConfirmDelete: false,
     errorMessage: "",
     isEdit: false,
-    productType: this.productTypesDefault,
+    expenseType: this.expenseTypeDefault,
     datasource: this.gridSource
   };
 
+  // TODO Bad way. Needs to change this very soon in refractoring.
   componentWillMount() {
-    this.setDataSource();
+    this.onFetchAll();
   }
 
   onFetchAll = async () => {
-    try {
-      await this.props.fetchAllProductTypes();
-      this.setDataSource();
-    } catch (error) {
-      console.log(error);
-    }
+    const expenseTypes = await api.expenseTypes.fetchAll();
+    this.setDataSource(expenseTypes);
   };
 
-  setDataSource = () => {
-    const datasource = this.state.datasource;
-    datasource.data = this.props.productTypes;
+  onSearch = async query => {
+    const expenseTypes = await api.expenseTypes.search(query);
+    this.setDataSource(expenseTypes);
+  };
+
+  setDataSource = data => {
+    const { datasource } = this.state;
+    datasource.data = data;
     this.setState({ datasource });
-  };
-
-  onSearch = query => {
-    this.props
-      .fetchBySearchQuery(query)
-      .then(() => this.setDataSource())
-      .catch(err => {
-        console.log("onSearch =>", err);
-      });
   };
 
   onCreateNew = () => {
     this.setState({
       canShowAddOrUpdate: true,
       isEdit: false,
-      productType: this.productTypesDefault
+      expenseType: this.expenseTypeDefault
     });
   };
 
-  onEdit = productType => {
-    this.currentProductType.id = productType.id;
-    this.setState({ canShowAddOrUpdate: true, isEdit: true, productType });
+  onEdit = expenseType => {
+    this.currentExpenseType.id = expenseType.id;
+    this.setState({ canShowAddOrUpdate: true, isEdit: true, expenseType });
   };
 
-  onDelete = productType => {
-    this.currentProductType = productType;
+  onDelete = expenseType => {
+    this.currentExpenseType = expenseType;
     this.setState({ canShowConfirmDelete: true });
   };
 
-  deleteProduct = async () => {
+  deleteExpenseType = async () => {
     try {
-      this.setState({ canShowConfirmDelete: false, isLoading: true });
-      await api.productTypes.delete(this.currentProductType.id);
+      this.setState({ canShowConfirmDelete: false, isLoading: false });
+      await api.expenseTypes.delete(this.currentExpenseType.id);
       this.showMessageBox("Deleted successfully.");
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProductTypes();
-      this.setDataSource();
+      await this.onFetchAll();
       this.setState({ isLoading: false });
     }
   };
 
   onSubmitForm = async data => {
     try {
-      this.setState({ productType: data, isLoading: true });
+      this.setState({ expenseType: data, isLoading: true });
 
       let res = "";
       let message = "";
 
       if (this.state.isEdit)
-        res = await api.productTypes.update(this.currentProductType.id, data);
-      else res = await api.productTypes.createNew(data);
+        res = await api.expenseTypes.update(this.currentExpenseType.id, data);
+      else res = await api.expenseTypes.createNew(data);
 
       console.log(res);
 
@@ -133,8 +120,7 @@ class ProductTypeTab extends Component {
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProductTypes();
-      this.setDataSource();
+      await this.onFetchAll();
       this.onAddOrUpdateDialogClose();
     }
   };
@@ -160,9 +146,9 @@ class ProductTypeTab extends Component {
       <Tab.Pane>
         <Loader isLoading={this.state.isLoading} />
         <Datagrid datasource={this.state.datasource} />
-        <AddOrUpdateProductTypes
+        <AddOrUpdateExpenseTypes
           isEdit={this.state.isEdit}
-          data={this.state.productType}
+          data={this.state.expenseType}
           canShowDialog={this.state.canShowAddOrUpdate}
           onDialogClose={this.onAddOrUpdateDialogClose}
           onSubmit={this.onSubmitForm}
@@ -175,9 +161,9 @@ class ProductTypeTab extends Component {
         />
         {this.state.canShowConfirmDelete ? (
           <YesNo
-            message="Are you sure want to delete the selected product type?"
+            message="Are you sure want to delete the selected expense type?"
             onNo={() => this.setState({ canShowConfirmDelete: false })}
-            onYes={this.deleteProduct}
+            onYes={this.deleteExpenseType}
           />
         ) : null}
       </Tab.Pane>
@@ -185,13 +171,4 @@ class ProductTypeTab extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    productTypes: state.productTypes
-  };
-}
-
-export default connect(mapStateToProps, {
-  fetchAllProductTypes,
-  fetchBySearchQuery
-})(ProductTypeTab);
+export default ExpenseTypesTab;

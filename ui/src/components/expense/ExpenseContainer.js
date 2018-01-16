@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import { Tab } from "semantic-ui-react";
+import ExpenseTab from "./ExpenseTab";
+import ExpenseTypesTab from "./ExpenseTypesTab";
 
-import ProductTab from "./ProductTab";
-import ProductTypesTab from "./ProductTypesTab";
 import "../controls/commonTabs.css";
 
-class ProductsContainer extends Component {
+class ExpenseContainer extends Component {
+  state = {};
+
   render() {
     const panes = [
       {
-        menuItem: "Products",
-        render: () => <ProductTab />
+        menuItem: "Expense",
+        render: () => <ExpenseTab />
       },
       {
-        menuItem: "Product Type",
-        render: () => <ProductTypesTab />
+        menuItem: "Expense Type",
+        render: () => <ExpenseTypesTab />
       }
     ];
 
@@ -30,4 +32,4 @@ class ProductsContainer extends Component {
   }
 }
 
-export default ProductsContainer;
+export default ExpenseContainer;

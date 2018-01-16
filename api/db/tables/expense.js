@@ -1,11 +1,17 @@
+// expense table schema
 module.exports = (table, knex) => {
-  table.string("id", 75).primary();
-  table.string("description").notNullable();
-  table.decimal("price").notNullable();
+  table.increments();
   table
-    .string("product_type")
+    .string("expense_type")
     .references("id")
-    .inTable("product_types");
+    .inTable("expense_types");
+
+  table.string("description").notNullable();
+  table.decimal("amount").notNullable();
+  table
+    .timestamp("date")
+    .notNullable()
+    .defaultTo(knex.fn.now());
   table.timestamp("created_at").defaultTo(knex.fn.now());
   table.timestamp("updated_at").defaultTo(knex.fn.now());
   table

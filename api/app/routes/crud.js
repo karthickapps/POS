@@ -32,6 +32,14 @@ const routes = [
   {
     route: "productTypes",
     table: "product_types"
+  },
+  {
+    route: "expenseTypes",
+    table: "expense_types"
+  },
+  {
+    route: "expense",
+    table: "expense"
   }
 ];
 

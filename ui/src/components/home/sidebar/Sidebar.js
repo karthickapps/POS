@@ -45,6 +45,19 @@ class Sidebar extends Component {
 
         <Menu.Item
           as={Link}
+          to="/expense"
+          name="expense"
+          active={isActive("expense")}
+          onClick={this.handleItemClick}
+        >
+          <div>
+            <Icon name="payment" size="large" />
+            Expense
+          </div>
+        </Menu.Item>
+
+        <Menu.Item
+          as={Link}
           to="/pos"
           name="pos"
           active={isActive("pos")}

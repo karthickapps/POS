@@ -5,6 +5,7 @@ import { Switch, Route } from "react-router";
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import ProductsContainer from "../products/ProductsContainer";
+import ExpenseContainer from "../expense/ExpenseContainer";
 import "./home.css";
 
 class Home extends Component {
@@ -24,11 +25,8 @@ class Home extends Component {
             >
               <Segment id="segment-container" color="violet">
                 <Switch>
-                  <Route
-                    exact
-                    path="/products"
-                    component={ProductsContainer}
-                  />
+                  <Route exact path="/products" component={ProductsContainer} />
+                  <Route exact path="/expense" component={ExpenseContainer} />
                 </Switch>
               </Segment>
             </Grid.Column>
