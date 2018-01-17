@@ -17,10 +17,7 @@ class AddOrUpdateExpenseTypes extends Component {
 
   onInputChange = e => {
     const id = e.target.value;
-
-    this.setState({ error: "" });
-
-    this.setState({ data: { id } });
+    this.setState({ data: { id }, error: "" });
   };
 
   onSubmitForm = () => {

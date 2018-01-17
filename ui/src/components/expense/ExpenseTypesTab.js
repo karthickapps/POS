@@ -40,8 +40,10 @@ class ExpenseTypesTab extends Component {
   };
 
   // TODO Bad way. Needs to change this very soon in refractoring.
+  // Currently its done this way, since even the tab change trigerrs this event.
+  // So to load data intially it's passed from the props.
   componentWillMount() {
-    this.onFetchAll();
+    this.setDataSource(this.props.expenseTypes);
   }
 
   onFetchAll = async () => {
