@@ -6,6 +6,7 @@ import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import ProductsContainer from "../products/ProductsContainer";
 import ExpenseContainer from "../expense/ExpenseContainer";
+import Customers from "../customers";
 import "./home.css";
 
 class Home extends Component {
@@ -27,6 +28,7 @@ class Home extends Component {
                 <Switch>
                   <Route exact path="/products" component={ProductsContainer} />
                   <Route exact path="/expense" component={ExpenseContainer} />
+                  <Route exact path="/customers" component={Customers} />
                 </Switch>
               </Segment>
             </Grid.Column>

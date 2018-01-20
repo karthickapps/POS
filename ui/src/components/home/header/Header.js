@@ -23,7 +23,7 @@ class Header extends Component {
     const { activeItem } = this.state;
 
     return (
-      <Menu id="header" inverted color="violet">
+      <Menu id="header" inverted color="blue">
         <Menu.Item id="logo" header name="logo">
           OLYMPIC PRINTINGS
         </Menu.Item>

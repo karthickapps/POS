@@ -1,6 +1,7 @@
 const express = require("express");
 
-const Crud = require("../controllers/crud");
+const routes = require("./routesConfig");
+const Crud = require("../../controllers/crud");
 
 const mainRouter = express.Router();
 
@@ -11,7 +12,11 @@ const getCrudRoutes = (routeName, tableName) => {
 
   router.get(`/${routeName}`, crud.selectAll);
 
+  router.get(`/${routeName}/page/:no`, crud.getPage);
+
   router.get(`/${routeName}/search/:query`, crud.getItem);
+
+  router.get(`/${routeName}/search/:query/:pageNo`, crud.getItem);
 
   router.get(`/${routeName}/:id`, crud.selectById);
 
@@ -23,25 +28,6 @@ const getCrudRoutes = (routeName, tableName) => {
 
   return router;
 };
-
-const routes = [
-  {
-    route: "products",
-    table: "products"
-  },
-  {
-    route: "productTypes",
-    table: "product_types"
-  },
-  {
-    route: "expenseTypes",
-    table: "expense_types"
-  },
-  {
-    route: "expense",
-    table: "expense"
-  }
-];
 
 for (let i = 0; i < routes.length; i++) {
   mainRouter.use("/", getCrudRoutes(routes[i].route, routes[i].table));

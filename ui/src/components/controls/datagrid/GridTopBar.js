@@ -44,20 +44,20 @@ class GridTopBar extends Component {
           <Button.Group>
             <Button
               type="button"
-              color="violet"
+              color="blue"
               onClick={this.onFetchAllClick}
               size="small"
               style={{ marginRight: 0 }}
             >
-              Fetch All
+              Get All
             </Button>
             <Button type="button" onClick={onCreateNew} size="small">
-              Create New
+              Create
             </Button>
           </Button.Group>
 
           <input />
-          <Button color="violet" icon onClick={this.onSearchClick} size="mini">
+          <Button color="blue" icon onClick={this.onSearchClick} size="mini">
             <Icon name="search" />
           </Button>
         </Input>

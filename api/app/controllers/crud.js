@@ -5,6 +5,8 @@ const {
   getJsonErrorResponse
 } = require("../helpers/response_object");
 
+const BATCH_SIZE = 50;
+
 // TODO: Log all the errors for debugging.
 class Crud {
   constructor(tableName, routeName) {
@@ -16,19 +18,46 @@ class Crud {
     this.selectById = this.selectById.bind(this);
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
+    this.getPage = this.getPage.bind(this);
   }
 
   async getItem(req, res) {
     try {
-      const rows = await knex(this.tableName).where(
-        "id",
-        "like",
-        `${req.params.query}%`
-      );
+      const pageNo = req.params.pageNo;
+
+      if (!pageNo) {
+        const rows = await knex(this.tableName).where(
+          "id",
+          "like",
+          `%${req.params.query}%`
+        );
+        res.send(getJsonResponse(rows));
+      } else {
+        const noToSkip = (pageNo - 1) * BATCH_SIZE;
+        const rows = await knex(this.tableName)
+          .where("id", "like", `%${req.params.query}%`)
+          .limit(BATCH_SIZE)
+          .offset(noToSkip);
+        res.send(getJsonResponse(rows));
+      }
+    } catch (err) {
+      res.send(getJsonErrorResponse("HE01"));
+    }
+  }
+
+  async getPage(req, res) {
+    try {
+      const pageNo = req.params.no;
+      const noToSkip = (pageNo - 1) * BATCH_SIZE;
+
+      const rows = await knex
+        .select()
+        .from(this.tableName)
+        .limit(BATCH_SIZE)
+        .offset(noToSkip);
       res.send(getJsonResponse(rows));
     } catch (err) {
-      console.log(err);
-      res.send(getJsonErrorResponse("HE01"));
+      res.send(getJsonErrorResponse("HE02", err.message));
     }
   }
 
@@ -37,7 +66,7 @@ class Crud {
       const rows = await knex.select().from(this.tableName);
       res.send(getJsonResponse(rows));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE01"));
+      res.send(getJsonErrorResponse("HE03"));
     }
   }
 
@@ -48,7 +77,7 @@ class Crud {
         .delete();
       res.send(getJsonResponse(noOfRowsDeleted));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE02"));
+      res.send(getJsonErrorResponse("HE04"));
     }
   }
 
@@ -62,7 +91,7 @@ class Crud {
         });
       res.send(getJsonResponse(product));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE03"));
+      res.send(getJsonErrorResponse("HE05"));
     }
   }
 
@@ -86,7 +115,7 @@ class Crud {
         } id exists already. Please try with some other unique id.`;
       else message = err.message;
 
-      res.send(getJsonErrorResponse("HE04", message));
+      res.send(getJsonErrorResponse("HE06", message));
     }
   }
 
@@ -99,8 +128,7 @@ class Crud {
         .update(product);
       res.send(getJsonResponse(noOfRowsAffected));
     } catch (err) {
-      console.log(err);
-      res.send(getJsonErrorResponse("HE05"));
+      res.send(getJsonErrorResponse("HE07"));
     }
   }
 }

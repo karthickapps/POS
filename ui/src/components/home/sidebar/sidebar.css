@@ -16,14 +16,14 @@
 }
 
 #menu > .active {
-  border-left: 4px solid #6335ca;
+  border-left: 4px solid #2185d0;
   border-radius: 0px;
   margin-left: -1px;
   padding-left: 2.1em;
 }
 
 #menu > .active.item:hover {
-  background: #6335ca;
+  background: #2185d0;
   color: white;
 }
 

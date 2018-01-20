@@ -55,7 +55,7 @@ class LoginForm extends Component {
     return (
       <div id="login-container">
         <div id="login">
-          <Segment inverted color="violet" attached="top">
+          <Segment inverted color="blue" attached="top">
             Welcome to Acoounts book!.
           </Segment>
           <Segment attached>
@@ -90,7 +90,7 @@ class LoginForm extends Component {
                 onChange={this.onChange}
               />
 
-              <Button color="violet" fluid size="large">
+              <Button color="blue" fluid size="large">
                 Login
               </Button>
             </Form>

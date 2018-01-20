@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
     .createTable("product_types", table => tables.productTypes(table, knex))
     .createTable("products", table => tables.products(table, knex))
     .createTable("expense", table => tables.expense(table, knex))
+    .createTable("customers", table => tables.customers(table, knex))
     .createTable("expense_types", table => tables.expenseTypes(table, knex));
 };
 
@@ -16,5 +17,6 @@ exports.down = function(knex, Promise) {
     .dropTable("product_types")
     .dropTable("products")
     .dropTable("expense")
+    .dropTable("customers")
     .dropTable("expense_types");
 };

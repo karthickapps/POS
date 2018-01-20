@@ -15,7 +15,7 @@ const Dialog = props => {
           <Button onClick={onClose} size="small">
             Cancel
           </Button>
-          <Button color="violet" onClick={onSubmit} size="small">
+          <Button color="blue" onClick={onSubmit} size="small">
             Submit
           </Button>
         </Button.Group>
