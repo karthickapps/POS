@@ -115,9 +115,7 @@ class AddOrUpdateProduct extends Component {
     const errors = this.validate();
 
     if (Object.keys(errors).length > 0) {
-      this.setState({
-        errors
-      });
+      this.setState({ errors });
       return;
     }
 

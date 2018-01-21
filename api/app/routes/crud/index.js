@@ -1,36 +1,53 @@
 const express = require("express");
 
 const routes = require("./routesConfig");
-const Crud = require("../../controllers/crud");
+const CommonEndPoints = require("../../controllers/commonEndPoints");
 
 const mainRouter = express.Router();
 
-const getCrudRoutes = (routeName, tableName) => {
-  const crud = new Crud(tableName, routeName);
+const getcommonEndPointsRoutes = (routeName, tableName) => {
+  const commonEndPoints = new CommonEndPoints(tableName, routeName);
 
   const router = express.Router();
 
-  router.get(`/${routeName}`, crud.selectAll);
+  // Fetch all
+  router.get(`/${routeName}`, commonEndPoints.selectAll);
 
-  router.get(`/${routeName}/page/:no`, crud.getPage);
+  // Gets the total count of rows present.
+  router.get(`/${routeName}/count/`, commonEndPoints.getCount);
 
-  router.get(`/${routeName}/search/:query`, crud.getItem);
+  // Gets the total count of rows with filter
+  router.get(`/${routeName}/count/:query`, commonEndPoints.getCount);
 
-  router.get(`/${routeName}/search/:query/:pageNo`, crud.getItem);
+  // Fetach by Id
+  router.get(`/${routeName}/:id`, commonEndPoints.selectById);
 
-  router.get(`/${routeName}/:id`, crud.selectById);
+  // Delete the record by Id
+  router.delete(`/${routeName}/:id`, commonEndPoints.delete);
 
-  router.delete(`/${routeName}/:id`, crud.delete);
+  // Creates the record
+  router.post(`/${routeName}`, commonEndPoints.create);
 
-  router.post(`/${routeName}`, crud.create);
+  // Updates the record.
+  router.put(`/${routeName}/:id`, commonEndPoints.update);
 
-  router.put(`/${routeName}/:id`, crud.update);
+  // Gets the records - pagination implementation.
+  router.get(`/${routeName}/page/:no`, commonEndPoints.getPage);
+
+  // Gets the records with the filter sent as query
+  router.get(`/${routeName}/search/:query`, commonEndPoints.getItem);
+
+  // Search with pagination
+  router.get(`/${routeName}/search/:query/:pageNo`, commonEndPoints.getItem);
 
   return router;
 };
 
 for (let i = 0; i < routes.length; i++) {
-  mainRouter.use("/", getCrudRoutes(routes[i].route, routes[i].table));
+  mainRouter.use(
+    "/",
+    getcommonEndPointsRoutes(routes[i].route, routes[i].table)
+  );
 }
 
 module.exports = mainRouter;

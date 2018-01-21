@@ -188,7 +188,7 @@ class ExpenseTab extends Component {
             <Button onClick={this.onCancel} size="small">
               Cancel
             </Button>
-            <Button color="violet" onClick={this.onSubmit} size="small">
+            <Button color="blue" onClick={this.onSubmit} size="small">
               Submit
             </Button>
           </Button.Group>

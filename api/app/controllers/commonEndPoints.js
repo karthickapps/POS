@@ -8,7 +8,7 @@ const {
 const BATCH_SIZE = 50;
 
 // TODO: Log all the errors for debugging.
-class Crud {
+class CommonEndPoints {
   constructor(tableName, routeName) {
     this.tableName = tableName;
     this.routeName = routeName;
@@ -19,6 +19,25 @@ class Crud {
     this.create = this.create.bind(this);
     this.update = this.update.bind(this);
     this.getPage = this.getPage.bind(this);
+    this.getCount = this.getCount.bind(this);
+  }
+
+  async getCount(req, res) {
+    try {
+      const { query } = req.params;
+
+      if (!query || query.length === 0) {
+        const count = await knex(this.tableName).count("id as count");
+        res.send(getJsonResponse(count));
+      } else {
+        const count = await knex(this.tableName)
+          .where("id", "like", `%${query}%`)
+          .count("id as count");
+        res.send(getJsonResponse(count));
+      }
+    } catch (err) {
+      res.send(getJsonErrorResponse("HE01"), err.message);
+    }
   }
 
   async getItem(req, res) {
@@ -41,7 +60,7 @@ class Crud {
         res.send(getJsonResponse(rows));
       }
     } catch (err) {
-      res.send(getJsonErrorResponse("HE01"));
+      res.send(getJsonErrorResponse("HE01"), err.message);
     }
   }
 
@@ -77,7 +96,7 @@ class Crud {
         .delete();
       res.send(getJsonResponse(noOfRowsDeleted));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE04"));
+      res.send(getJsonErrorResponse("HE04"), err.message);
     }
   }
 
@@ -91,7 +110,7 @@ class Crud {
         });
       res.send(getJsonResponse(product));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE05"));
+      res.send(getJsonErrorResponse("HE05"), err.message);
     }
   }
 
@@ -128,9 +147,9 @@ class Crud {
         .update(product);
       res.send(getJsonResponse(noOfRowsAffected));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE07"));
+      res.send(getJsonErrorResponse("HE07"), err.message);
     }
   }
 }
 
-module.exports = Crud;
+module.exports = CommonEndPoints;

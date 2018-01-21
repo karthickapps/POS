@@ -136,6 +136,10 @@ class Datagrid extends Component {
     this.page.currentPage === 1 && this.page.currentBatch === 1;
 
   isLastPage = () => {
+    if (this.page.batchData.length <= PAGE_SIZE) {
+      return true;
+    }
+
     if (this.page.lastBatchIndex !== this.page.currentBatch) {
       return false;
     }
@@ -217,7 +221,7 @@ class Datagrid extends Component {
     return (
       <div>
         <GridTopBar
-          searchText="Enter product id..."
+          searchText={`${this.props.datasource.headers[0]}..`}
           onSearch={actions.onSearch}
           onCreateNew={actions.onCreateNew}
           onFetchAll={actions.onFetchAll}

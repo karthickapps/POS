@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Titlebar, Datagrid, Loader } from "../controls";
+import { Titlebar, Datagrid, Loader, MessageBox, YesNo } from "../controls";
+import AddOrUpdateCustomer from "./AddOrUpdateCustomer";
 import api from "../../api";
 
 class Customers extends Component {
@@ -46,9 +47,10 @@ class Customers extends Component {
     this.onFetchAll();
   }
 
-  setDataSource = customers => {
+  setDataSource = (customers, count) => {
     const { datasource } = this.state;
     datasource.data = customers;
+    datasource.pagination.totalRecords = count;
     this.setState({ datasource: this.state.datasource, isLoading: false });
   };
 
@@ -59,13 +61,15 @@ class Customers extends Component {
 
   onFetchAll = async () => {
     this.setState({ isLoading: true });
+    const res = await api.customers.count();
     const customers = await api.customers.getPage(1);
-    this.setDataSource(customers);
+    this.setDataSource(customers, res[0].count);
   };
 
   onSearch = async query => {
+    const res = await api.customers.count();
     const customers = await api.customers.search(query);
-    this.setDataSource(customers);
+    this.setDataSource(customers, res[0].count);
   };
 
   onCreateNew = () => {
@@ -81,10 +85,15 @@ class Customers extends Component {
     this.setState({ canShowAddOrUpdate: true, isEdit: true, customer });
   };
 
+  onDelete = customer => {
+    this.currentCustomer = customer;
+    this.setState({ canShowConfirmDelete: true });
+  };
+
   deleteCustomer = async () => {
     try {
       this.setState({ canShowConfirmDelete: false, isLoading: false });
-      await api.customers.delete(this.customerDefault.id);
+      await api.customers.delete(this.currentCustomer.id);
       this.showMessageBox("Deleted successfully.");
     } catch (error) {
       this.showMessageBox(error.message);
@@ -95,7 +104,37 @@ class Customers extends Component {
   };
 
   onSubmitForm = async data => {
-    //
+    try {
+      this.setState({ customer: data, isLoading: true });
+
+      let res = "";
+      let message = "";
+
+      if (this.state.isEdit)
+        res = await api.customers.update(this.currentCustomer.id, data);
+      else res = await api.customers.createNew(data);
+
+      console.log(res);
+
+      if (res.data.status === "FAILED") {
+        message =
+          res.data.message.length === 0
+            ? "Something went wrong. Please try again"
+            : res.data.message;
+      } else {
+        message =
+          res.data.message.length === 0
+            ? "Saved successfully."
+            : res.data.message;
+      }
+
+      this.showMessageBox(message);
+    } catch (error) {
+      this.showMessageBox(error.message);
+    } finally {
+      await this.onFetchAll();
+      this.onAddOrUpdateDialogClose();
+    }
   };
 
   showMessageBox = message => {
@@ -120,6 +159,26 @@ class Customers extends Component {
         <Titlebar title="Customers" />
         <Loader isLoading={this.state.isLoading} />
         <Datagrid datasource={this.state.datasource} />
+        <AddOrUpdateCustomer
+          isEdit={this.state.isEdit}
+          data={this.state.customer}
+          canShowDialog={this.state.canShowAddOrUpdate}
+          onDialogClose={this.onAddOrUpdateDialogClose}
+          onSubmit={this.onSubmitForm}
+          headerText="Create product type"
+        />
+        <MessageBox
+          message={this.state.errorMessage}
+          open={this.state.canShowError}
+          onClose={() => this.setState({ canShowError: false })}
+        />
+        {this.state.canShowConfirmDelete ? (
+          <YesNo
+            message="Are you sure want to delete the selected expense type?"
+            onNo={() => this.setState({ canShowConfirmDelete: false })}
+            onYes={this.deleteCustomer}
+          />
+        ) : null}
       </div>
     );
   }

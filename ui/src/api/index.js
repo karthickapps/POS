@@ -1,20 +1,20 @@
 import axios from "axios";
-import crudApi from "./crudApiBuilder";
+import apiBuilder from "./apiBuilder";
 import { setAuthorizationHeader } from "../utils";
 
 setAuthorizationHeader(sessionStorage.getItem("token"));
 
-const customers = crudApi("customers");
+const customers = apiBuilder("customers");
 
-const expense = crudApi("expense");
+const expense = apiBuilder("expense");
 
-const expenseTypes = crudApi("expenseTypes");
+const expenseTypes = apiBuilder("expenseTypes");
 
-const productTypes = crudApi("productTypes");
+const productTypes = apiBuilder("productTypes");
 
-const products = crudApi("products");
+const products = apiBuilder("products");
 
-const user = crudApi("user");
+const user = apiBuilder("user");
 
 user.login = ({ id, password }) =>
   axios.post("/api/signin", { id, password }).then(res => {
