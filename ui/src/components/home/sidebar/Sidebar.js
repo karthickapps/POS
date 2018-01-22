@@ -51,6 +51,9 @@ class Sidebar extends Component {
           Expense
         </Menu.Item>
 
+        <div className="menu-header">
+          <span>SALE</span>
+        </div>
         <Menu.Item
           as={Link}
           to="/pos"
@@ -58,8 +61,19 @@ class Sidebar extends Component {
           active={isActive("pos")}
           onClick={this.handleItemClick}
         >
-          Sale
+          New Sale
         </Menu.Item>
+
+        <Menu.Item
+          as={Link}
+          to="/settle"
+          name="settle"
+          active={isActive("settle")}
+          onClick={this.handleItemClick}
+        >
+          Settle balance
+        </Menu.Item>
+
         <div className="menu-header">
           <span>REPORTS</span>
         </div>

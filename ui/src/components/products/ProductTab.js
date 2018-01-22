@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
 
 import AddOrUpdateProduct from "./AddOrUpdateProduct";
 import { Loader, Datagrid, MessageBox, YesNo } from "../controls";
-import { fetchAllProducts, fetchBySearchQuery } from "../../actions/products";
 import api from "../../api";
 
 import "../controls/commonTabs.css";
@@ -44,29 +42,29 @@ class ProductTab extends Component {
     datasource: this.gridSource
   };
 
-  componentWillMount() {
-    this.setDataSource();
+  componentWillReceiveProps(nextProps) {
+    this.setDataSource(nextProps.products);
   }
 
-  setDataSource = () => {
+  componentWillMount() {
+    this.setDataSource(this.props.products);
+  }
+
+  setDataSource = data => {
     const datasource = this.state.datasource;
-    datasource.data = this.props.products;
+    datasource.data = data;
     this.setState({ datasource });
   };
 
-  onSearch = query => {
-    this.props
-      .fetchBySearchQuery(query)
-      .then(() => this.setDataSource())
-      .catch(err => {
-        console.log("onSearch =>", err);
-      });
+  onSearch = async query => {
+    const products = await api.products.search(query);
+    this.setDataSource(products);
   };
 
   onFetchAll = async () => {
     try {
-      await this.props.fetchAllProducts();
-      this.setDataSource();
+      const products = await api.products.fetchAll();
+      this.setDataSource(products);
     } catch (error) {
       console.log(error);
     }
@@ -98,8 +96,7 @@ class ProductTab extends Component {
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProducts();
-      this.setDataSource();
+      await this.onFetchAll();
       this.setState({ isLoading: false });
     }
   };
@@ -133,8 +130,7 @@ class ProductTab extends Component {
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProducts();
-      this.setDataSource();
+      await this.onFetchAll();
       this.onAddOrUpdateDialogClose();
     }
   };
@@ -185,13 +181,4 @@ class ProductTab extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    products: state.products
-  };
-}
-
-export default connect(mapStateToProps, {
-  fetchAllProducts,
-  fetchBySearchQuery
-})(ProductTab);
+export default ProductTab;

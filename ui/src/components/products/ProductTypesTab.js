@@ -1,13 +1,8 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Tab } from "semantic-ui-react";
 
-import AddOrUpdateProductTypes from "./AddOrUpdateProductTypes";
 import { Loader, Datagrid, MessageBox, YesNo } from "../controls";
-import {
-  fetchAllProductTypes,
-  fetchBySearchQuery
-} from "../../actions/productTypes";
+import AddOrUpdateProductTypes from "./AddOrUpdateProductTypes";
 import api from "../../api";
 
 import "../controls/commonTabs.css";
@@ -44,32 +39,32 @@ class ProductTypeTab extends Component {
     datasource: this.gridSource
   };
 
+  componentWillReceiveProps(nextProps) {
+    this.setDataSource(nextProps.productTypes);
+  }
+
   componentWillMount() {
-    this.setDataSource();
+    this.setDataSource(this.props.productTypes);
   }
 
   onFetchAll = async () => {
     try {
-      await this.props.fetchAllProductTypes();
-      this.setDataSource();
+      const productTypes = await api.productTypes.fetchAll();
+      this.setDataSource(productTypes);
     } catch (error) {
-      console.log(error);
+      this.showMessageBox(error.message);
     }
   };
 
-  setDataSource = () => {
+  setDataSource = data => {
     const datasource = this.state.datasource;
-    datasource.data = this.props.productTypes;
+    datasource.data = data;
     this.setState({ datasource });
   };
 
-  onSearch = query => {
-    this.props
-      .fetchBySearchQuery(query)
-      .then(() => this.setDataSource())
-      .catch(err => {
-        console.log("onSearch =>", err);
-      });
+  onSearch = async query => {
+    const productTypes = await api.productTypes.search(query);
+    this.setDataSource(productTypes);
   };
 
   onCreateNew = () => {
@@ -98,8 +93,7 @@ class ProductTypeTab extends Component {
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProductTypes();
-      this.setDataSource();
+      await this.onFetchAll();
       this.setState({ isLoading: false });
     }
   };
@@ -133,8 +127,7 @@ class ProductTypeTab extends Component {
     } catch (error) {
       this.showMessageBox(error.message);
     } finally {
-      await this.props.fetchAllProductTypes();
-      this.setDataSource();
+      await this.onFetchAll();
       this.onAddOrUpdateDialogClose();
     }
   };
@@ -185,13 +178,4 @@ class ProductTypeTab extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    productTypes: state.productTypes
-  };
-}
-
-export default connect(mapStateToProps, {
-  fetchAllProductTypes,
-  fetchBySearchQuery
-})(ProductTypeTab);
+export default ProductTypeTab;
