@@ -11,12 +11,10 @@ class GridTopBar extends Component {
 
   onSearchClick = () => {
     if (this.state.searchQuery.length === 0) {
-      // eslint-disable-next-line no-alert
-      alert("Please enter a text to search");
+      this.onFetchAllClick();
       return;
     }
     this.props.onSearch(this.state.searchQuery);
-    this.setState({ searchQuery: "" });
   };
 
   onFetchAllClick = e => {

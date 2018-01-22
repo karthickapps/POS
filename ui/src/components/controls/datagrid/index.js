@@ -103,13 +103,7 @@ class Datagrid extends Component {
   };
 
   onNext = async () => {
-    // We increase current page everytime. So 6 indicates the overflow.
-    // Meaning we need to fetch the next batch.
-    if (
-      this.page.currentPage + 1 ===
-      PAGE_MAX_INDEX + 1
-      // this.page.currentPage === PAGE_MAX_INDEX + 1
-    ) {
+    if (this.page.currentPage === PAGE_MAX_INDEX) {
       this.page.currentPage = 1;
       await this.fetchNextBatch();
     } else {

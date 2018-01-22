@@ -28,7 +28,7 @@ class Customers extends Component {
     data: null,
     pagination: {
       showPagination: true,
-      totalRecords: 167
+      totalRecords: 0
     }
   };
 
@@ -51,7 +51,7 @@ class Customers extends Component {
     const { datasource } = this.state;
     datasource.data = customers;
     datasource.pagination.totalRecords = count;
-    this.setState({ datasource: this.state.datasource, isLoading: false });
+    this.setState({ datasource, isLoading: false });
   };
 
   onFetchNextBatch = async idx => {
@@ -67,7 +67,7 @@ class Customers extends Component {
   };
 
   onSearch = async query => {
-    const res = await api.customers.count();
+    const res = await api.customers.count(query);
     const customers = await api.customers.search(query);
     this.setDataSource(customers, res[0].count);
   };

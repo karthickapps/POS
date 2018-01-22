@@ -16,12 +16,12 @@ class Home extends Component {
         <Header />
         <Grid columns={2} divided="vertically">
           <Grid.Row id="container">
-            <Grid.Column width={3} style={{ marginBottom: 0 }}>
+            <Grid.Column width={2} style={{ marginBottom: 0 }}>
               <Sidebar />
             </Grid.Column>
             <Grid.Column
               id="grid-wrapper"
-              width={13}
+              width={14}
               style={{ marginBottom: 0 }}
             >
               <Segment id="segment-container" color="violet">

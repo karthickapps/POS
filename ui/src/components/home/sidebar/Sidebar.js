@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import { Menu, Icon } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import "./sidebar.css";
 
@@ -17,6 +17,10 @@ class Sidebar extends Component {
 
     return (
       <Menu fluid vertical id="menu">
+        <div className="menu-header">
+          <span>MASTERS</span>
+        </div>
+
         <Menu.Item
           as={Link}
           to="/customers"
@@ -24,10 +28,7 @@ class Sidebar extends Component {
           active={isActive("customers")}
           onClick={this.handleItemClick}
         >
-          <div>
-            <Icon name="address book" size="large" />
-            Customers
-          </div>
+          Customers
         </Menu.Item>
 
         <Menu.Item
@@ -37,10 +38,7 @@ class Sidebar extends Component {
           active={isActive("products")}
           onClick={this.handleItemClick}
         >
-          <div>
-            <Icon name="currency" size="large" />
-            Products
-          </div>
+          Products
         </Menu.Item>
 
         <Menu.Item
@@ -50,10 +48,7 @@ class Sidebar extends Component {
           active={isActive("expense")}
           onClick={this.handleItemClick}
         >
-          <div>
-            <Icon name="payment" size="large" />
-            Expense
-          </div>
+          Expense
         </Menu.Item>
 
         <Menu.Item
@@ -63,10 +58,19 @@ class Sidebar extends Component {
           active={isActive("pos")}
           onClick={this.handleItemClick}
         >
-          <div>
-            <Icon name="shopping cart" size="large" />
-            Point Of sale
-          </div>
+          Sale
+        </Menu.Item>
+        <div className="menu-header">
+          <span>REPORTS</span>
+        </div>
+        <Menu.Item
+          as={Link}
+          to="/dailySales"
+          name="dailySales"
+          active={isActive("dailySales")}
+          onClick={this.handleItemClick}
+        >
+          Daily Sales
         </Menu.Item>
       </Menu>
     );

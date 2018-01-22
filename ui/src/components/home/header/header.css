@@ -5,6 +5,11 @@
 }
 
 #logo {
-  padding: 0.92857143em 3.5em;
-  width: 247px;
+  padding: 0.92857143em 1.5em;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+#logo::before {
+  background: none;
 }
