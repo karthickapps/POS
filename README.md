@@ -6,14 +6,11 @@ A simple point of sale app in nodejs and reactjs.
 - Clone the repository using git clone
   ```git clone https://github.com/sfkshan/POS.git```
 
-- Navigate to the folder ```ui``` and then run
+- Navigate to the folder ```ui``` and then run ```yarn install
+yarn start```
 
-```yarn install
-   yarn start```
 
-- Open a new terminal and navigate to ```api``` folder and run
-
-```yarn install
+- Open a new terminal and navigate to ```api``` folder and run ```yarn install
    yarn start```
    
 - It works with npm also.
