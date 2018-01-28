@@ -1,0 +1,47 @@
+.saleFormContainer {
+  width: 100%;
+  padding-right: 10px;
+}
+
+.saleContainer {
+  display: flex;
+}
+
+.emptyMessageText {
+  text-align: left;
+  color: #e61111cc;
+}
+
+.show {
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+.emptyMessageText p {
+  font-size: 12px;
+}
+
+.priceLabel {
+  width: 40%;
+  text-align: right;
+  margin: 8px 18px 0px 10px;
+  color: #f73505f7;
+  font-size: 20px;
+  border-bottom: #f73505f7 1px dotted;
+}
+
+.qtyCell {
+  display: flex;
+}
+
+.qtyCell span {
+  margin-top: 5px;
+  width: 60px;
+}
+
+.ui.buttons.left {
+  margin-left: 20px;
+}

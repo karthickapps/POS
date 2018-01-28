@@ -18,7 +18,7 @@ class ProductTab extends Component {
   };
 
   gridSource = {
-    headers: ["Id", "Title", "Price", "Product type", "Action"],
+    headers: ["Id", "Title", "Price", "Product type"],
     filter: key =>
       key !== "created_at" && key !== "updated_at" && key !== "user_id",
     actions: {

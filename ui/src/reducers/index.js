@@ -1,10 +1,13 @@
 import { combineReducers } from "redux";
 
 import user from "../reducers/user";
+import cart from "../reducers/cart";
+
 import { USER_LOGGED_OUT } from "../types";
 
 const appReducer = combineReducers({
-  user
+  user,
+  cart
 });
 
 const rootReducer = (state, action) => {

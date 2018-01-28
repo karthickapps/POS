@@ -15,7 +15,7 @@ class ExpenseTypesTab extends Component {
   };
 
   gridSource = {
-    headers: ["Expense type", "actions"],
+    headers: ["Expense type"],
     filter: key =>
       key !== "created_at" && key !== "updated_at" && key !== "user_id",
     actions: {

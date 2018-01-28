@@ -7,6 +7,7 @@ import Sidebar from "./sidebar/Sidebar";
 import ProductsContainer from "../products/ProductsContainer";
 import ExpenseContainer from "../expense/ExpenseContainer";
 import Customers from "../customers";
+import Sale from "../sale";
 import "./home.css";
 
 class Home extends Component {
@@ -29,6 +30,7 @@ class Home extends Component {
                   <Route exact path="/products" component={ProductsContainer} />
                   <Route exact path="/expense" component={ExpenseContainer} />
                   <Route exact path="/customers" component={Customers} />
+                  <Route exact path="/sale" component={Sale} />
                 </Switch>
               </Segment>
             </Grid.Column>

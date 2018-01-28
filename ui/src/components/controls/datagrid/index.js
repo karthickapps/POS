@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Table, Button, Icon } from "semantic-ui-react";
 
 import GridTopBar from "./GridTopBar";
+import "./style.css";
 
 const PAGE_SIZE = 10;
 
@@ -51,40 +52,6 @@ class Datagrid extends Component {
     this.page.lastBatchIndex = lastBatchIndex;
     this.setState({ data: data.slice(0, PAGE_SIZE) });
   };
-
-  renderRowActionButtons = val => (
-    <Table.Cell>
-      <Button.Group>
-        <Button
-          icon
-          size="mini"
-          compact
-          onClick={() => this.actions.onEdit(val)}
-        >
-          <Icon name="write" />
-        </Button>
-        <Button
-          icon
-          size="mini"
-          color="blue"
-          compact
-          onClick={() => this.actions.onDelete(val)}
-        >
-          <Icon name="trash" />
-        </Button>
-      </Button.Group>
-    </Table.Cell>
-  );
-
-  renderRowData = val =>
-    Object.keys(val)
-      .filter(k => this.props.datasource.filter(k))
-      .map(key => <Table.Cell key={key}>{val[key]}</Table.Cell>);
-
-  renderHeaderRow = () =>
-    this.props.datasource.headers.map(col => (
-      <Table.HeaderCell key={col}>{col}</Table.HeaderCell>
-    ));
 
   fetchNextBatch = async () => {
     this.page.batchData = await this.actions.onFetchNextBatch(
@@ -148,6 +115,94 @@ class Datagrid extends Component {
     return false;
   };
 
+  hasActions = () => Object.keys(this.actions).length > 0;
+
+  // RENDERS
+  renderRowActionButtons = val => {
+    if (!this.hasActions()) {
+      return null;
+    }
+
+    const renderEditButton = () => {
+      if (!this.actions.onEdit) {
+        return null;
+      }
+
+      return (
+        <Button
+          icon
+          size="mini"
+          compact
+          onClick={() => this.actions.onEdit(val)}
+        >
+          <Icon name="write" />
+        </Button>
+      );
+    };
+
+    const renderDeleteButton = () => {
+      if (!this.actions.onDelete) {
+        return null;
+      }
+
+      return (
+        <Button
+          icon
+          size="mini"
+          color="blue"
+          compact
+          onClick={() => this.actions.onDelete(val)}
+        >
+          <Icon name="trash" />
+        </Button>
+      );
+    };
+
+    const renderSelectButton = () => {
+      if (!this.actions.onSelect) {
+        return null;
+      }
+
+      return (
+        <Button
+          id="grid-select-button"
+          icon
+          size="mini"
+          color="orange"
+          compact
+          onClick={() => this.actions.onSelect(val)}
+        >
+          Select
+        </Button>
+      );
+    };
+
+    return (
+      <Table.Cell>
+        <Button.Group>
+          {renderEditButton()}
+          {renderDeleteButton()}
+          {renderSelectButton()}
+        </Button.Group>
+      </Table.Cell>
+    );
+  };
+
+  renderRowData = val =>
+    Object.keys(val)
+      .filter(k => this.props.datasource.filter(k))
+      .map(key => <Table.Cell key={key}>{val[key]}</Table.Cell>);
+
+  renderHeaderRow = () => {
+    const headers = this.props.datasource.headers.map(col => (
+      <Table.HeaderCell key={col}>{col}</Table.HeaderCell>
+    ));
+    if (this.hasActions()) {
+      headers.push(<Table.HeaderCell key="Actions">Actions</Table.HeaderCell>);
+    }
+    return headers;
+  };
+
   renderPagination = () => {
     if (!this.pagination) return null;
 
@@ -197,7 +252,7 @@ class Datagrid extends Component {
 
     return (
       <div>
-        <Table celled compact>
+        <Table celled compact className="gridview">
           <Table.Header>
             <Table.Row>{this.renderHeaderRow()}</Table.Row>
           </Table.Header>

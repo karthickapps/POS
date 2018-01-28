@@ -56,12 +56,12 @@ class Sidebar extends Component {
         </div>
         <Menu.Item
           as={Link}
-          to="/pos"
-          name="pos"
-          active={isActive("pos")}
+          to="/sale"
+          name="sale"
+          active={isActive("sale")}
           onClick={this.handleItemClick}
         >
-          New Sale
+          Sale
         </Menu.Item>
 
         <Menu.Item

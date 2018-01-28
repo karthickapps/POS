@@ -12,6 +12,11 @@ const setAuthorizationHeader = (token = null) => {
 
 const isValidDDMMYY = date => moment(date, "DD-MM-YY", true).isValid();
 
+const invertShowHide = val => {
+  if (val === "show") return "hide";
+  return "show";
+};
+
 const isValidDateChange = idate => {
   let date = idate;
 
@@ -31,4 +36,9 @@ const isValidDateChange = idate => {
   return true;
 };
 
-export { setAuthorizationHeader, isValidDDMMYY, isValidDateChange };
+export {
+  setAuthorizationHeader,
+  isValidDDMMYY,
+  isValidDateChange,
+  invertShowHide
+};

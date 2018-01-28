@@ -14,7 +14,7 @@ class Customers extends Component {
   };
 
   gridSource = {
-    headers: ["Customer Id", "Name", "Details", "Adress", "Actions"],
+    headers: ["Customer Id", "Name", "Details", "Adress"],
     filter: key =>
       key !== "created_at" && key !== "updated_at" && key !== "user_id",
     actions: {
