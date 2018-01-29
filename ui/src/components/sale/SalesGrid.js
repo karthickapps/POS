@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Table, Button, Icon } from "semantic-ui-react";
+import { connect } from "react-redux";
+
+import { removeItemFromCart, updateItemInCart } from "../../actions/cart";
 
 import "./sale.css";
 
@@ -17,6 +20,19 @@ class SalesGrid extends Component {
     </Table.Row>
   );
 
+  updateItemInCart = (item, count) => {
+    const t = {};
+    Object.assign(t, item);
+    t.qty += count;
+
+    if (t.qty === 0) {
+      return;
+    }
+
+    t.netPrice = t.pricePerQty * t.qty;
+    this.props.updateItemInCart(t);
+  };
+
   renderRowActionButtons = val => (
     <Table.Cell>
       <Button.Group>
@@ -25,7 +41,7 @@ class SalesGrid extends Component {
           size="mini"
           color="red"
           compact
-          onClick={() => this.props.onRemoveItemFromCart(val)}
+          onClick={() => this.props.removeItemFromCart(val)}
         >
           <Icon name="trash" />
         </Button>
@@ -42,7 +58,7 @@ class SalesGrid extends Component {
           size="mini"
           color="blue"
           compact
-          onClick={() => this.props.onUpdateQtyInCartItem(val, 1)}
+          onClick={() => this.updateItemInCart(val, 1)}
         >
           <Icon name="plus" />
         </Button>
@@ -51,7 +67,7 @@ class SalesGrid extends Component {
           icon
           size="mini"
           compact
-          onClick={() => this.props.onUpdateQtyInCartItem(val, -1)}
+          onClick={() => this.updateItemInCart(val, -1)}
         >
           <Icon name="minus" />
         </Button>
@@ -60,19 +76,22 @@ class SalesGrid extends Component {
   );
 
   renderRows = () =>
-    this.props.cart.map((val, idx) => (
-      <Table.Row key={val.id}>
-        <Table.Cell>{idx}</Table.Cell>
-        <Table.Cell>{val.id}</Table.Cell>
-        <Table.Cell>{`₹ ${val.pricePerQty}`}</Table.Cell>
-        <Table.Cell>{this.renderQtyCell(val)}</Table.Cell>
-        <Table.Cell>{`₹ ${val.netPrice}`}</Table.Cell>
-        {this.renderRowActionButtons(val)}
-      </Table.Row>
-    ));
+    this.props.cart.ids.map((id, idx) => {
+      const val = this.props.cart.listOfItems[id];
+      return (
+        <Table.Row key={val.id}>
+          <Table.Cell>{idx + 1}</Table.Cell>
+          <Table.Cell>{val.id}</Table.Cell>
+          <Table.Cell>{`₹ ${val.pricePerQty}`}</Table.Cell>
+          <Table.Cell>{this.renderQtyCell(val)}</Table.Cell>
+          <Table.Cell>{`₹ ${val.netPrice}`}</Table.Cell>
+          {this.renderRowActionButtons(val)}
+        </Table.Row>
+      );
+    });
 
   renderTable = () => (
-    <Table celled compact className="gridview">
+    <Table compact className="gridview">
       <Table.Header>{this.renderHeaderRow()}</Table.Header>
       <Table.Body>{this.renderRows()}</Table.Body>
     </Table>
@@ -83,4 +102,13 @@ class SalesGrid extends Component {
   }
 }
 
-export default SalesGrid;
+function mapStateToProps(state) {
+  return {
+    cart: state.cart
+  };
+}
+
+export default connect(mapStateToProps, {
+  removeItemFromCart,
+  updateItemInCart
+})(SalesGrid);
