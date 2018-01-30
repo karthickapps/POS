@@ -3,7 +3,7 @@
   padding-right: 10px;
 }
 
-.saleContainer {
+.saleForm {
   display: flex;
 }
 
@@ -44,4 +44,66 @@
 
 .ui.buttons.left {
   margin-left: 20px;
+}
+
+.row {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 25px;
+}
+
+.row > .col1 {
+  width: 40%;
+}
+
+.row > .col1 > span {
+  font-size: 14px;
+  float: right;
+}
+
+.row > .col2 {
+  width: 40%;
+  padding-left: 50px;
+}
+
+.row > .col2 > span {
+  font-size: 18px;
+  float: left;
+  color: black;
+}
+
+.col2 > .ui.input input {
+  border: none;
+  margin-top: -10px;
+  padding-left: 0px;
+  border-bottom: 1px #2384d0 solid;
+  border-radius: 0px;
+}
+
+.col2 > .ui.input input:focus,
+.ui.input.focus input {
+  border-bottom: 1.5px #2384d0 solid;
+}
+
+.row > .col2 > span.netBillLabel {
+  color: red;
+  font-weight: bold;
+}
+
+.row.line {
+  height: 1px;
+  border-bottom: 1px #0000001a solid;
+  align-self: center;
+}
+
+.center {
+  width: 50%;
+  margin: auto;
+}
+
+.ui.buttons.btnGroup-sales {
+  padding: 20px;
+  width: 50%;
+  margin: 0 auto;
 }
