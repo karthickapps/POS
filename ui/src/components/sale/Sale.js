@@ -8,11 +8,7 @@ import SalesEntryForm from "./SalesEntryForm";
 import SaleGrid from "./SaleGrid";
 import api from "../../api";
 import { Titlebar, Loader } from "../controls";
-import {
-  addToCart,
-  removeItemFromCart,
-  updateItemInCart
-} from "../../actions/cart";
+import * as cartActions from "../../actions/cart";
 
 import "./sale.css";
 
@@ -180,6 +176,7 @@ class Sale extends Component {
         />
         <br />
         <Button
+          disabled={this.props.cart.ids.length === 0}
           color="blue"
           style={{ float: "right" }}
           onClick={this.onCheckout}
@@ -191,16 +188,14 @@ class Sale extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    cart: state.cart
-  };
-}
+const mapStateToProps = state => ({
+  cart: state.cart
+});
 
 export default withRouter(
   connect(mapStateToProps, {
-    addToCart,
-    removeItemFromCart,
-    updateItemInCart
+    addToCart: cartActions.addToCart,
+    removeItemFromCart: cartActions.removeItemFromCart,
+    updateItemInCart: cartActions.updateItemInCart
   })(Sale)
 );

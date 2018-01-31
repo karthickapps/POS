@@ -1,14 +1,58 @@
 import React, { Component } from "react";
-import { Input, Button } from "semantic-ui-react";
+import { Input, Button, Message } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { Titlebar } from "../controls";
+import cartTotalSelector from "../../selectors/cart";
+import { emptyCart } from "../../actions/cart";
 
 class SaleSummary extends Component {
-  state = {};
+  state = {
+    discount: "",
+    netBillAmount: ""
+  };
+
+  componentWillMount() {
+    this.setState({ netBillAmount: this.props.totalBillAmount });
+  }
+
+  onDiscountChange = e => {
+    const discountValue = e.target.value;
+
+    if (!discountValue && discountValue.length === 0) {
+      this.setState({
+        discount: "",
+        netBillAmount: this.props.totalBillAmount
+      });
+    } else if (
+      !isNaN(discountValue) &&
+      discountValue <= this.props.totalBillAmount
+    ) {
+      this.setState({
+        discount: Number(discountValue),
+        netBillAmount: this.props.totalBillAmount - discountValue
+      });
+    }
+  };
+
+  onCancelSale = () => {
+    this.props.emptyCart();
+    this.props.history.push("/sale");
+  };
 
   render() {
-    console.log(this.props.cart);
+    if (this.props.totalBillAmount === 0) {
+      return (
+        <div>
+          <Titlebar title="Sale Summary" />
+
+          <Message info>
+            <Message.Header>Oops, sorry</Message.Header>
+            <p>No items in the cart!</p>
+          </Message>
+        </div>
+      );
+    }
 
     return (
       <div>
@@ -19,7 +63,7 @@ class SaleSummary extends Component {
             <span>Total bill amount</span>
           </div>
           <div className="col2">
-            <span>₹ 10</span>
+            <span>{`₹ ${this.props.totalBillAmount}`}</span>
           </div>
         </div>
 
@@ -28,7 +72,11 @@ class SaleSummary extends Component {
             <span>Discount</span>
           </div>
           <div className="col2">
-            <Input placeholder="Discount..." />
+            <Input
+              placeholder="₹"
+              value={this.state.discount}
+              onChange={this.onDiscountChange}
+            />
           </div>
         </div>
 
@@ -37,7 +85,9 @@ class SaleSummary extends Component {
             <span>Net bill amount</span>
           </div>
           <div className="col2">
-            <span className="netBillLabel">₹ 10</span>
+            <span className="netBillLabel">{`₹ ${
+              this.state.netBillAmount
+            }`}</span>
           </div>
         </div>
 
@@ -45,7 +95,7 @@ class SaleSummary extends Component {
 
         <div className="row center">
           <Button.Group className="btnGroup-sales">
-            <Button>Cancel Sale</Button>
+            <Button onClick={this.onCancelSale}>Cancel Sale</Button>
             <Button color="blue">Finish Sale</Button>
           </Button.Group>
         </div>
@@ -56,10 +106,8 @@ class SaleSummary extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    cart: state.cart
-  };
-};
+const mapStateToProps = state => ({
+  totalBillAmount: cartTotalSelector(state)
+});
 
-export default withRouter(connect(mapStateToProps, null)(SaleSummary));
+export default withRouter(connect(mapStateToProps, { emptyCart })(SaleSummary));
