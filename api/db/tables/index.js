@@ -6,6 +6,9 @@ const expense = require("./expense");
 const expenseTypes = require("./expense_types");
 const transactions = require("./transactions");
 const transactionsHeader = require("./transactions_header");
+const customerCreditDetail = require("./customer_credit_detail");
+const customerCreditHeader = require("./customer_credit_header");
+const customerDebitDetail = require("./customer_debit_detail");
 
 module.exports = {
   users,
@@ -15,5 +18,8 @@ module.exports = {
   expenseTypes,
   customers,
   transactions,
-  transactionsHeader
+  transactionsHeader,
+  customerCreditDetail,
+  customerCreditHeader,
+  customerDebitDetail
 };

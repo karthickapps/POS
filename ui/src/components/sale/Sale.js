@@ -33,6 +33,10 @@ class Sale extends Component {
     this.fetchProducts();
   }
 
+  componentDidMount() {
+    document.getElementById("search_box").focus();
+  }
+
   // Featches all products and sets the source for search.
   fetchProducts = async () => {
     const products = await api.products.fetchAll();
@@ -153,6 +157,7 @@ class Sale extends Component {
         <Titlebar title="Sale" />
         <div className="saleForm">
           <Search
+            id="search_box"
             placeholder="Product Id"
             style={{ paddingRight: 10 }}
             loading={isLoading}

@@ -12,6 +12,15 @@ exports.up = function(knex, Promise) {
     .createTable("transactions", table => tables.transactions(table, knex))
     .createTable("transactions_header", table =>
       tables.transactionsHeader(table, knex)
+    )
+    .createTable("credit_credit_detail", table =>
+      tables.customerCreditDetail(table, knex)
+    )
+    .createTable("customer_credit_header", table =>
+      tables.customerCreditHeader(table, knex)
+    )
+    .createTable("customer_debit_detail", table =>
+      tables.customerDebitDetail(table, knex)
     );
 };
 
@@ -24,5 +33,8 @@ exports.down = function(knex, Promise) {
     .dropTable("customers")
     .dropTable("expense_types")
     .dropTable("transactions")
-    .dropTable("transactions_header");
+    .dropTable("transactions_header")
+    .dropTable("credit_credit_detail")
+    .dropTable("customer_credit_header")
+    .dropTable("customer_debit_detail");
 };
