@@ -1,8 +1,12 @@
 const Joi = require("joi");
 
+const schema = Joi.object().keys({
+  query: Joi.string().required()
+});
+
 module.exports = {
   // eslint-disable-next-line
-  validateUserInfo: schema => (req, res, next) => {
+  validateQuery: (req, res, next) => {
     const result = Joi.validate(req.body, schema);
     if (result.error) {
       return res.status(400).json(result.error);
@@ -15,14 +19,9 @@ module.exports = {
     next();
   },
 
-  schemas: {
-    authSchema: Joi.object().keys({
-      id: Joi.string()
-        .min(4)
-        .required(),
-      password: Joi.string()
-        .min(4)
-        .required(),
-    }),
-  },
+  validateSaleQueryString: (req, res, next) => {
+    const result = req.params;
+    console.log(result);
+    next();
+  }
 };

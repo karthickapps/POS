@@ -28,14 +28,21 @@ class Sale extends Component {
     results: []
   };
 
-  componentWillMount() {
+  async componentWillMount() {
     this.resetSalesEntryForm();
     this.fetchProducts();
+    this.setTransId();
   }
 
   componentDidMount() {
     document.getElementById("search_box").focus();
   }
+
+  setTransId = async () => {
+    if (this.props.cart.transId) return;
+    const res = await api.sale.getTransId();
+    this.props.setTransId(res.transId);
+  };
 
   // Featches all products and sets the source for search.
   fetchProducts = async () => {
@@ -201,6 +208,7 @@ export default withRouter(
   connect(mapStateToProps, {
     addToCart: cartActions.addToCart,
     removeItemFromCart: cartActions.removeItemFromCart,
-    updateItemInCart: cartActions.updateItemInCart
+    updateItemInCart: cartActions.updateItemInCart,
+    setTransId: cartActions.setTransId
   })(Sale)
 );

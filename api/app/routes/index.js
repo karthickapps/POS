@@ -5,6 +5,7 @@ const express = require("express");
 const passportConf = require("../passport");
 const crud = require("./crud");
 const auth = require("./auth");
+const sale = require("./sale");
 
 const router = express.Router();
 
@@ -19,5 +20,8 @@ router.use((req, res, next) => {
 
 // All routes below this needs token for authentication.
 router.use("/api", crud);
+
+// All routes regarding sale & transactions.
+router.use("/api", sale);
 
 module.exports = router;

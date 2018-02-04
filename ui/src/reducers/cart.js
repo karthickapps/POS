@@ -5,7 +5,8 @@ import {
   ADD_TO_CART,
   REMOVE_ITEM_FROM_CART,
   UPDATE_CART_ITEM,
-  EMPTY_CART
+  EMPTY_CART,
+  SET_TRANS_ID
 } from "../types";
 
 const ids = (state = [], action = {}) => {
@@ -17,7 +18,7 @@ const ids = (state = [], action = {}) => {
       }
 
       const isAvail = state.filter(o => o === action.payload.id);
-      
+
       if (isAvail.length > 0) {
         return state;
       }
@@ -56,9 +57,23 @@ const listOfItems = (state = {}, action = {}) => {
   }
 };
 
+const transId = (state = "", action = {}) => {
+  switch (action.type) {
+    case EMPTY_CART:
+      return "";
+
+    case SET_TRANS_ID:
+      return action.payload;
+
+    default:
+      return state;
+  }
+};
+
 const cart = combineReducers({
   ids,
-  listOfItems
+  listOfItems,
+  transId
 });
 
 export default cart;

@@ -1,25 +1,25 @@
-import {
-  ADD_TO_CART,
-  REMOVE_ITEM_FROM_CART,
-  UPDATE_CART_ITEM,
-  EMPTY_CART
-} from "../types";
+import * as types from "../types";
 
 export const emptyCart = () => ({
-  type: EMPTY_CART
+  type: types.EMPTY_CART
 });
 
 export const addToCart = item => ({
-  type: ADD_TO_CART,
+  type: types.ADD_TO_CART,
   payload: item
 });
 
 export const removeItemFromCart = item => ({
-  type: REMOVE_ITEM_FROM_CART,
+  type: types.REMOVE_ITEM_FROM_CART,
   payload: item
 });
 
 export const updateItemInCart = item => ({
-  type: UPDATE_CART_ITEM,
+  type: types.UPDATE_CART_ITEM,
   payload: item
+});
+
+export const setTransId = transId => ({
+  type: types.SET_TRANS_ID,
+  payload: transId
 });
