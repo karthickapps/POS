@@ -13,7 +13,7 @@ exports.up = function(knex, Promise) {
     .createTable("transactions_header", table =>
       tables.transactionsHeader(table, knex)
     )
-    .createTable("credit_credit_detail", table =>
+    .createTable("customer_credit_detail", table =>
       tables.customerCreditDetail(table, knex)
     )
     .createTable("customer_credit_header", table =>
@@ -34,7 +34,7 @@ exports.down = function(knex, Promise) {
     .dropTable("expense_types")
     .dropTable("transactions")
     .dropTable("transactions_header")
-    .dropTable("credit_credit_detail")
+    .dropTable("customer_credit_detail")
     .dropTable("customer_credit_header")
     .dropTable("customer_debit_detail");
 };

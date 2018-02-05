@@ -117,7 +117,9 @@ class Sale extends Component {
     }
   };
 
-  onAddToCartClick = () => {
+  onAddToCartClick = async () => {
+    this.setState({ isLoading: true });
+
     const item = _.cloneDeep(this.state.cartItem);
     const previous = _.cloneDeep(this.props.cart.listOfItems)[item.id];
 
@@ -126,15 +128,24 @@ class Sale extends Component {
     if (previous) {
       previous.qty += item.qty;
       previous.netPrice += item.netPrice;
+      previous.transId = this.props.cart.transId;
+
+      // TODO
+      await api.sale.addItemToCart(previous);
       this.props.addToCart(previous);
     } else {
+      item.transId = this.props.cart.transId;
+
+      // TODO
+      await api.sale.addItemToCart(item);
       this.props.addToCart(item);
     }
 
     this.setState({
       cartItem: this.defaultCartItem,
       selectedProduct: "",
-      value: ""
+      value: "",
+      isLoading: false
     });
   };
 

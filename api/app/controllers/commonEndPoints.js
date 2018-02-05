@@ -110,7 +110,7 @@ class CommonEndPoints {
         });
       res.send(getJsonResponse(product));
     } catch (err) {
-      res.send(getJsonErrorResponse("HE05"), err.message);
+      res.send(getJsonErrorResponse("HE05", err.message));
     }
   }
 

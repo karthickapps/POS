@@ -1,7 +1,5 @@
 module.exports = (table, knex) => {
   table.string("id", 35);
-  table.integer("no");
-  table.primary(["id", "no"]);
 
   table
     .string("product_id")
@@ -9,8 +7,9 @@ module.exports = (table, knex) => {
     .references("id")
     .inTable("products");
 
+  table.primary(["id", "product_id"]);
+
   table.integer("qty").notNullable();
-  table.decimal("amount").notNullable();
 
   table.timestamp("created_at").defaultTo(knex.fn.now());
   table.timestamp("updated_at").defaultTo(knex.fn.now());

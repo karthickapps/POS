@@ -1,13 +1,20 @@
 const router = require("express-promise-router")();
 const validate = require("./validate");
 
-// controllers
 const saleController = require("../../controllers/sale");
 
-router.get(
+router.get("/sale/transId", saleController.getTransId);
+
+router.post(
   "/sale",
-  validate.validateSaleQueryString,
-  saleController.getTransId
+  validate.validateAddToCartItemRequest,
+  saleController.addItemToCart
+);
+
+router.delete(
+  "/sale",
+  validate.validateEmptyCartRequest,
+  saleController.emptyCart
 );
 
 module.exports = router;

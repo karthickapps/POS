@@ -5,6 +5,7 @@ import { withRouter } from "react-router";
 import { Titlebar } from "../controls";
 import cartTotalSelector from "../../selectors/cart";
 import { emptyCart } from "../../actions/cart";
+import api from "../../api";
 
 class SaleSummary extends Component {
   state = {
@@ -35,7 +36,9 @@ class SaleSummary extends Component {
     }
   };
 
-  onCancelSale = () => {
+  onCancelSale = async () => {
+    // TODO
+    await api.sale.emptyCart(this.props.transId);
     this.props.emptyCart();
     this.props.history.push("/sale");
   };
@@ -107,6 +110,7 @@ class SaleSummary extends Component {
 }
 
 const mapStateToProps = state => ({
+  transId: state.cart.transId,
   totalBillAmount: cartTotalSelector(state)
 });
 

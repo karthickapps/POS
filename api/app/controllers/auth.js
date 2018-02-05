@@ -1,11 +1,12 @@
 const JWT = require("jsonwebtoken");
 
+const tableNames = require("../../db/tableNames");
 const knex = require("../../db/knex");
 const { JWT_SECRET } = require("../configuration");
 
 const {
   getJsonResponse,
-  getJsonErrorResponse,
+  getJsonErrorResponse
 } = require("../helpers/response_object");
 
 const signToken = id =>
@@ -15,9 +16,9 @@ const signToken = id =>
       sub: id,
       id,
       iat: new Date().getTime(),
-      exp: new Date().setDate(new Date().getDate() + 1), // current time + 1 day ahead
+      exp: new Date().setDate(new Date().getDate() + 1) // current time + 1 day ahead
     },
-    JWT_SECRET,
+    JWT_SECRET
   );
 
 module.exports = {
@@ -26,7 +27,7 @@ module.exports = {
 
     try {
       // gives no of rows here incase of sqlite3
-      await knex("users").insert({ id, password });
+      await knex(tableNames.users).insert({ id, password });
 
       const token = signToken(id);
 
@@ -35,13 +36,13 @@ module.exports = {
       if (err.errno === 19) {
         const errorResponse = getJsonErrorResponse(
           "CA01",
-          "Username already exists. Please use different name.",
+          "Username already exists. Please use different name."
         );
         res.send(errorResponse);
       } else {
         const errorResponse = getJsonErrorResponse(
           "CA01-B",
-          "Internal error plase try after sometime.",
+          "Internal error plase try after sometime."
         );
         res.send(errorResponse);
       }
@@ -56,12 +57,12 @@ module.exports = {
     try {
       user = await knex
         .select()
-        .from("users")
+        .from(tableNames.users)
         .where({ id, password });
     } catch (err) {
       const errorResponse = getJsonErrorResponse(
         "CA02-A",
-        "Internal error plase try after sometime.",
+        "Internal error plase try after sometime."
       );
       return res.send(errorResponse);
     }
@@ -69,7 +70,7 @@ module.exports = {
     if (user.length !== 1) {
       const errorResponse = getJsonErrorResponse(
         "CA02-B",
-        "Invalid credentials. Please try again",
+        "Invalid credentials. Please try again"
       );
       return res.send(errorResponse);
     }
@@ -77,5 +78,5 @@ module.exports = {
     const token = signToken(id);
 
     return res.send(getJsonResponse({ token }));
-  },
+  }
 };

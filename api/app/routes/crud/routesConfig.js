@@ -1,9 +1,11 @@
+const tableNames = require("../../../db/tableNames");
+
 const routesConfig = [
-  { route: "products", table: "products" },
-  { route: "productTypes", table: "product_types" },
-  { route: "expenseTypes", table: "expense_types" },
-  { route: "expense", table: "expense" },
-  { route: "customers", table: "customers" }
+  { route: "products", table: tableNames.products },
+  { route: "productTypes", table: tableNames.productTypes },
+  { route: "expenseTypes", table: tableNames.expenseTypes },
+  { route: "expense", table: tableNames.expense },
+  { route: "customers", table: tableNames.customers }
 ];
 
 module.exports = routesConfig;

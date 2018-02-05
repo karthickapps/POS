@@ -1,12 +1,12 @@
 import * as types from "../types";
 
-export const emptyCart = () => ({
-  type: types.EMPTY_CART
-});
-
 export const addToCart = item => ({
   type: types.ADD_TO_CART,
   payload: item
+});
+
+export const emptyCart = () => ({
+  type: types.EMPTY_CART
 });
 
 export const removeItemFromCart = item => ({
