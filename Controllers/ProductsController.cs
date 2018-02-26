@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace pos.Controllers
@@ -14,6 +15,18 @@ namespace pos.Controllers
                 "Pen",
                 "Pencil",
                 "Paper"
+            };
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("[action]")]
+        public IEnumerable<string> ProtectedAll()
+        {
+            return new List<string>
+            {
+                "Audi",
+                "Mercedez",
+                "BMW"
             };
         }
     }
