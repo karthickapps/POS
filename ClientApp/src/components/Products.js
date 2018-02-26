@@ -17,8 +17,6 @@ class Products extends Component {
     await this.login();
     await this.FetchAndUpdate("Products", "api/Products/All");
     await this.FetchAndUpdate("Protected", "api/Products/ProtectedAll");
-
-    console.log(document.cookie);
   }
 
   async login() {
