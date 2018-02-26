@@ -30,7 +30,7 @@ namespace POS
 
                      options.SlidingExpiration = true;
 
-                     options.ExpireTimeSpan = new TimeSpan(2);
+                     options.ExpireTimeSpan = TimeSpan.FromMinutes(2);
 
                      options.Events.OnRedirectToAccessDenied = (context) =>
                      {
