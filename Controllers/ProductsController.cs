@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace pos.Controllers
+namespace POS.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     [Route("api/[controller]")]
     public class ProductsController : Controller
     {
+        [AllowAnonymous]
         [HttpGet("[action]")]
         public IEnumerable<string> All()
         {
@@ -18,7 +20,6 @@ namespace pos.Controllers
             };
         }
 
-        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public IEnumerable<string> ProtectedAll()
         {

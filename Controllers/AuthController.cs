@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using pos.Controllers.Resources;
+using POS.Controllers.Resources;
 
-namespace pos.Controllers
+namespace POS.Controllers
 {
     [Route("api/[controller]")]
     [AllowAnonymous]
@@ -19,7 +19,7 @@ namespace pos.Controllers
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, "barry", ClaimValueTypes.String));
-            claims.Add(new Claim(ClaimTypes.Role, "Administrator", ClaimValueTypes.String));
+            // claims.Add(new Claim(ClaimTypes.Role, "Administrator", ClaimValueTypes.String));
 
             var userIdentity = new ClaimsIdentity("SuperSecureLogin");
             userIdentity.AddClaims(claims);

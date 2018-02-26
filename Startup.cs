@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,10 @@ namespace POS
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                  {
                      options.Cookie.Name = "POS_Auth";
+
+                     options.SlidingExpiration = true;
+
+                     options.ExpireTimeSpan = new TimeSpan(2);
 
                      options.Events.OnRedirectToAccessDenied = (context) =>
                      {
