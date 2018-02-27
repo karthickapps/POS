@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using POS.Persistance;
 
 namespace POS
 {
@@ -53,6 +55,11 @@ namespace POS
             {
                 options.AddPolicy("AdministratorOnly", policy => policy.RequireRole("Administrator"));
             });
+
+
+            var connectionString = Configuration.GetConnectionString("PosContext");
+
+            services.AddEntityFrameworkNpgsql().AddDbContext<PosDbContext>(options => options.UseNpgsql(connectionString));
 
             services.AddMvc(config =>
             {

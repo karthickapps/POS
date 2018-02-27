@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace pos.Controllers.Resources
+namespace POS.Controllers.Resources
 {
     public class LoginResource
     {

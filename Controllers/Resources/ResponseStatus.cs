@@ -1,4 +1,4 @@
-namespace pos.Controllers.Resources
+namespace POS.Controllers.Resources
 {
     public class ResponseStatus
     {
