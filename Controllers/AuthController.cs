@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using pos.Controllers.Resources;
 using POS.Controllers.Resources;
 
 namespace POS.Controllers
@@ -15,14 +16,21 @@ namespace POS.Controllers
     public class AuthController : Controller
     {
         [HttpPost("[action]")]
-        public async Task<OkResponseResource> Login()
+        public async Task<IActionResult> Login([FromBody]LoginResource loginData)
         {
+            if (!this.ModelState.IsValid)
+            {
+                await this.HttpContext.SignOutAsync();
+                return BadRequest(ModelState);
+            }
+
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, "barry", ClaimValueTypes.String));
-            // claims.Add(new Claim(ClaimTypes.Role, "Administrator", ClaimValueTypes.String));
+            claims.Add(new Claim(ClaimTypes.Role, "Administrator", ClaimValueTypes.String));
 
             var userIdentity = new ClaimsIdentity("SuperSecureLogin");
             userIdentity.AddClaims(claims);
+
             var userPrincipal = new ClaimsPrincipal(userIdentity);
 
             await HttpContext.SignInAsync(
@@ -35,14 +43,14 @@ namespace POS.Controllers
                     AllowRefresh = false
                 });
 
-            return new OkResponseResource { Status = 200, ResponseText = "Signed in successfully." };
+            return Ok(new OkResponseResource { Status = ResponseStatus.Success, ResponseText = "Signed in successfully." });
         }
 
         [HttpPost("[action]")]
         public async Task<OkResponseResource> Logout()
         {
             await HttpContext.SignOutAsync();
-            return new OkResponseResource { Status = 200, ResponseText = "Signed out successfully." };
+            return new OkResponseResource { Status = ResponseStatus.Success, ResponseText = "Signed out successfully." };
         }
     }
 }

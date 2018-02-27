@@ -22,13 +22,14 @@ class Products extends Component {
   async login() {
     try {
       const response = await this.postData("api/Auth/Login", {
-        username: "sfk",
+        username: "sfkShan",
         password: "Mozzie@2018"
       });
       const loginStatus = await response.status;
 
       if (loginStatus !== 200) {
-        this.setState({ loginStatus: "Failed to singin." });
+        const data = await response.text();
+        this.setState({ loginStatus: data });
         return;
       }
 

@@ -26,6 +26,10 @@ namespace POS
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                  {
+                     // Dangareous here. Will need to change this in next release.
+                     // Go with custom token authentication.
+                     options.Cookie.HttpOnly = false;
+
                      options.Cookie.Name = "POS_Auth";
 
                      options.SlidingExpiration = true;
@@ -96,6 +100,7 @@ namespace POS
 
                 if (env.IsDevelopment())
                 {
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:3000/");
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
