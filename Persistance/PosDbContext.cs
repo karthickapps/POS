@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using POS.Core.Models;
 
 namespace POS.Persistance
 {
@@ -8,5 +9,7 @@ namespace POS.Persistance
           : base(options)
         {
         }
+
+        public DbSet<User> Users { get; set; }
     }
 }

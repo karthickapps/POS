@@ -57,7 +57,7 @@ namespace POS
             });
 
 
-            var connectionString = Configuration.GetConnectionString("PosContext");
+            var connectionString = Configuration.GetConnectionString("PosDbContext");
 
             services.AddEntityFrameworkNpgsql().AddDbContext<PosDbContext>(options => options.UseNpgsql(connectionString));
 
