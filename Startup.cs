@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using POS.Extensions;
 using POS.Persistance;
 
 namespace POS
@@ -59,7 +60,10 @@ namespace POS
 
             var connectionString = Configuration.GetConnectionString("PosDbContext");
 
-            services.AddEntityFrameworkNpgsql().AddDbContext<PosDbContext>(options => options.UseNpgsql(connectionString));
+            services
+                .AddEntityFrameworkNpgsql()
+                .AddDbContext<PosDbContext>(options => options.UseNpgsql(connectionString))
+                .AddUnitOfWork<PosDbContext>();
 
             services.AddMvc(config =>
             {
@@ -111,6 +115,15 @@ namespace POS
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (!serviceScope.ServiceProvider.GetService<PosDbContext>().AllMigrationsApplied())
+                {
+                    serviceScope.ServiceProvider.GetService<PosDbContext>().Database.Migrate();
+                    serviceScope.ServiceProvider.GetService<PosDbContext>().EnsureSeeded();
+                }
+            }
         }
     }
 }

@@ -1,20 +1,40 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using POS.Core;
 
 namespace POS.Persistance
 {
-    public class UnitOfWork : IUnitOfWork
-    {
-        private readonly PosDbContext context;
-
-        public UnitOfWork(PosDbContext context)
+    public class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TContext>, IUnitOfWork
+         where TContext : DbContext
         {
-            this.context = context;
-        }
+            private Dictionary<Type, object> _repositories;
 
-        public async Task CompleteAsync()
-        {
-            await context.SaveChangesAsync();
+            public UnitOfWork(TContext context)
+            {
+                Context = context ?? throw new ArgumentNullException(nameof(context));
+            }
+
+            public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
+            {
+                if (_repositories == null) _repositories = new Dictionary<Type, object>();
+
+                var type = typeof(TEntity);
+                if (!_repositories.ContainsKey(type)) _repositories[type] = new Repository<TEntity>(Context);
+                return (IRepository<TEntity>)_repositories[type];
+            }
+
+            public TContext Context { get; }
+
+            public int SaveChanges()
+            {
+                return Context.SaveChanges();
+            }
+
+            public void Dispose()
+            {
+                Context?.Dispose();
+            }
         }
-    }
 }

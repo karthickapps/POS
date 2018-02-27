@@ -39,7 +39,7 @@ namespace POS.Controllers
                 {
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(20),
                     IsPersistent = false,
-                    AllowRefresh = false
+                    AllowRefresh = true
                 });
 
             return Ok(new OkResponseResource { Status = ResponseStatus.Success, ResponseText = "Signed in successfully." });

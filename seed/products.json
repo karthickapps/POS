@@ -1,0 +1,22 @@
+[
+  {
+    "Id": "XeroxBW",
+    "Name": "Xerox black and white",
+    "Description": "Xerox copy in black and white",
+    "Amount": 2,
+    "CreatedBy": "SfkShan",
+    "UpdatedBy": "SfkShan",
+    "CreatedAt": "2018-02-27",
+    "UpdatedAt": "2018-02-27"
+  },
+  {
+    "Id": "XeroxColor",
+    "Name": "Xerox color",
+    "Description": "Xerox copy in color",
+    "Amount": 10,
+    "CreatedBy": "SfkShan",
+    "UpdatedBy": "SfkShan",
+    "CreatedAt": "2018-02-27",
+    "UpdatedAt": "2018-02-27"
+  }
+]
