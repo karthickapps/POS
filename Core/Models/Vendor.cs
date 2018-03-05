@@ -1,31 +1,26 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace POS.Core.Models
 {
-    [Table("Products")]
-    public class Product : BaseEntity
+    [Table("Vendors")]
+    public class Vendor : BaseEntity
     {
         [StringLength(35)]
         public string Id { get; set; }
 
-        [Required]
         [StringLength(100)]
+        [Required]
         public string Name { get; set; }
 
-        [StringLength(200)]
+        [StringLength(250)]
         public string Description { get; set; }
 
+        [StringLength(300)]
         [Required]
-        public decimal Amount { get; set; }
+        public string Address { get; set; }
 
         [Required]
-        [StringLength(35)]
-        public string ProductTypeId { get; set; }
-
-
-        [ForeignKey("ProductTypeId")]
-        public ProductType ProductType { get; set; }
+        public int Mobile { get; set; }
     }
 }

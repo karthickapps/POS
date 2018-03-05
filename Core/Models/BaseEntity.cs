@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace POS.Core.Models
 {
-    public class TableMetadata
+    public class BaseEntity
     {
         [Required]
         [MinLength(5)]

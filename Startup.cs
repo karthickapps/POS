@@ -120,8 +120,8 @@ namespace POS
             {
                 if (!serviceScope.ServiceProvider.GetService<PosDbContext>().AllMigrationsApplied())
                 {
-                    serviceScope.ServiceProvider.GetService<PosDbContext>().Database.Migrate();
-                    serviceScope.ServiceProvider.GetService<PosDbContext>().EnsureSeeded();
+                    // serviceScope.ServiceProvider.GetService<PosDbContext>().Database.Migrate();
+                    // serviceScope.ServiceProvider.GetService<PosDbContext>().EnsureSeeded();
                 }
             }
         }
