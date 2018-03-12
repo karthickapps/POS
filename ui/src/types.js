@@ -1,8 +1,0 @@
-export const USER_LOGGED_IN = "USER_LOGGED_IN";
-export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
-
-export const ADD_TO_CART = "ADD_TO_CART";
-export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";
-export const REMOVE_ITEM_FROM_CART = "REMOVE_ITEM_FROM_CART";
-export const EMPTY_CART = "EMPTY_CART";
-export const SET_TRANS_ID = "SET_TRANS_ID";
