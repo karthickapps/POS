@@ -1,0 +1,16 @@
+.logo {
+  height: 64px;
+  background: #3f51b5;
+}
+
+.logo-container {
+  padding: 18px 5px 5px 15px;
+  display: flex;
+  color: white;
+  display: flex;
+}
+
+.logo-container:only-child > span {
+  padding: 4px 0px 0px 10px;
+  font-weight: lighter;
+}

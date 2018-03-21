@@ -4,14 +4,17 @@ import Drawer from "material-ui/Drawer";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
 import List from "material-ui/List";
+import ShoppingCart from "material-ui-icons/ShoppingCart";
+import Paper from "material-ui/Paper";
 import Typography from "material-ui/Typography";
 import IconButton from "material-ui/IconButton";
 import Hidden from "material-ui/Hidden";
 import Divider from "material-ui/Divider";
 import MenuIcon from "material-ui-icons/Menu";
 import { mailFolderListItems, otherMailFolderListItems } from "./tileData";
+import "./Home.css";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const styles = theme => ({
   root: {
@@ -21,7 +24,8 @@ const styles = theme => ({
     position: "relative",
     display: "flex",
     width: "100%",
-    height: "100vh"
+    height: "100vh",
+    borderBottom: "1px solid #e0e0e0"
   },
   appBar: {
     position: "absolute",
@@ -44,7 +48,11 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
     padding: theme.spacing.unit * 3
+  },
+  avatar: {
+    backgroundColor: "#3f51b5"
   }
 });
 
@@ -62,10 +70,14 @@ class Home extends React.Component {
 
     const drawer = (
       <div>
-        <div className={classes.toolbar}>POS</div>
+        <div className="logo">
+          <div className="logo-container">
+            <ShoppingCart />
+            <span>Point Of Sale</span>
+          </div>
+        </div>
         <Divider />
         <List>{mailFolderListItems}</List>
-        <Divider />
         <List>{otherMailFolderListItems}</List>
       </div>
     );
@@ -112,10 +124,17 @@ class Home extends React.Component {
           </Drawer>
         </Hidden>
         <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Typography noWrap>
-            {"You think water moves fast? You should see ice."}
-          </Typography>
+          <div>
+            <Paper className={classes.root} elevation={4}>
+              <Typography variant="headline" component="h3">
+                This is a sheet of paper.
+              </Typography>
+              <Typography component="p">
+                Paper can be used to build surface or other elements for your
+                application.
+              </Typography>
+            </Paper>
+          </div>
         </main>
       </div>
     );

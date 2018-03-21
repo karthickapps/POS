@@ -1,5 +1,6 @@
 import React from "react";
 import { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
+import ListSubheader from "material-ui/List/ListSubheader";
 import InboxIcon from "material-ui-icons/MoveToInbox";
 import DraftsIcon from "material-ui-icons/Drafts";
 import StarIcon from "material-ui-icons/Star";
@@ -10,52 +11,54 @@ import ReportIcon from "material-ui-icons/Report";
 
 export const mailFolderListItems = (
   <div>
+    <ListSubheader>MASTER</ListSubheader>
     <ListItem button dense>
       <ListItemIcon>
-        <InboxIcon />
+        <InboxIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="Inbox" />
+      <ListItemText primary="Inbox" style={{ paddingLeft: 10 }} />
     </ListItem>
     <ListItem button dense>
       <ListItemIcon>
-        <StarIcon />
+        <StarIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="Starred" />
+      <ListItemText primary="Starred" style={{ paddingLeft: 10 }} />
     </ListItem>
     <ListItem button dense>
       <ListItemIcon>
-        <SendIcon />
+        <SendIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="Send mail" />
+      <ListItemText primary="Send mail" style={{ paddingLeft: 10 }} />
     </ListItem>
     <ListItem button dense>
       <ListItemIcon>
-        <DraftsIcon />
+        <DraftsIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="Drafts" />
+      <ListItemText primary="Drafts" style={{ paddingLeft: 10 }} />
     </ListItem>
   </div>
 );
 
 export const otherMailFolderListItems = (
   <div>
+    <ListSubheader>REPORTS</ListSubheader>
     <ListItem button dense>
       <ListItemIcon>
-        <MailIcon />
+        <MailIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="All mail" />
+      <ListItemText primary="All mail" style={{ paddingLeft: 10 }} />
     </ListItem>
     <ListItem button dense>
       <ListItemIcon>
-        <DeleteIcon />
+        <DeleteIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="Trash" />
+      <ListItemText primary="Trash" style={{ paddingLeft: 10 }} />
     </ListItem>
     <ListItem button dense>
       <ListItemIcon>
-        <ReportIcon />
+        <ReportIcon style={{ fontSize: "20px" }} />
       </ListItemIcon>
-      <ListItemText primary="Spam" />
+      <ListItemText primary="Spam" style={{ paddingLeft: 10 }} />
     </ListItem>
   </div>
 );
