@@ -1,3 +1,9 @@
 {
-    "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "files.autoSave": "off",
+  "go.lintFlags": [
+    "--disable-all",
+    "--enable=golint",
+    "--config=~/.gometalinter"
+  ]
 }
