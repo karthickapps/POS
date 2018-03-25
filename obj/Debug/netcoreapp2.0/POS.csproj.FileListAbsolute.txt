@@ -1,0 +1,10 @@
+/Users/shanmugharajk/Code/github/POS/bin/Debug/netcoreapp2.0/POS.deps.json
+/Users/shanmugharajk/Code/github/POS/bin/Debug/netcoreapp2.0/POS.runtimeconfig.json
+/Users/shanmugharajk/Code/github/POS/bin/Debug/netcoreapp2.0/POS.runtimeconfig.dev.json
+/Users/shanmugharajk/Code/github/POS/bin/Debug/netcoreapp2.0/POS.dll
+/Users/shanmugharajk/Code/github/POS/bin/Debug/netcoreapp2.0/POS.pdb
+/Users/shanmugharajk/Code/github/POS/obj/Debug/netcoreapp2.0/POS.csproj.CoreCompileInputs.cache
+/Users/shanmugharajk/Code/github/POS/obj/Debug/netcoreapp2.0/POS.AssemblyInfoInputs.cache
+/Users/shanmugharajk/Code/github/POS/obj/Debug/netcoreapp2.0/POS.AssemblyInfo.cs
+/Users/shanmugharajk/Code/github/POS/obj/Debug/netcoreapp2.0/POS.dll
+/Users/shanmugharajk/Code/github/POS/obj/Debug/netcoreapp2.0/POS.pdb
