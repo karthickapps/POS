@@ -12,8 +12,6 @@ import (
 	"github.com/sfkshan/pos/api-server/config"
 )
 
-var verifyKey string
-
 const (
 	LoginErrorMessage = "Something went wrong. Couldn't login, please try again later."
 )
@@ -72,7 +70,7 @@ func RefreshToken(oldAuthTokenString string, oldRfreshTokenString string, oldCsr
 
 	// now, check that it matches what's in the auth token claims
 	refreshToken, err := jwt.ParseWithClaims(oldRfreshTokenString, &domain.TokenClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return verifyKey, nil
+		return config.SignKey, nil
 	})
 	refreshTokenClaims, ok := refreshToken.Claims.(*domain.TokenClaims)
 	if !ok {
