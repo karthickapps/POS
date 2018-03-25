@@ -20,4 +20,9 @@ func Migrate() {
 	defer db.Close()
 
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Customer{})
+	db.AutoMigrate(&models.ProductType{})
+	db.AutoMigrate(&models.Product{})
+	db.AutoMigrate(&models.ExpenseType{})
+	db.AutoMigrate(&models.Expense{})
 }
