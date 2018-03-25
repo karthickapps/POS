@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { withStyles } from "material-ui/styles";
 import CustomTabs from "../controls/Tabs";
 import TabContainer from "../controls/TabContainer";
-import mock from "../../mock";
 
 const styles = theme => ({
   root: {
@@ -42,7 +41,7 @@ class Sale extends Component {
           <CustomTabs
             onChange={this.handleChange}
             value={value}
-            items={mock.tabMenus}
+            items={["Products", "Product Types"]}
           />
           {value === 0 && (
             <TabContainer>
