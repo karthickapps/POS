@@ -25,4 +25,10 @@ func Migrate() {
 	db.AutoMigrate(&models.Product{})
 	db.AutoMigrate(&models.ExpenseType{})
 	db.AutoMigrate(&models.Expense{})
+	db.AutoMigrate(&models.Stock{})
+	db.AutoMigrate(&models.Transaction{})
+	db.AutoMigrate(&models.TransactionHeader{})
+	db.AutoMigrate(&models.CreditHistory{})
+	db.AutoMigrate(&models.CreditHeader{})
+	db.AutoMigrate(&models.Receiving{})
 }
