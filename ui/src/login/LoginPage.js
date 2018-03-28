@@ -47,7 +47,6 @@ class LoginPage extends Component {
               fullWidth
               label="Username"
               placeholder="Username"
-              className={classes.textField}
               margin="normal"
             />
 
@@ -56,7 +55,6 @@ class LoginPage extends Component {
               label="Password"
               placeholder="Password"
               type="password"
-              className={classes.textField}
               margin="normal"
             />
 
