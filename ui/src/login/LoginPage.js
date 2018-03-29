@@ -2,20 +2,22 @@ import React, { Component } from "react";
 import { withStyles } from "material-ui/styles";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
+import { CircularProgress } from "material-ui/Progress";
 import Button from "material-ui/Button";
+import ErrorMessage from "../controls/ErrorMessage";
 
 // eslint-disable-next-line
 const styles = theme => ({
   root: {
     background: "#efefef",
-    height: "calc(100vh)"
+    height: "100vh"
   },
   paper: {
     minWidth: 300,
     display: "flex",
     flexDirection: "column",
-    width: "auto",
-    height: "auto",
+    width: "350px",
+    minHeight: "230px",
     margin: "auto",
     alignItems: "center",
     padding: "20px 30px 30px 30px"
@@ -24,16 +26,22 @@ const styles = theme => ({
     display: "flex",
     height: "calc(90vh)"
   },
-  button: {
-    marginTop: "25px"
+  errorMessage: {
+    width: "90%",
+    marginTop: 20
   },
-  textFieldFormLabel: {
-    fontSize: 14
+  wrapper: {
+    marginTop: 20,
+    position: "relative"
   },
-  textFieldInput: {
-    fontSize: 14
-  },
-  textFieldRoot: {}
+  buttonProgress: {
+    color: "black",
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12
+  }
 });
 
 class LoginPage extends Component {
@@ -49,23 +57,19 @@ class LoginPage extends Component {
             <div>
               <span>Welcome to Easy POS</span>
             </div>
+
+            <ErrorMessage
+              show={true}
+              className={classes.errorMessage}
+              message="Invalid credentials"
+            />
+
             <TextField
               fullWidth
               label="Username"
               placeholder="Username"
               margin="normal"
-              InputProps={{
-                classes: {
-                  root: classes.textFieldRoot,
-                  input: classes.textFieldInput,
-                  fontSize: "10px"
-                }
-              }}
-              InputLabelProps={{
-                className: classes.textFieldFormLabel
-              }}
             />
-
             <TextField
               fullWidth
               label="Password"
@@ -74,9 +78,12 @@ class LoginPage extends Component {
               margin="normal"
             />
 
-            <Button variant="raised" color="primary" className={classes.button}>
-              Login
-            </Button>
+            <div className={classes.wrapper}>
+              <Button variant="raised" color="primary" disabled>
+                Login
+              </Button>
+              <CircularProgress size={24} className={classes.buttonProgress} />
+            </div>
           </Paper>
         </div>
       </div>
