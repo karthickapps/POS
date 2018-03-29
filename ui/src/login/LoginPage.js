@@ -11,23 +11,29 @@ const styles = theme => ({
     height: "calc(100vh)"
   },
   paper: {
+    minWidth: 300,
     display: "flex",
     flexDirection: "column",
-    minWidth: "400px",
     width: "auto",
     height: "auto",
     margin: "auto",
     alignItems: "center",
-    padding: "20px 30px 45px 30px"
+    padding: "20px 30px 30px 30px"
   },
   loginContainer: {
     display: "flex",
     height: "calc(90vh)"
   },
   button: {
-    marginTop: "45px",
-    width: "200px"
-  }
+    marginTop: "25px"
+  },
+  textFieldFormLabel: {
+    fontSize: 14
+  },
+  textFieldInput: {
+    fontSize: 14
+  },
+  textFieldRoot: {}
 });
 
 class LoginPage extends Component {
@@ -48,6 +54,16 @@ class LoginPage extends Component {
               label="Username"
               placeholder="Username"
               margin="normal"
+              InputProps={{
+                classes: {
+                  root: classes.textFieldRoot,
+                  input: classes.textFieldInput,
+                  fontSize: "10px"
+                }
+              }}
+              InputLabelProps={{
+                className: classes.textFieldFormLabel
+              }}
             />
 
             <TextField
