@@ -76,6 +76,27 @@
   version = "v1.6.0"
 
 [[projects]]
+  branch = "material-node-ts"
+  name = "github.com/sfkshan/pos"
+  packages = [
+    "api-server/app/controllers",
+    "api-server/app/controllers/resources",
+    "api-server/app/controllers/resources/responsecodes",
+    "api-server/app/models",
+    "api-server/app/router",
+    "api-server/app/server",
+    "api-server/app/server/custom",
+    "api-server/app/services",
+    "api-server/app/services/domain",
+    "api-server/app/services/sqlengine",
+    "api-server/app/utils",
+    "api-server/config",
+    "api-server/db/migrations",
+    "api-server/db/seed"
+  ]
+  revision = "4aca950d1ec62c325347ee593cf0ef275eff6ff3"
+
+[[projects]]
   branch = "master"
   name = "github.com/valyala/bytebufferpool"
   packages = ["."]
@@ -117,6 +138,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6c71c822549ca45715720b96d6681d6823cd9ba9ff6c6d292f7846580e90e6c5"
+  inputs-digest = "bba1fe562924cb298d75ef4bc10bf60348ec5416b96613db7759425e8d749b56"
   solver-name = "gps-cdcl"
   solver-version = 1
