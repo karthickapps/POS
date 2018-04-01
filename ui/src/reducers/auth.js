@@ -5,7 +5,7 @@ export default function user(state = {}, action = {}) {
   switch (action.type) {
     case USER_LOGGED_IN:
       return update(state, {
-        token: { $set: action.token }
+        tokens: { $set: action.authInfo }
       });
     default:
       return state;

@@ -5,7 +5,7 @@ export const CustomListItemIcon = props => {
   const { children, ...rest } = props;
 
   return (
-    <ListItemIcon {...rest} style={{ width: 18 }}>
+    <ListItemIcon {...rest} style={{ width: 19 }}>
       {props.children}
     </ListItemIcon>
   );

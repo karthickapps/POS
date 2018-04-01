@@ -2,13 +2,9 @@ import React, { Component, Fragment } from "react";
 import { withStyles } from "material-ui/styles";
 import Hidden from "material-ui/Hidden";
 import Drawer from "material-ui/Drawer";
-import List from "material-ui/List";
 import ShoppingCart from "material-ui-icons/ShoppingCart";
 import Divider from "material-ui/Divider";
-import {
-  mailFolderListItems,
-  otherMailFolderListItems
-} from "./getSidebarMenus";
+import Menus from "./Menus";
 
 const drawerWidth = 200;
 
@@ -54,8 +50,7 @@ class Sidebar extends Component {
           </div>
         </div>
         <Divider />
-        <List>{mailFolderListItems}</List>
-        <List>{otherMailFolderListItems}</List>
+        <Menus />
       </div>
     );
 

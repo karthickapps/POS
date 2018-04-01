@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import AccountCircle from "material-ui-icons/AccountCircle";
 import Menu, { MenuItem } from "material-ui/Menu";
 import IconButton from "material-ui/IconButton";
+import { logout } from "../../../actions/auth";
 
 // eslint-disable-next-line
 const styles = theme => ({
@@ -24,6 +26,14 @@ class Menus extends Component {
 
   handleClose = () => {
     this.setState({ anchorEl: null });
+  };
+
+  logout = () => {
+    this.props.logout();
+  };
+
+  myProfile = () => {
+    //
   };
 
   render() {
@@ -56,10 +66,10 @@ class Menus extends Component {
           open={open}
           onClose={this.handleClose}
         >
-          <MenuItem className={classes.menuItem} onClick={this.handleClose}>
+          <MenuItem className={classes.menuItem} onClick={this.myProfile}>
             My Profile
           </MenuItem>
-          <MenuItem className={classes.menuItem} onClick={this.handleClose}>
+          <MenuItem className={classes.menuItem} onClick={this.logout}>
             Logout
           </MenuItem>
         </Menu>
@@ -68,4 +78,6 @@ class Menus extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Menus);
+export default connect(null, { logout })(
+  withStyles(styles, { withTheme: true })(Menus)
+);

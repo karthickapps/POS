@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import Home from "../home/Home";
@@ -11,11 +11,11 @@ const App = props => {
     }
     return <LoginPage />;
   };
-  return <div>{checkForAuth()}</div>;
+  return <Fragment>{checkForAuth()}</Fragment>;
 };
 
 function mapStateToProps(state) {
-  const isLoggedIn = state.user !== undefined ? !!state.user.token : false;
+  const isLoggedIn = state.auth !== undefined ? !!state.auth.tokens : false;
 
   return {
     isLoggedIn

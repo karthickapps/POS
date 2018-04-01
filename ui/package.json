@@ -9,10 +9,12 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "classnames": "^2.2.5",
     "immutability-helper": "^2.6.6",
     "material-ui": "^1.0.0-beta.38",
     "material-ui-icons": "^1.0.0-beta.36",
+    "moment": "^2.22.0",
     "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -32,5 +34,6 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0"
-  }
+  },
+  "proxy": "http://localhost:3500"
 }

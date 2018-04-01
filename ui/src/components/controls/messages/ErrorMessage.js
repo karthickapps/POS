@@ -18,8 +18,6 @@ const styles = () => ({
 const ErrorMessage = props => {
   const style = {};
 
-  console.log(props.show);
-
   if (props.show && props.show === true) {
     style.display = "block";
   } else {

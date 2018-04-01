@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
-import { LOGOUT_USER } from "./types";
+import { USER_LOGGED_OUT } from "./types";
 
-import user from "./login/reducer";
+import auth from "./reducers/auth";
 
 const appReducer = combineReducers({
-  user
+  auth
 });
 
 const rootReducer = (state, action) => {
-  if (action.type === LOGOUT_USER) {
+  if (action.type === USER_LOGGED_OUT) {
     return {};
   }
   return appReducer(state, action);

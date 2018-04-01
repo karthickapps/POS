@@ -38,16 +38,24 @@ class Sale extends Component {
     return (
       <div>
         <div className={classes.tabHolder}>
+          {/* <div
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              flexGrow: 1,
+              backgroundColor: "black",
+              zIndex: 100
+            }}
+          >
+            sfk rocks
+          </div> */}
           <CustomTabs
             onChange={this.handleChange}
             value={value}
             items={["Products", "Product Types"]}
           />
-          {value === 0 && (
-            <TabContainer>
-              <div>shan</div>
-            </TabContainer>
-          )}
+          {value === 0 && <TabContainer>Product</TabContainer>}
           {value === 1 && <TabContainer>Product Types</TabContainer>}
         </div>
       </div>

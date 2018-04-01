@@ -20,6 +20,8 @@ func Login(userid string, password string) (token domain.UserToken, err error) {
 	engine := sqlengine.Default()
 	token = domain.UserToken{}
 
+	defer engine.CloseConnection()
+
 	var resultSet = &models.User{}
 	if err = engine.FindById(userid, resultSet); err != nil {
 		return

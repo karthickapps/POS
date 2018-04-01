@@ -16,7 +16,7 @@ const styles = theme => ({
   }
 });
 
-class Container extends Component {
+class MainContainer extends Component {
   state = {};
 
   render() {
@@ -32,4 +32,4 @@ class Container extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Container);
+export default withStyles(styles, { withTheme: true })(MainContainer);

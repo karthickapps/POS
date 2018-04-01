@@ -1,7 +1,7 @@
 package resources
 
 type User struct {
-	ID       string `json:"userid" validate:"required,email"`
+	ID       string `json:"username" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
 
