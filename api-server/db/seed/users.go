@@ -22,7 +22,7 @@ func AddUsers() {
 
 	// Default admin user
 	u := &models.User{}
-	u.ID = "admin@mail.com"
+	u.ID = "admin"
 	u.Name = "admin user"
 	u.Password = "admin"
 	u.Role = models.RoleAdmin
