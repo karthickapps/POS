@@ -30,9 +30,9 @@ class Menus extends Component {
 
           <ListSubheader>MASTER</ListSubheader>
           <SidebarMenu
-            isSelected={this.isSelected("customer")}
-            onClick={() => this.onMenuClick("/customer")}
-            text="Customer"
+            isSelected={this.isSelected("customers")}
+            onClick={() => this.onMenuClick("/customers")}
+            text="Customers"
             icon={<GroupAdd />}
           />
           <SidebarMenu text="Product" icon={<More />} />

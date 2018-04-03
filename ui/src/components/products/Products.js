@@ -17,11 +17,11 @@ const styles = theme => ({
   }
 });
 
-class Customer extends Component {
+class Products extends Component {
   state = {};
 
   onCreateNewClick = () => {
-    this.props.history.push("customer/new");
+    this.props.history.push("products/new");
   };
 
   render() {
@@ -29,7 +29,7 @@ class Customer extends Component {
 
     return (
       <Container>
-        <Title title="Customer" />
+        <Title title="Products" />
         <br />
         <Button
           className={classes.button}
@@ -54,4 +54,4 @@ class Customer extends Component {
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(Customer));
+export default withRouter(withStyles(styles, { withTheme: true })(Products));

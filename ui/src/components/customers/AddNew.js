@@ -11,13 +11,6 @@ import CustomTextField from "../controls/CustomTextField";
 const styles = theme => ({
   form: {
     marginLeft: 20
-  },
-  textField: {
-    width: 500,
-    marginRight: 10
-  },
-  textFieldFormLabel: {
-    fontSize: "1.15rem"
   }
 });
 
@@ -95,7 +88,7 @@ class AddNew extends Component {
   };
 
   onCancelClick = () => {
-    this.props.history.push("/customer");
+    this.props.history.push("/customers");
   };
 
   render() {
