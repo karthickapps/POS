@@ -4,8 +4,7 @@ import { Switch, Route } from "react-router";
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import MainContainer from "../controls/MainContainer";
-import Sale from "../sale/Sale";
-import Customer from "../customer/Customer";
+import customer from "../customer";
 import NotFound from "../notFound/NotFound";
 
 // eslint-disable-next-line
@@ -33,8 +32,9 @@ class Home extends Component {
         <Sidebar />
         <MainContainer>
           <Switch>
-            <Route exact path="/home" component={Sale} />
-            <Route exact path="/customer" component={Customer} />
+            <Route exact path="/" component={() => <div />} />
+            <Route exact path="/customer" component={customer.Customer} />
+            <Route exact path="/customer/new" component={customer.AddNew} />
             <Route path="/" component={NotFound} />
           </Switch>
         </MainContainer>

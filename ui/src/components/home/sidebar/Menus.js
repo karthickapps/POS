@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import List from "material-ui/List";
+import { withRouter } from "react-router";
 import ListSubheader from "material-ui/List/ListSubheader";
 import ViewModule from "material-ui-icons/ViewModule";
 import GroupAdd from "material-ui-icons/GroupAdd";
@@ -13,6 +14,14 @@ import SidebarMenu from "../../controls/SidebarMenu";
 class Menus extends Component {
   state = {};
 
+  isSelected = path =>
+    this.props.history.location.pathname === `/${path}` ||
+    this.props.history.location.pathname.includes(`/${path}/`);
+
+  onMenuClick = route => {
+    this.props.history.push(route);
+  };
+
   render() {
     return (
       <Fragment>
@@ -21,8 +30,8 @@ class Menus extends Component {
 
           <ListSubheader>MASTER</ListSubheader>
           <SidebarMenu
-            isSelected={true}
-            onClick={() => console.log("hey")}
+            isSelected={this.isSelected("customer")}
+            onClick={() => this.onMenuClick("/customer")}
             text="Customer"
             icon={<GroupAdd />}
           />
@@ -40,4 +49,4 @@ class Menus extends Component {
   }
 }
 
-export default Menus;
+export default withRouter(Menus);

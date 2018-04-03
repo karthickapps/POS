@@ -61,10 +61,43 @@ const isValidDateChange = idate => {
   return true;
 };
 
+const isValueExists = (object, keysToIgnore = []) => {
+  const keys = Object.keys(object);
+  const errors = {};
+
+  const fn = val => {
+    if (keysToIgnore.length === 0) return false;
+
+    for (let i = 0; i < keysToIgnore.length; i++) {
+      const element = keysToIgnore[i];
+      if (element === val) return true;
+    }
+    return false;
+  };
+
+  for (let idx = 0; idx < keys.length; idx++) {
+    const key = keys[idx];
+    const value = object[key];
+    if (!fn(value) && value.length === 0) errors[key] = "Required field";
+  }
+
+  return errors;
+};
+
+const isValidEmail = mail => {
+  // eslint-disable-next-line no-useless-escape
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    return true;
+  }
+  return false;
+};
+
 export {
   styled,
   setAuthorizationHeader,
   isValidDDMMYY,
   isValidDateChange,
-  invertShowHide
+  invertShowHide,
+  isValueExists,
+  isValidEmail
 };

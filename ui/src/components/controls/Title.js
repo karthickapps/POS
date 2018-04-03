@@ -1,23 +1,27 @@
-import React from "react";
-import Typography from "material-ui/Typography";
+import React, { Fragment } from "react";
+import Divider from "material-ui/Divider";
 import { withStyles } from "material-ui";
 
 // eslint-disable-next-line
 const styles = theme => ({
   title: {
-    fontWeight: "lighter",
-    color: "#1b1c1d",
-    fontSize: "18px",
-    borderBottom: "1px solid #eceaea",
-    padding: "0px 0px 10px 0px"
+    color: "#000000a3",
+    lineHeight: 1.1,
+    margin: 0,
+    paddingBottom: 8,
+    fontSize: 18,
+    fontWeight: 400,
+    display: "inline-block",
+    borderBottom: "3px solid #3f50b5"
   }
 });
 
 function Title({ classes, title }) {
   return (
-    <Typography className={classes.title} variant="title" gutterBottom>
-      {title}
-    </Typography>
+    <Fragment>
+      <div className={classes.title}>{title}</div>
+      <Divider />
+    </Fragment>
   );
 }
 
