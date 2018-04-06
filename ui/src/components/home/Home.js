@@ -5,6 +5,7 @@ import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
 import MainContainer from "../controls/MainContainer";
 import customer from "../customers";
+import product from "../products";
 import NotFound from "../notFound/NotFound";
 
 // eslint-disable-next-line
@@ -35,6 +36,8 @@ class Home extends Component {
             <Route exact path="/" component={() => <div />} />
             <Route exact path="/customers" component={customer.Customers} />
             <Route exact path="/customers/new" component={customer.AddNew} />
+            <Route exact path="/products" component={product.Products} />
+            <Route exact path="/products/new" component={product.AddNew} />
             <Route path="/" component={NotFound} />
           </Switch>
         </MainContainer>

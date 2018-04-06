@@ -1,55 +1,58 @@
 import React, { Component } from "react";
-import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
-import Container from "../controls/Container";
-import Title from "../controls/Title";
+import CustomTabs from "../controls/Tabs";
+import TabContainer from "../controls/TabContainer";
+import ProductTab from "./ProductTab";
 
 const styles = theme => ({
-  leftIcon: {
-    marginRight: theme.spacing.unit
+  root: {
+    padding: 10
   },
-  button: {
-    margin: theme.spacing.unit
+  tabHolder: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper
   },
-  iconSmall: {
-    fontSize: 20
+  tab: {
+    boxShadow: "none"
+  },
+  tabItem: {
+    fontSize: "12px"
+  },
+  indicator: {
+    backgroundColor: "#3f51b5"
   }
 });
 
 class Products extends Component {
-  state = {};
+  state = {
+    value: 0
+  };
 
-  onCreateNewClick = () => {
-    this.props.history.push("products/new");
+  handleChange = (event, value) => {
+    this.setState({ value });
   };
 
   render() {
     const { classes } = this.props;
+    const { value } = this.state;
 
     return (
-      <Container>
-        <Title title="Products" />
-        <br />
-        <Button
-          className={classes.button}
-          variant="raised"
-          color="default"
-          size="small"
-        >
-          List
-        </Button>
-
-        <Button
-          className={classes.button}
-          variant="raised"
-          color="primary"
-          size="small"
-          onClick={this.onCreateNewClick}
-        >
-          Create New
-        </Button>
-      </Container>
+      <div>
+        <div className={classes.tabHolder}>
+          <CustomTabs
+            onChange={this.handleChange}
+            value={value}
+            items={["Products", "Product Types"]}
+          />
+          {value === 0 && (
+            <TabContainer>
+              <ProductTab />
+            </TabContainer>
+          )}
+          {value === 1 && <TabContainer>Product Types</TabContainer>}
+        </div>
+      </div>
     );
   }
 }

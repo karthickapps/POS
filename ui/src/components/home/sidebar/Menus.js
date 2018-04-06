@@ -35,7 +35,12 @@ class Menus extends Component {
             text="Customers"
             icon={<GroupAdd />}
           />
-          <SidebarMenu text="Product" icon={<More />} />
+          <SidebarMenu
+            isSelected={this.isSelected("products")}
+            onClick={() => this.onMenuClick("/products")}
+            text="Products"
+            icon={<More />}
+          />
           <SidebarMenu text="Expense" icon={<LocalAtm />} />
           <SidebarMenu text="Recievings" icon={<NoteAdd />} />
 

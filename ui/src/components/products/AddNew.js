@@ -4,7 +4,6 @@ import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
 import Title from "../controls/Title";
 import SubmitCancel from "../controls/SubmitCancel";
-import { isValueExists, isValidEmail } from "../../utils";
 import CustomTextField from "../controls/CustomTextField";
 
 // eslint-disable-next-line
@@ -15,10 +14,17 @@ const styles = theme => ({
 });
 
 class AddNew extends Component {
-  state = {};
+  state = {
+    data: {},
+    errors: {}
+  };
 
   onCancelClick = () => {
     this.props.history.push("/products");
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
   };
 
   render() {
@@ -27,7 +33,7 @@ class AddNew extends Component {
 
     return (
       <Container>
-        <Title title="New customer" />
+        <Title title="New product" />
         <br />
 
         <form onSubmit={this.onSubmit} className={classes.form}>

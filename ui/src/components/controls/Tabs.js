@@ -6,10 +6,11 @@ import Tabs, { Tab } from "material-ui/Tabs";
 // eslint-disable-next-line
 const styles = theme => ({
   tab: {
-    boxShadow: "none"
+    boxShadow: "none",
+    border: "1px solid #e0e0e0"
   },
   tabItem: {
-    fontSize: "12px"
+    // fontSize: "12px"
   },
   indicator: {
     backgroundColor: "#3f51b5"
