@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
-import Title from "../controls/Title";
-import SubmitCancel from "../controls/SubmitCancel";
+import Form from "../controls/Form";
 import CustomTextField from "../controls/CustomTextField";
 
 // eslint-disable-next-line
@@ -13,7 +12,7 @@ const styles = theme => ({
   }
 });
 
-class AddNew extends Component {
+class AddNewProduct extends Component {
   state = {
     data: {},
     errors: {}
@@ -32,11 +31,13 @@ class AddNew extends Component {
     const { data, errors } = this.state;
 
     return (
-      <Container>
-        <Title title="New product" />
-        <br />
-
-        <form onSubmit={this.onSubmit} className={classes.form}>
+      <Container title="New product">
+        <Form
+          id="product"
+          onSubmit={this.onSubmit}
+          onCancel={this.onCancelClick}
+          className={classes.form}
+        >
           <CustomTextField
             error={!!errors.productId}
             name="productId"
@@ -45,13 +46,12 @@ class AddNew extends Component {
             helperText="This should be unique"
             onChange={this.onChange}
           />
-          <br />
-
-          <SubmitCancel onCancelClick={this.onCancelClick} />
-        </form>
+        </Form>
       </Container>
     );
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(AddNew));
+export default withRouter(
+  withStyles(styles, { withTheme: true })(AddNewProduct)
+);

@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo"
 	"github.com/sfkshan/pos/api-server/app/controllers/resources"
 	"github.com/sfkshan/pos/api-server/app/services"
@@ -19,5 +21,5 @@ func SignUp(c echo.Context) (err error) {
 		return
 	}
 
-	return c.JSON(200, resources.Response{Code: "0", Message: "SUCCESS"})
+	return c.JSON(http.StatusOK, resources.Response{Code: "0", Message: "SUCCESS"})
 }

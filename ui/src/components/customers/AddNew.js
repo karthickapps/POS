@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
-import Title from "../controls/Title";
-import SubmitCancel from "../controls/SubmitCancel";
+import Form from "../controls/Form";
 import { isValueExists, isValidEmail } from "../../utils";
 import CustomTextField from "../controls/CustomTextField";
 
@@ -92,15 +91,15 @@ class AddNew extends Component {
   };
 
   render() {
-    const { classes } = this.props;
     const { data, errors } = this.state;
 
     return (
-      <Container>
-        <Title title="New customer" />
-        <br />
-
-        <form onSubmit={this.onSubmit} className={classes.form}>
+      <Container title="New customer">
+        <Form
+          id="customer"
+          onSubmit={this.onSubmit}
+          onCancel={this.onCancelClick}
+        >
           <CustomTextField
             error={!!errors.customerId}
             name="customerId"
@@ -149,9 +148,7 @@ class AddNew extends Component {
             margin="normal"
             onChange={this.onChange}
           />
-
-          <SubmitCancel onCancelClick={this.onCancelClick} />
-        </form>
+        </Form>
       </Container>
     );
   }

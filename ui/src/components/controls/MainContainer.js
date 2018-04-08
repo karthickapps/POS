@@ -9,6 +9,15 @@ const styles = theme => ({
     padding: "70px 10px 15px 10px"
   },
   paper: {
+    [theme.breakpoints.up("xs")]: {
+      width: "calc(100vw - 20px)"
+    },
+    [theme.breakpoints.up("md")]: {
+      width: "100%"
+    },
+    [theme.breakpoints.up("lg")]: {
+      width: "100%"
+    },
     height: `calc(100vh - 80px)`,
     overflowX: "auto",
     overflowY: "auto",

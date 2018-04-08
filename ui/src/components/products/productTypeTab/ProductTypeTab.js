@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
-import Container from "../controls/Container";
+import CustomTable from "./CustomTable";
+import Searchbox from "../../controls/Searchbox";
 
 const styles = theme => ({
   leftIcon: {
@@ -16,18 +17,18 @@ const styles = theme => ({
   }
 });
 
-class Customers extends Component {
+class ProductTypeTab extends Component {
   state = {};
 
   onCreateNewClick = () => {
-    this.props.history.push("customers/new");
+    this.props.history.push("productType/new");
   };
 
   render() {
     const { classes } = this.props;
 
     return (
-      <Container title="Customers">
+      <Fragment>
         <Button
           className={classes.button}
           variant="raised"
@@ -46,9 +47,13 @@ class Customers extends Component {
         >
           Create New
         </Button>
-      </Container>
+        <Searchbox onSubmit={this.onSearchSubmit} />
+        <CustomTable />
+      </Fragment>
     );
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(Customers));
+export default withRouter(
+  withStyles(styles, { withTheme: true })(ProductTypeTab)
+);

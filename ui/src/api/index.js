@@ -1,4 +1,6 @@
 import axios from "axios";
+import apiBuilder from "./apiBuilder";
+import "./axiosClient";
 
 const auth = {
   login: async ({ username, password }) => {
@@ -18,4 +20,6 @@ const auth = {
   }
 };
 
-export default { auth };
+const productType = apiBuilder("productType");
+
+export default { auth, productType };

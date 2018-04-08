@@ -5,10 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"strconv"
-	"time"
 
 	"github.com/labstack/echo"
+	"github.com/sfkshan/pos/api-server/app/server/custom"
 	"github.com/sfkshan/pos/api-server/app/services/sqlengine"
 	"github.com/sfkshan/pos/api-server/app/utils"
 )
@@ -87,13 +86,6 @@ func (crudHandler *CrudHandler) GET(c echo.Context) (err error) {
 
 // GET ?per_page=10&page=2
 func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
-	page, perPage := getPageInfo(c)
-
-	url := c.Request().Host + c.Request().URL.String()
-	fmt.Println(url)
-
-	var count interface{}
-
 	dest := crudHandler.GetResultSetPtr()
 
 	// Destroy the variable. Dont know whether its required or not
@@ -101,19 +93,30 @@ func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
 		dest = nil
 	}()
 
+	query := sqlengine.Query{}
+	query.DataSet = dest
+
+	id := "%" + c.QueryParam("q") + "%"
+
+	query.Condition = "id like ?"
+	query.Args = []interface{}{id}
+
+	var count int64
+
 	engine := sqlengine.Default()
-	if count, err = engine.Count(dest); err != nil {
+	if count, err = engine.Count(query); err != nil {
 		return
 	}
 
-	if err = engine.FetchPage(perPage, page, crudHandler.Model, dest); err != nil {
+	query.PageNo, query.PerPage = utils.GetPageInfoFromQs(c, count)
+
+	if err = engine.Fetch(query); err != nil {
 		return
 	}
 
-	// TODO needs to implement link header pagination.
-	fmt.Println(count)
+	utils.SetLinkHeader(c, query.PerPage, query.PageNo, count)
 
-	return c.JSON(http.StatusOK, dest)
+	return c.JSON(http.StatusOK, query.DataSet)
 }
 
 // POST /
@@ -121,11 +124,11 @@ func (crudHandler *CrudHandler) POST(c echo.Context) (err error) {
 	if err = c.Bind(crudHandler.Model); err != nil {
 		return
 	}
-	if err = c.Validate(crudHandler.Model); err != nil {
-		fmt.Println(err)
+	if err = utils.SetFieldsForCreated(crudHandler.Model, c.(*custom.Context).UserID); err != nil {
 		return
 	}
-	if err = utils.SetTimeStamp(crudHandler.Model); err != nil {
+	if err = c.Validate(crudHandler.Model); err != nil {
+		fmt.Println(err)
 		return
 	}
 
@@ -145,12 +148,15 @@ func (crudHandler *CrudHandler) PUT(c echo.Context) (err error) {
 	if err = c.Validate(crudHandler.Model); err != nil {
 		return
 	}
-	if err = utils.UpdateBaseModelField(crudHandler.Model, "UpdatedAt", time.Now()); err != nil {
+	if err = utils.SetFieldsForUpdated(crudHandler.Model, c.(*custom.Context).UserID); err != nil {
 		return
 	}
 
 	engine := sqlengine.Default()
-	if err = engine.Update(crudHandler.Model); err != nil {
+	query := sqlengine.Query{}
+	query.DataSet = crudHandler.Model
+
+	if err = engine.Update(query); err != nil {
 		return
 	}
 
@@ -172,16 +178,4 @@ func (crudHandler *CrudHandler) DEL(c echo.Context) (err error) {
 	}
 
 	return c.NoContent(http.StatusNoContent)
-}
-
-// Gets the pagination details from querystring
-func getPageInfo(c echo.Context) (page int, perPage int) {
-	if page, _ = strconv.Atoi(c.QueryParam("page")); page == 0 {
-		page = 1
-	}
-
-	if perPage, _ = strconv.Atoi(c.QueryParam("per_page")); perPage == 0 {
-		perPage = 50
-	}
-	return
 }

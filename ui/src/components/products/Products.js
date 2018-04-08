@@ -3,7 +3,8 @@ import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import CustomTabs from "../controls/Tabs";
 import TabContainer from "../controls/TabContainer";
-import ProductTab from "./ProductTab";
+import ProductTab from "./productTab/ProductTab";
+import ProductTypeTab from "./productTypeTab/ProductTypeTab";
 
 const styles = theme => ({
   root: {
@@ -29,7 +30,20 @@ class Products extends Component {
     value: 0
   };
 
+  componentWillMount() {
+    if (this.props.history.location.pathname === "/products") {
+      this.setState({ value: 0 });
+    } else {
+      this.setState({ value: 1 });
+    }
+  }
+
   handleChange = (event, value) => {
+    if (value === 0) {
+      this.props.history.push("/products");
+    } else {
+      this.props.history.push("/productType");
+    }
     this.setState({ value });
   };
 
@@ -50,7 +64,11 @@ class Products extends Component {
               <ProductTab />
             </TabContainer>
           )}
-          {value === 1 && <TabContainer>Product Types</TabContainer>}
+          {value === 1 && (
+            <TabContainer>
+              <ProductTypeTab />
+            </TabContainer>
+          )}
         </div>
       </div>
     );

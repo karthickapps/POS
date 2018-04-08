@@ -49,7 +49,7 @@ func CreateNewTokens(userid string, role string) (token domain.UserToken, err er
 		return
 	}
 
-	refreshTokenString, err := createTokenString(userid, role, domain.AuthTokenValidTime, csrfSecret)
+	refreshTokenString, err := createTokenString(userid, role, domain.RefreshTokenValidTime, csrfSecret)
 	if err != nil {
 		return
 	}

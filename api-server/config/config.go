@@ -6,3 +6,5 @@ const DbPath = "pos.db"
 // `openssl genrsa -out app.rsa 2048`
 // `openssl genrsa -in -pubout > app.rsa.pub`
 const SignKey = "M0zzie@Wc_18!SH"
+
+const BasePath = "http://localhost:3500/api"

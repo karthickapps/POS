@@ -1,4 +1,5 @@
-import AddNew from "./AddNew";
+import AddNewProduct from "./AddNewProduct";
+import AddNewProductType from "./AddNewProductType";
 import Products from "./Products";
 
-export default { AddNew, Products };
+export default { AddNewProduct, AddNewProductType, Products };

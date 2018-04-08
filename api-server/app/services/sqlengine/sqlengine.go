@@ -50,22 +50,52 @@ func (engine *SqlEngine) Create(data interface{}) (err error) {
 	defer engine.CloseConnection()
 
 	db := engine.Db
-	if count := db.Create(data).RowsAffected; count == 0 {
-		return errors.New("Error occurred while saving.")
+	res := db.Create(data)
+
+	if count := res.RowsAffected; count == 0 {
+		return errors.New("Duplicate entry")
 	}
 
 	return
 }
 
-func (engine *SqlEngine) Update(data interface{}) (err error) {
+func (engine *SqlEngine) Update(query Query) (err error) {
 	if err = engine.OpenConnection(); err != nil {
 		return
 	}
 	defer engine.CloseConnection()
 
 	db := engine.Db
-	if count := db.Save(data).RowsAffected; count == 0 {
-		return errors.New("Error occurred while saving.")
+	var res *gorm.DB
+
+	if query.Condition != nil {
+		res = db.Where(query.Condition, query.Args).Save(query.DataSet)
+	} else {
+		res = db.Save(query.DataSet)
+	}
+
+	if err = res.Error; err != nil {
+		return
+	}
+
+	return
+}
+
+func (engine *SqlEngine) Delete(query Query) (err error) {
+	if err = engine.OpenConnection(); err != nil {
+		return
+	}
+	defer engine.CloseConnection()
+
+	db := engine.Db
+	response := db.Where(query.Condition, query.Args).Delete(query.DataSet)
+	if err = response.Error; err != nil {
+		return
+	}
+
+	if response.RowsAffected == 0 {
+		err = errors.New("Couldn't find a record with the id sent")
+		return
 	}
 
 	return
@@ -91,14 +121,21 @@ func (engine *SqlEngine) DeleteById(id string, model interface{}) (err error) {
 	return
 }
 
-func (engine *SqlEngine) Count(model interface{}) (count int64, err error) {
+func (engine *SqlEngine) Count(query Query) (count int64, err error) {
 	if err = engine.OpenConnection(); err != nil {
 		return
 	}
 	defer engine.CloseConnection()
 
 	db := engine.Db
-	response := db.Model(model).Count(&count)
+
+	q := db.Model(query.DataSet)
+
+	if query.Condition != nil {
+		q = q.Where(query.Condition, query.Args...)
+	}
+
+	response := q.Count(&count)
 
 	if err = response.Error; err != nil {
 		return
@@ -107,8 +144,8 @@ func (engine *SqlEngine) Count(model interface{}) (count int64, err error) {
 	return
 }
 
-func (engine *SqlEngine) FetchPage(perPage int, pageNo int, model interface{}, result interface{}) (err error) {
-	toSkip := (pageNo - 1) * perPage
+func (engine *SqlEngine) Fetch(query Query) (err error) {
+	toSkip := (query.PageNo - 1) * query.PerPage
 
 	if err = engine.OpenConnection(); err != nil {
 		return
@@ -117,7 +154,11 @@ func (engine *SqlEngine) FetchPage(perPage int, pageNo int, model interface{}, r
 
 	db := engine.Db
 
-	db.Offset(toSkip).Limit(perPage).Find(result)
+	if query.Condition != nil {
+		db.Where(query.Condition, query.Args).Offset(toSkip).Limit(query.PerPage).Find(query.DataSet)
+	} else {
+		db.Offset(toSkip).Limit(query.PerPage).Find(query.DataSet)
+	}
 
 	return
 }

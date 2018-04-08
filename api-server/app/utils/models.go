@@ -29,6 +29,29 @@ func SetTimeStamp(m interface{}) (err error) {
 	return
 }
 
+func SetFieldsForCreated(m interface{}, userId string) (err error) {
+	if err = UpdateBaseModelField(m, "CreatedAt", time.Now()); err != nil {
+		return
+	}
+	if err = UpdateBaseModelField(m, "CreatedBy", userId); err != nil {
+		return
+	}
+	if err = SetFieldsForUpdated(m, userId); err != nil {
+		return
+	}
+	return
+}
+
+func SetFieldsForUpdated(m interface{}, userId string) (err error) {
+	if err = UpdateBaseModelField(m, "UpdatedAt", time.Now()); err != nil {
+		return
+	}
+	if err = UpdateBaseModelField(m, "UpdatedBy", userId); err != nil {
+		return
+	}
+	return
+}
+
 func UpdateBaseModelField(m interface{}, field string, value interface{}) (err error) {
 	typ := reflect.TypeOf(m).Elem()
 	val := reflect.ValueOf(m).Elem()

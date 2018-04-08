@@ -28,7 +28,7 @@ const styled = Component => (style, options) => {
 const setAuthorizationHeader = (token = null) => {
   if (token) {
     sessionStorage.setItem("token", token);
-    axios.defaults.headers.common.authorization = `${token}`;
+    axios.defaults.headers.common.authorization = `Bearer ${token}`;
   } else {
     delete axios.defaults.headers.common.authorization;
   }
