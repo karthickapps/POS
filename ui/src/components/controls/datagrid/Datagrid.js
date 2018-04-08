@@ -15,15 +15,16 @@ import TablePaginationActions from "./TablePaginationActions";
 import CustomTablePagination from "./CustomTablePagination";
 import CustomTableCell from "./CustomTableCell";
 
+// eslint-disable-next-line
 const styles = theme => ({
   root: {
     width: "100%",
-    [theme.breakpoints.up("xs")]: {
-      marginTop: theme.spacing.unit * 8
-    },
-    [theme.breakpoints.up("md")]: {
-      marginTop: theme.spacing.unit * 3
-    },
+    // [theme.breakpoints.up("xs")]: {
+    //   marginTop: theme.spacing.unit * 8
+    // },
+    // [theme.breakpoints.up("md")]: {
+    //   marginTop: theme.spacing.unit * 3
+    // },
     overflowX: "auto",
     flexShrink: 0
   },

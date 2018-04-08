@@ -8,7 +8,12 @@ import CustomTextField from "./CustomTextField";
 // eslint-disable-next-line
 const styles = theme => ({
   root: {
-    float: "right"
+    [theme.breakpoints.up("xs")]: {
+      float: "none"
+    },
+    [theme.breakpoints.up("md")]: {
+      float: "right"
+    }
   },
   textfield: {
     width: 200

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
-import { CircularProgress } from "material-ui/Progress";
+import { LinearProgress } from "material-ui/Progress";
 import Searchbox from "../../controls/Searchbox";
 import Datagrid from "../../controls/datagrid/Datagrid";
 
@@ -25,7 +25,8 @@ const styles = theme => ({
     position: "absolute",
     background: "#ffffffad",
     height: "100%",
-    width: "100%"
+    width: "100%",
+    zIndex: 100
   },
   buttonProgress: {
     color: "#3f50b5",
@@ -76,31 +77,32 @@ class ProductTypeTab extends Component {
 
     return (
       <Fragment>
-        <Button
-          className={classes.button}
-          variant="raised"
-          color="default"
-          size="small"
-        >
-          List
-        </Button>
+        <div>
+          <Button
+            className={classes.button}
+            variant="raised"
+            color="default"
+            size="small"
+          >
+            List
+          </Button>
 
-        <Button
-          className={classes.button}
-          variant="raised"
-          color="primary"
-          size="small"
-          onClick={this.onCreateNewClick}
-        >
-          Create New
-        </Button>
-        <Searchbox onSubmit={this.onSearchSubmit} />
+          <Button
+            className={classes.button}
+            variant="raised"
+            color="primary"
+            size="small"
+            onClick={this.onCreateNewClick}
+          >
+            Create New
+          </Button>
+          <Searchbox onSubmit={this.onSearchSubmit} />
+        </div>
 
         <div className={classes.wrapper}>
+          <LinearProgress size={24} style={{ height: 1.5 }} />
+          <div className={classes.overlay} />
           <Datagrid data={data} headers={this.productColumns} />
-          <div className={classes.overlay}>
-            <CircularProgress size={24} className={classes.buttonProgress} />
-          </div>
         </div>
       </Fragment>
     );
