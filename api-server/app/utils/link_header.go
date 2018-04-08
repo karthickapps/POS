@@ -47,6 +47,9 @@ func SetLinkHeader(c echo.Context, recordsPerpage int64, currentPageNo int64, to
 	linkHeaderString += fmt.Sprintf("%s?page=%d;rel=\"first\",", url, 1)
 	linkHeaderString += fmt.Sprintf("%s?page=%d;rel=\"last\",", url, totalpages)
 
+	// This is a custom entry which breaks the standard. For now go with this.
+	linkHeaderString += fmt.Sprintf("%d;rel=\"count\",", totalpages)
+
 	linkHeaderString = strings.TrimSuffix(linkHeaderString, ",")
 
 	c.Response().Header().Add("Link", linkHeaderString)

@@ -14,7 +14,9 @@ const styles = theme => ({
     width: drawerWidth,
     [theme.breakpoints.up("md")]: {
       position: "relative"
-    }
+    },
+    height: "calc(100vh - 1px)",
+    borderBottom: "1px solid #e0e0e0"
   },
   logo: {
     height: "64px",

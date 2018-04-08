@@ -47,9 +47,6 @@ export const styles = theme => ({
   }
 });
 
-/**
- * A `TableCell` based component for placing inside `TableFooter` for pagination.
- */
 class CustomTablePagination extends React.Component {
   // This logic would be better handled on userside.
   // However, we have it just in case.

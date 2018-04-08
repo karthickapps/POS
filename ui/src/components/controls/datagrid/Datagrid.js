@@ -13,11 +13,17 @@ import Table, {
 import Paper from "material-ui/Paper";
 import TablePaginationActions from "./TablePaginationActions";
 import CustomTablePagination from "./CustomTablePagination";
+import CustomTableCell from "./CustomTableCell";
 
 const styles = theme => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing.unit * 3,
+    [theme.breakpoints.up("xs")]: {
+      marginTop: theme.spacing.unit * 8
+    },
+    [theme.breakpoints.up("md")]: {
+      marginTop: theme.spacing.unit * 3
+    },
     overflowX: "auto",
     flexShrink: 0
   },
@@ -29,37 +35,7 @@ const styles = theme => ({
   }
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
-const CustomTableCell = withStyles(() => ({
-  head: {
-    backgroundColor: "#f5f5f5",
-    color: "black",
-    fontSize: 14
-  },
-  body: {
-    fontSize: 14
-  }
-}))(TableCell);
-
-const data = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-  createData("Frozen 2", 159, 6.0, 24, 4.0),
-  createData("2 Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("3 Eclair", 262, 16.0, 24, 6.0),
-  createData("4 Cupcake", 305, 3.7, 67, 4.3),
-  createData("5 Gingerbread", 356, 16.0, 49, 3.9)
-];
-
-class CustomTable extends Component {
+class Datagrid extends Component {
   state = {
     page: 0,
     rowsPerPage: 5
@@ -69,8 +45,11 @@ class CustomTable extends Component {
     this.setState({ page });
   };
 
+  renderHeader = () =>
+    this.props.headers.map(h => <CustomTableCell key={h}>{h}</CustomTableCell>);
+
   render() {
-    const { classes } = this.props;
+    const { classes, data } = this.props;
     const { rowsPerPage, page } = this.state;
 
     return (
@@ -78,11 +57,7 @@ class CustomTable extends Component {
         <Table className={classes.table}>
           <TableHead className={classes.head}>
             <TableRow>
-              <CustomTableCell>Dessert (100g serving)</CustomTableCell>
-              <CustomTableCell numeric>Calories</CustomTableCell>
-              <CustomTableCell numeric>Fat (g)</CustomTableCell>
-              <CustomTableCell numeric>Carbs (g)</CustomTableCell>
-              <CustomTableCell numeric>Protein (g)</CustomTableCell>
+              {this.renderHeader()}
               <CustomTableCell>Actions</CustomTableCell>
             </TableRow>
           </TableHead>
@@ -92,10 +67,10 @@ class CustomTable extends Component {
               .map(n => (
                 <TableRow key={n.id}>
                   <TableCell>{n.name}</TableCell>
-                  <TableCell numeric>{n.calories}</TableCell>
-                  <TableCell numeric>{n.fat}</TableCell>
-                  <TableCell numeric>{n.carbs}</TableCell>
-                  <TableCell numeric>{n.protein}</TableCell>
+                  <TableCell>{n.calories}</TableCell>
+                  <TableCell>{n.fat}</TableCell>
+                  <TableCell>{n.carbs}</TableCell>
+                  <TableCell>{n.protein}</TableCell>
                   <TableCell>
                     <IconButton>
                       <DeleteIcon />
@@ -126,4 +101,4 @@ class CustomTable extends Component {
   }
 }
 
-export default withStyles(styles)(CustomTable);
+export default withStyles(styles)(Datagrid);
