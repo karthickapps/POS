@@ -1,30 +1,15 @@
 import axios from "axios";
 
 const apiBuilder = mainRouteName => ({
-  fetchAll: async () => {
-    const res = await axios.get(`/api/${mainRouteName}`);
-    return res.data;
-  },
+  fetchAll: () => axios.get(`/api/${mainRouteName}`),
 
-  fetchById: async id => {
-    const res = await axios.get(`/api/${mainRouteName}/${id}`);
-    return res.data;
-  },
+  fetchById: id => axios.get(`/api/${mainRouteName}/${id}`),
 
-  count: async (query = "") => {
-    const res = await axios.get(`/api/${mainRouteName}/count/${query}`);
-    return res.data;
-  },
+  count: (query = "") => axios.get(`/api/${mainRouteName}/count/${query}`),
 
-  getPage: async page => {
-    const res = await axios.get(`/api/${mainRouteName}/page/${page}`);
-    return res.data;
-  },
+  getPage: page => axios.get(`/api/${mainRouteName}/page/${page}`),
 
-  search: async query => {
-    const res = await axios.get(`/api/${mainRouteName}/search/${query}`);
-    return res.data;
-  },
+  search: query => axios.get(`/api/${mainRouteName}/search/${query}`),
 
   createNew: item => axios.post(`/api/${mainRouteName}`, item),
 
