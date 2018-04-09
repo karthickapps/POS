@@ -8,6 +8,11 @@ import (
 )
 
 func SetLinkHeader(c echo.Context, recordsPerpage int64, currentPageNo int64, totalrecords int64) {
+	if totalrecords == 0 {
+		c.Response().Header().Add("Link", "")
+		return
+	}
+
 	var linkHeaderString string
 
 	params := c.QueryParams()
@@ -43,9 +48,9 @@ func SetLinkHeader(c echo.Context, recordsPerpage int64, currentPageNo int64, to
 		prevPage = currentPageNo - 1
 	}
 
-	linkHeaderString += fmt.Sprintf("%s?page=%d;rel=\"prev\",", url, prevPage)
-	linkHeaderString += fmt.Sprintf("%s?page=%d;rel=\"first\",", url, 1)
-	linkHeaderString += fmt.Sprintf("%s?page=%d;rel=\"last\",", url, totalpages)
+	linkHeaderString += fmt.Sprintf("%s&page=%d;rel=\"prev\",", url, prevPage)
+	linkHeaderString += fmt.Sprintf("%s&page=%d;rel=\"first\",", url, 1)
+	linkHeaderString += fmt.Sprintf("%s&page=%d;rel=\"last\",", url, totalpages)
 
 	// This is a custom entry which breaks the standard. For now go with this.
 	linkHeaderString += fmt.Sprintf("%d;rel=\"count\",", totalpages)
