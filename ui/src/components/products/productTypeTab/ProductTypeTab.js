@@ -54,6 +54,15 @@ class ProductTypeTab extends Component {
     this.props.history.push("productType/new");
   };
 
+  onEdit = row => {
+    console.log(row);
+    this.props.history.push("productType/edit/12E");
+  };
+
+  onDelete = row => {
+    console.log(row);
+  };
+
   render() {
     const { isLoading } = this.state;
     const { classes, productType } = this.props;
@@ -84,6 +93,8 @@ class ProductTypeTab extends Component {
 
         <div className={classes.wrapper}>
           <AutoFetchDatagrid
+            onEdit={this.onEdit}
+            onDelete={this.onDelete}
             data={productType}
             headers={this.productColumns}
             isLoading={isLoading}

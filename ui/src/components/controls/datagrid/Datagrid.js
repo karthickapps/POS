@@ -74,10 +74,10 @@ class Datagrid extends Component {
             {this.renderRow(row)}
             <TableCell>
               <IconButton>
-                <DeleteIcon />
+                <DeleteIcon onClick={() => this.props.onDelete(row)} />
               </IconButton>
               <IconButton>
-                <EditIcon />
+                <EditIcon onClick={() => this.props.onEdit(row)} />
               </IconButton>
             </TableCell>
           </TableRow>

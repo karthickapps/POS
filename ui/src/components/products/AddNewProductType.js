@@ -93,6 +93,9 @@ class AddNewProductType extends Component {
   };
 
   render() {
+    // https://stackoverflow.com/questions/29852998/getting-query-parameters-from-react-router-hash-fragment/43630848#43630848
+    console.log(this.props.match.params);
+
     const { data, errors, showMessage, isError, message } = this.state;
 
     return (

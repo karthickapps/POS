@@ -17,6 +17,11 @@ const Routes = () => (
       path="/productType/new"
       component={product.AddNewProductType}
     />
+    <Route
+      exact
+      path="/productType/edit/:id"
+      component={product.AddNewProductType}
+    />
     <Route path="/" component={NotFound} />
   </Switch>
 );
