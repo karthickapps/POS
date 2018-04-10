@@ -36,10 +36,12 @@ func FetchAll(c echo.Context) (err error) {
 	query := sqlengine.Query{}
 	query.DataSet = &[]models.ProductType{}
 
-	id := "%" + c.QueryParam("q") + "%"
-
-	query.Condition = "id like ?"
-	query.Args = []interface{}{id}
+	q := c.QueryParam("q")
+	if q != "" {
+		id := "%" + c.QueryParam("q") + "%"
+		query.Condition = "id like ?"
+		query.Args = []interface{}{id}
+	}
 
 	var count int64
 

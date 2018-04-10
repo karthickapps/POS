@@ -1,10 +1,14 @@
 import React, { Component, Fragment } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
+import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import Searchbox from "../../controls/Searchbox";
-import Datagrid from "../../controls/datagrid/Datagrid";
 import api from "../../../api";
+import { getPaginationInfo } from "../../../utils";
+import { loadProductType } from "../../../actions/productType";
+import { productTypeSelector } from "../../../selectors";
+import AutoFetchDatagrid from "../../controls/datagrid/AutoFetchDatagrid";
 
 const styles = theme => ({
   leftIcon: {
@@ -25,23 +29,25 @@ const styles = theme => ({
 class ProductTypeTab extends Component {
   productColumns = ["Product Type ID", "Description"];
 
-  state = {
-    data: []
-  };
+  state = {};
 
   async componentDidMount() {
-    const product = await api.productType.fetchAll();
-    const linkHeader = product.headers.link;
-    const links = linkHeader.split(",");
-    const paginationInfo = {
-      next: links[0].split(";")[0],
-      prev: links[1].split(";")[0],
-      first: links[2].split(";")[0],
-      last: links[3].split(";")[0],
-      count: links[4].split(";")[0]
+    if (this.props.productType.list.length > 0) {
+      return;
+    }
+
+    this.setState({ isLoading: true });
+
+    const res = await api.productType.fetchAll();
+    const paginationInfo = getPaginationInfo(res.headers.link);
+    const list = res.data;
+    const productType = {
+      list,
+      paginationInfo
     };
 
-    console.log(paginationInfo);
+    this.props.loadProductType(productType);
+    this.setState({ isLoading: false });
   }
 
   onCreateNewClick = () => {
@@ -49,8 +55,8 @@ class ProductTypeTab extends Component {
   };
 
   render() {
-    const { classes } = this.props;
-    const { data } = this.state;
+    const { isLoading } = this.state;
+    const { classes, productType } = this.props;
 
     return (
       <Fragment>
@@ -77,10 +83,11 @@ class ProductTypeTab extends Component {
         </div>
 
         <div className={classes.wrapper}>
-          <Datagrid
-            data={data}
+          <AutoFetchDatagrid
+            data={productType}
             headers={this.productColumns}
-            isLoading={true}
+            isLoading={isLoading}
+            afterDataFetch={this.props.loadProductType}
           />
         </div>
       </Fragment>
@@ -88,6 +95,13 @@ class ProductTypeTab extends Component {
   }
 }
 
-export default withRouter(
-  withStyles(styles, { withTheme: true })(ProductTypeTab)
-);
+function mapStateToProps(state) {
+  return {
+    productType: productTypeSelector(state)
+  };
+}
+
+let component = withStyles(styles, { withTheme: true })(ProductTypeTab);
+component = connect(mapStateToProps, { loadProductType })(component);
+
+export default withRouter(component);

@@ -92,6 +92,19 @@ const isValidEmail = mail => {
   return false;
 };
 
+const getPaginationInfo = linkHeaderString => {
+  const links = linkHeaderString.split(",");
+  const paginationInfo = {
+    next: links[0].split(";")[0],
+    prev: links[1].split(";")[0],
+    first: links[2].split(";")[0],
+    last: links[3].split(";")[0],
+    count: links[4].split(";")[0],
+    current: links[5].split(";")[0]
+  };
+  return paginationInfo;
+};
+
 export {
   styled,
   setAuthorizationHeader,
@@ -99,5 +112,6 @@ export {
   isValidDateChange,
   invertShowHide,
   isValueExists,
-  isValidEmail
+  isValidEmail,
+  getPaginationInfo
 };

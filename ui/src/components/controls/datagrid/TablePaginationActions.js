@@ -15,65 +15,50 @@ const styles = theme => ({
 });
 
 class TablePaginationActions extends Component {
-  handleFirstPageButtonClick = event => {
-    this.props.onChangePage(event, 0);
-  };
-
-  handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.page - 1);
-  };
-
-  handleNextButtonClick = event => {
-    this.props.onChangePage(event, this.props.page + 1);
-  };
-
-  handleLastPageButtonClick = event => {
-    this.props.onChangePage(
-      event,
-      Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1)
-    );
-  };
-
   render() {
-    const { classes, count, page, rowsPerPage, theme } = this.props;
+    const {
+      classes,
+      count,
+      page,
+      rowsPerPage,
+      onFirst,
+      onPrev,
+      onLast,
+      onNext
+    } = this.props;
 
     return (
       <div className={classes.root}>
         <IconButton
-          onClick={this.handleFirstPageButtonClick}
+          onClick={onFirst}
           disabled={page === 0}
           aria-label="First Page"
         >
-          {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
+          <FirstPageIcon />
         </IconButton>
+
         <IconButton
-          onClick={this.handleBackButtonClick}
+          onClick={onPrev}
           disabled={page === 0}
           aria-label="Previous Page"
         >
-          {theme.direction === "rtl" ? (
-            <KeyboardArrowRight />
-          ) : (
-            <KeyboardArrowLeft />
-          )}
+          <KeyboardArrowLeft />
         </IconButton>
+
         <IconButton
-          onClick={this.handleNextButtonClick}
+          onClick={onNext}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="Next Page"
         >
-          {theme.direction === "rtl" ? (
-            <KeyboardArrowLeft />
-          ) : (
-            <KeyboardArrowRight />
-          )}
+          <KeyboardArrowRight />
         </IconButton>
+
         <IconButton
-          onClick={this.handleLastPageButtonClick}
+          onClick={onLast}
           disabled={page >= Math.ceil(count / rowsPerPage) - 1}
           aria-label="Last Page"
         >
-          {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
+          <LastPageIcon />
         </IconButton>
       </div>
     );

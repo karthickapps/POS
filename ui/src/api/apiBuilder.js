@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiBuilder = mainRouteName => ({
-  fetchAll: () => axios.get(`/api/${mainRouteName}`),
+  fetchAll: () => axios.get(`/api/${mainRouteName}?per_page=10&page=1`),
 
   fetchById: id => axios.get(`/api/${mainRouteName}/${id}`),
 

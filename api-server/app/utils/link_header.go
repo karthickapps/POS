@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sfkshan/pos/api-server/config"
+
 	"github.com/labstack/echo"
 )
 
@@ -25,7 +27,8 @@ func SetLinkHeader(c echo.Context, recordsPerpage int64, currentPageNo int64, to
 		qs += fmt.Sprintf("&%s=%s", key, params.Get(key))
 	}
 
-	url := fmt.Sprintf("http://%s%s%s", c.Request().Host, strings.Split(c.Request().RequestURI, "?")[0], qs)
+	uri := strings.Split(c.Request().RequestURI, "?")[0]
+	url := fmt.Sprintf("%s%s%s", config.ClientHost, uri, qs)
 	totalpages := GetNoOfPages(totalrecords, recordsPerpage)
 
 	var nextPage int64
@@ -53,7 +56,8 @@ func SetLinkHeader(c echo.Context, recordsPerpage int64, currentPageNo int64, to
 	linkHeaderString += fmt.Sprintf("%s&page=%d;rel=\"last\",", url, totalpages)
 
 	// This is a custom entry which breaks the standard. For now go with this.
-	linkHeaderString += fmt.Sprintf("%d;rel=\"count\",", totalpages)
+	linkHeaderString += fmt.Sprintf("%d;rel=\"count\",", totalrecords)
+	linkHeaderString += fmt.Sprintf("%d;rel=\"current\",", currentPageNo)
 
 	linkHeaderString = strings.TrimSuffix(linkHeaderString, ",")
 

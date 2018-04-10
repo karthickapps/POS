@@ -53,7 +53,11 @@ class CustomTablePagination extends React.Component {
   componentDidUpdate() {
     const { count, onChangePage, page, rowsPerPage } = this.props;
     const newLastPage = Math.max(0, Math.ceil(count / rowsPerPage) - 1);
-    if (page > newLastPage) {
+
+    // TODO
+    // Index starts zero here and server returns the pages starting from page 1.
+    // Needs to make it uniform. Ok as of now.
+    if (page - 1 > newLastPage) {
       onChangePage(null, newLastPage);
     }
   }
@@ -75,6 +79,7 @@ class CustomTablePagination extends React.Component {
       rowsPerPage,
       rowsPerPageOptions,
       SelectProps,
+      actions,
       ...other
     } = this.props;
 
@@ -90,19 +95,17 @@ class CustomTablePagination extends React.Component {
           <div className={classes.spacer} />
           <Typography variant="caption" className={classes.caption}>
             {labelDisplayedRows({
-              from: count === 0 ? 0 : page * rowsPerPage + 1,
+              from: count === 0 ? 0 : (page - 1) * rowsPerPage + 1, // page - 1 is because // TODO indexing difference. See comment on LNO : 57
               to: Math.min(count, (page + 1) * rowsPerPage),
               count,
               page
             })}
           </Typography>
-          <Actions
-            backIconButtonProps={backIconButtonProps}
+          <TablePaginationActions
             count={count}
-            nextIconButtonProps={nextIconButtonProps}
-            onChangePage={onChangePage}
-            page={page}
+            page={page - 1} // TODO indexing difference. See comment on LNO : 57
             rowsPerPage={rowsPerPage}
+            {...actions}
           />
         </Toolbar>
       </Component>
@@ -111,7 +114,6 @@ class CustomTablePagination extends React.Component {
 }
 
 CustomTablePagination.defaultProps = {
-  Actions: TablePaginationActions,
   component: TableCell,
   labelDisplayedRows: ({ from, to, count }) => `${from}-${to} of ${count}`,
   labelRowsPerPage: "Rows per page:",

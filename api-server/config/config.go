@@ -8,3 +8,5 @@ const DbPath = "pos.db"
 const SignKey = "M0zzie@Wc_18!SH"
 
 const BasePath = "http://localhost:3500/api"
+
+const ClientHost = "http://localhost:3000"

@@ -12,7 +12,6 @@ import Table, {
   TableFooter
 } from "material-ui/Table";
 import Paper from "material-ui/Paper";
-import TablePaginationActions from "./TablePaginationActions";
 import CustomTablePagination from "./CustomTablePagination";
 import CustomTableCell from "./CustomTableCell";
 import Overlay from "../Overlay";
@@ -44,14 +43,7 @@ const styles = theme => ({
 });
 
 class Datagrid extends Component {
-  state = {
-    page: 0,
-    rowsPerPage: 5
-  };
-
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
+  state = {};
 
   renderHeader = () => (
     <TableHead className={this.props.classes.head}>
@@ -66,17 +58,20 @@ class Datagrid extends Component {
 
   renderRow = row => {
     const keys = Object.keys(row);
-    return keys.map(k => <TableCell>{row[k]}</TableCell>);
+    return keys.map((k, idx) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <TableCell key={`${keys[idx]}${idx}`}>{row[k]}</TableCell>
+    ));
   };
 
   renderBody = () => (
     <TableBody>
-      {this.props.data.map((row, idx) => {
+      {this.props.data.list.map((row, idx) => {
         const keys = Object.keys(row);
         return (
           // eslint-disable-next-line react/no-array-index-key
           <TableRow key={`${keys[0]}${idx}`}>
-            {this.renderRow()}
+            {this.renderRow(row)}
             <TableCell>
               <IconButton>
                 <DeleteIcon />
@@ -91,9 +86,37 @@ class Datagrid extends Component {
     </TableBody>
   );
 
+  renderFooter = () => {
+    const { data } = this.props;
+
+    const actions = {};
+    actions.onFirst = this.props.onFirst;
+    actions.onNext = this.props.onNext;
+    actions.onPrev = this.props.onPrev;
+    actions.onLast = this.props.onLast;
+
+    if (data.list.length === 0) {
+      return null;
+    }
+
+    return (
+      <TableFooter>
+        <TableRow>
+          <CustomTablePagination
+            colSpan={6}
+            count={data.paginationInfo.count}
+            rowsPerPage={data.list.length}
+            page={data.paginationInfo.current}
+            onChangePage={this.handleChangePage}
+            actions={actions}
+          />
+        </TableRow>
+      </TableFooter>
+    );
+  };
+
   render() {
-    const { classes, data, isLoading } = this.props;
-    const { rowsPerPage, page } = this.state;
+    const { classes, isLoading } = this.props;
 
     return (
       <div className={classes.wrapper}>
@@ -106,19 +129,7 @@ class Datagrid extends Component {
           <Table className={classes.table}>
             {this.renderHeader()}
             {this.renderBody()}
-            <TableFooter>
-              <TableRow>
-                <CustomTablePagination
-                  colSpan={6}
-                  count={data.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={() => {}}
-                  Actions={TablePaginationActions}
-                />
-              </TableRow>
-            </TableFooter>
+            {this.renderFooter()}
           </Table>
         </Paper>
       </div>
