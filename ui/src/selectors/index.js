@@ -8,7 +8,8 @@ const productTypeSelector = createSelector(
     }
     return {
       list: [],
-      pagination: {}
+      pagination: {},
+      meta: {}
     };
   }
 );

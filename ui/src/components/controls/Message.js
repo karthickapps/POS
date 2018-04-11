@@ -81,7 +81,9 @@ class Message extends Component {
         {show === true && (
           <div className={classes.root} style={style}>
             <div className={messageContainerClass}>
-              <Clear className={errorClose} onClick={onCloseClick} />
+              {onCloseClick && (
+                <Clear className={errorClose} onClick={onCloseClick} />
+              )}
               {title && <div className={headerClass}> {title} </div>}
               <span>{message}</span>
             </div>

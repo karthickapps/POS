@@ -93,7 +93,16 @@ const isValidEmail = mail => {
 };
 
 const getPaginationInfo = linkHeaderString => {
+  if (!linkHeaderString) {
+    return {};
+  }
+
   const links = linkHeaderString.split(",");
+
+  if (links.length === 0) {
+    return {};
+  }
+
   const paginationInfo = {
     next: links[0].split(";")[0],
     prev: links[1].split(";")[0],

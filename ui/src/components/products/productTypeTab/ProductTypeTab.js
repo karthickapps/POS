@@ -29,26 +29,54 @@ const styles = theme => ({
 class ProductTypeTab extends Component {
   productColumns = ["Product Type ID", "Description"];
 
-  state = {};
+  state = { clearSearch: false };
 
   async componentDidMount() {
-    if (this.props.productType.list.length > 0) {
+    if (
+      this.props.productType.list.length > 0 &&
+      this.props.productType.meta.isFiltered === false
+    ) {
       return;
     }
 
-    this.setState({ isLoading: true });
+    await this.fetchAll();
+  }
+
+  fetchAll = async () => {
+    this.setState({ isLoading: true, clearSearch: true });
 
     const res = await api.productType.fetchAll();
     const paginationInfo = getPaginationInfo(res.headers.link);
     const list = res.data;
     const productType = {
       list,
-      paginationInfo
+      paginationInfo,
+      isFiltered: false
     };
 
     this.props.loadProductType(productType);
     this.setState({ isLoading: false });
-  }
+  };
+
+  onRefreshClick = async () => {
+    await this.fetchAll();
+  };
+
+  onSearchSubmit = async id => {
+    this.setState({ isLoading: true, clearSearch: false });
+
+    const res = await api.productType.searchByIdAndGetAll(id);
+    const paginationInfo = getPaginationInfo(res.headers.link);
+    const list = res.data;
+    const productType = {
+      list,
+      paginationInfo,
+      isFiltered: true
+    };
+
+    this.props.loadProductType(productType);
+    this.setState({ isLoading: false });
+  };
 
   onCreateNewClick = () => {
     this.props.history.push("productType/new");
@@ -64,7 +92,7 @@ class ProductTypeTab extends Component {
   };
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, clearSearch } = this.state;
     const { classes, productType } = this.props;
 
     return (
@@ -75,8 +103,9 @@ class ProductTypeTab extends Component {
             variant="raised"
             color="default"
             size="small"
+            onClick={this.onRefreshClick}
           >
-            List
+            Refresh
           </Button>
 
           <Button
@@ -88,11 +117,16 @@ class ProductTypeTab extends Component {
           >
             Create New
           </Button>
-          <Searchbox onSubmit={this.onSearchSubmit} />
+          <Searchbox
+            clear={clearSearch}
+            onChange={this.onSearchChange}
+            onSubmit={this.onSearchSubmit}
+          />
         </div>
 
         <div className={classes.wrapper}>
           <AutoFetchDatagrid
+            actions={["del", "edit"]}
             onEdit={this.onEdit}
             onDelete={this.onDelete}
             data={productType}

@@ -79,7 +79,7 @@ class CustomTablePagination extends React.Component {
       rowsPerPage,
       rowsPerPageOptions,
       SelectProps,
-      actions,
+      paginationActions,
       ...other
     } = this.props;
 
@@ -105,7 +105,7 @@ class CustomTablePagination extends React.Component {
             count={count}
             page={page - 1} // TODO indexing difference. See comment on LNO : 57
             rowsPerPage={rowsPerPage}
-            {...actions}
+            {...paginationActions}
           />
         </Toolbar>
       </Component>

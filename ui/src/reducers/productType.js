@@ -10,6 +10,9 @@ export default function productType(state = {}, action = {}) {
         },
         paginationInfo: {
           $set: action.data.paginationInfo
+        },
+        meta: {
+          $set: { isFiltered: action.data.isFiltered }
         }
       });
     default:

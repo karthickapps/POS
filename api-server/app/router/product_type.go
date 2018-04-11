@@ -7,5 +7,6 @@ import (
 
 func SetProductTypeRoutes(e *echo.Group) {
 	e.POST("/productType", producttype.CreateNew)
-	e.GET("/productType", producttype.FetchAll)
+	e.GET("/productType", producttype.FetchByPages)
+	e.GET("/productType/all", producttype.FetchAll)
 }

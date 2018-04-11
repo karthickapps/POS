@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import { withStyles } from "material-ui/styles";
 import { InputAdornment } from "material-ui/Input";
 import IconButton from "material-ui/IconButton";
@@ -20,22 +20,47 @@ const styles = theme => ({
   }
 });
 
-const Searchbox = props => (
-  <form onSubmit={props.onSubmit} className={props.classes.root}>
-    <CustomTextField
-      style={{ width: 200 }}
-      placeholder="Enter ID"
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <IconButton onClick={props.onSubmit}>
-              <Search />
-            </IconButton>
-          </InputAdornment>
-        )
-      }}
-    />
-  </form>
-);
+class Searchbox extends Component {
+  state = { id: "" };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.clear) {
+      this.setState({ id: "" });
+    }
+  }
+
+  onChange = e => {
+    this.setState({ id: e.target.value });
+  };
+
+  onSubmit = e => {
+    e.preventDefault();
+    this.props.onSubmit(this.state.id);
+  };
+
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <form onSubmit={this.onSubmit} className={classes.root}>
+        <CustomTextField
+          onChange={this.onChange}
+          value={this.state.id}
+          style={{ width: 200 }}
+          placeholder="Enter ID"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton onClick={this.onSubmit}>
+                  <Search />
+                </IconButton>
+              </InputAdornment>
+            )
+          }}
+        />
+      </form>
+    );
+  }
+}
 
 export default withStyles(styles, { withTheme: true })(Searchbox);

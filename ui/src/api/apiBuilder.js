@@ -1,15 +1,16 @@
 import axios from "axios";
 
 const apiBuilder = mainRouteName => ({
-  fetchAll: () => axios.get(`/api/${mainRouteName}?per_page=10&page=1`),
-
   fetchById: id => axios.get(`/api/${mainRouteName}/${id}`),
 
-  count: (query = "") => axios.get(`/api/${mainRouteName}/count/${query}`),
+  fetchByPages: () => axios.get(`/api/${mainRouteName}?per_page=10&page=1`),
 
-  getPage: page => axios.get(`/api/${mainRouteName}/page/${page}`),
+  fetchAll: () => axios.get(`/api/${mainRouteName}/all`),
 
-  search: query => axios.get(`/api/${mainRouteName}/search/${query}`),
+  searchByIdAndGetByPages: id =>
+    axios.get(`/api/${mainRouteName}?q=${id}&per_page=10&page=1`),
+
+  searchByIdAndGetAll: id => axios.get(`/api/${mainRouteName}/all?q=${id}`),
 
   createNew: item => axios.post(`/api/${mainRouteName}`, item),
 

@@ -144,7 +144,7 @@ func (engine *SqlEngine) Count(query Query) (count int64, err error) {
 	return
 }
 
-func (engine *SqlEngine) Fetch(query Query) (err error) {
+func (engine *SqlEngine) FetchByPages(query Query) (err error) {
 	toSkip := (query.PageNo - 1) * query.PerPage
 
 	if err = engine.OpenConnection(); err != nil {
@@ -158,6 +158,23 @@ func (engine *SqlEngine) Fetch(query Query) (err error) {
 		db.Where(query.Condition, query.Args).Offset(toSkip).Limit(query.PerPage).Find(query.DataSet)
 	} else {
 		db.Offset(toSkip).Limit(query.PerPage).Find(query.DataSet)
+	}
+
+	return
+}
+
+func (engine *SqlEngine) FetchAll(query Query) (err error) {
+	if err = engine.OpenConnection(); err != nil {
+		return
+	}
+	defer engine.CloseConnection()
+
+	db := engine.Db
+
+	if query.Condition != nil {
+		db.Where(query.Condition, query.Args).Find(query.DataSet)
+	} else {
+		db.Find(query.DataSet)
 	}
 
 	return

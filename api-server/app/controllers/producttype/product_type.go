@@ -32,6 +32,35 @@ func CreateNew(c echo.Context) (err error) {
 	return c.JSON(http.StatusCreated, p)
 }
 
+func FetchByPages(c echo.Context) (err error) {
+	query := sqlengine.Query{}
+	query.DataSet = &[]models.ProductType{}
+
+	q := c.QueryParam("q")
+	if q != "" {
+		id := "%" + c.QueryParam("q") + "%"
+		query.Condition = "id like ?"
+		query.Args = []interface{}{id}
+	}
+
+	var count int64
+
+	engine := sqlengine.Default()
+	if count, err = engine.Count(query); err != nil {
+		return
+	}
+
+	query.PageNo, query.PerPage = utils.GetPageInfoFromQs(c, count)
+
+	if err = engine.FetchByPages(query); err != nil {
+		return
+	}
+
+	utils.SetLinkHeader(c, query.PerPage, query.PageNo, count)
+
+	return c.JSON(http.StatusOK, query.DataSet)
+}
+
 func FetchAll(c echo.Context) (err error) {
 	query := sqlengine.Query{}
 	query.DataSet = &[]models.ProductType{}
@@ -52,11 +81,9 @@ func FetchAll(c echo.Context) (err error) {
 
 	query.PageNo, query.PerPage = utils.GetPageInfoFromQs(c, count)
 
-	if err = engine.Fetch(query); err != nil {
+	if err = engine.FetchAll(query); err != nil {
 		return
 	}
-
-	utils.SetLinkHeader(c, query.PerPage, query.PageNo, count)
 
 	return c.JSON(http.StatusOK, query.DataSet)
 }
