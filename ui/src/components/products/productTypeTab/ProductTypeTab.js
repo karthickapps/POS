@@ -8,7 +8,7 @@ import api from "../../../api";
 import { getPaginationInfo } from "../../../utils";
 import { loadProductType } from "../../../actions/productType";
 import { productTypeSelector } from "../../../selectors";
-import AutoFetchDatagrid from "../../controls/datagrid/AutoFetchDatagrid";
+import SimpleDatagrid from "../../controls/datagrid/SimpleDatagrid";
 
 const styles = theme => ({
   leftIcon: {
@@ -125,7 +125,7 @@ class ProductTypeTab extends Component {
         </div>
 
         <div className={classes.wrapper}>
-          <AutoFetchDatagrid
+          <SimpleDatagrid
             actions={["del", "edit"]}
             onEdit={this.onEdit}
             onDelete={this.onDelete}

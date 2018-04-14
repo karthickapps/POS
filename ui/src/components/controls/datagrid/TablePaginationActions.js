@@ -31,7 +31,7 @@ class TablePaginationActions extends Component {
       <div className={classes.root}>
         <IconButton
           onClick={onFirst}
-          disabled={page === 0}
+          disabled={page === 1}
           aria-label="First Page"
         >
           <FirstPageIcon />
@@ -39,7 +39,7 @@ class TablePaginationActions extends Component {
 
         <IconButton
           onClick={onPrev}
-          disabled={page === 0}
+          disabled={page === 1}
           aria-label="Previous Page"
         >
           <KeyboardArrowLeft />
@@ -47,7 +47,7 @@ class TablePaginationActions extends Component {
 
         <IconButton
           onClick={onNext}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          disabled={page >= Math.ceil(count / rowsPerPage)}
           aria-label="Next Page"
         >
           <KeyboardArrowRight />
@@ -55,7 +55,7 @@ class TablePaginationActions extends Component {
 
         <IconButton
           onClick={onLast}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          disabled={page >= Math.ceil(count / rowsPerPage)}
           aria-label="Last Page"
         >
           <LastPageIcon />
