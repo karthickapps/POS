@@ -7,7 +7,7 @@ import Searchbox from "../../controls/Searchbox";
 import api from "../../../api";
 import { getPaginationInfo } from "../../../utils";
 import { loadProductType } from "../../../actions/productType";
-import { productTypeSelector } from "../../../selectors";
+import { getProductTypeSelector } from "../../../selectors";
 import SimpleDatagrid from "../../controls/datagrid/SimpleDatagrid";
 
 const styles = theme => ({
@@ -141,8 +141,9 @@ class ProductTypeTab extends Component {
 }
 
 function mapStateToProps(state) {
+  const selector = getProductTypeSelector();
   return {
-    productType: productTypeSelector(state)
+    productType: selector(state)
   };
 }
 

@@ -5,7 +5,8 @@ import Title from "./Title";
 const styles = () => ({
   root: {
     borderTop: "1px solid #3f50b5",
-    padding: "10px 5px 5px 5px"
+    padding: "10px 5px 5px 5px",
+    position: "relative"
   }
 });
 

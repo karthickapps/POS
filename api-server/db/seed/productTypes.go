@@ -15,7 +15,7 @@ func AddProductTypes() {
 	err := engine.OpenConnection()
 
 	if err != nil {
-		fmt.Println("Couldn't connect databse")
+		fmt.Println("Couldn't connect database")
 		return
 	}
 
