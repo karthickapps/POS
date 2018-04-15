@@ -110,7 +110,7 @@ func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
 
 	query.PageNo, query.PerPage = utils.GetPageInfoFromQs(c, count)
 
-	if err = engine.Fetch(query); err != nil {
+	if err = engine.FetchAll(query); err != nil {
 		return
 	}
 

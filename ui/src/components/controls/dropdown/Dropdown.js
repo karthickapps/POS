@@ -62,6 +62,8 @@ class Dropdown extends React.Component {
 
     return (
       <CustomTextField
+        placeholder=""
+        helperText="Select a product type."
         fullWidth
         value={this.state.selectedValue}
         onChange={this.handleChange}
