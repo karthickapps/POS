@@ -1,14 +1,10 @@
 import React, { Component, Fragment } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
-import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import Searchbox from "../../controls/Searchbox";
 import api from "../../../api";
-import { getPaginationInfo } from "../../../utils";
-import { loadProductType } from "../../../actions/productType";
-import { getProductTypeSelector } from "../../../selectors";
-import SimpleDatagrid from "../../controls/datagrid/SimpleDatagrid";
+import ApiAutoFetchDatagrid from "../../controls/datagrid/ApiAutoFetchDatagrid";
 
 const styles = theme => ({
   leftIcon: {
@@ -29,53 +25,17 @@ const styles = theme => ({
 class ProductTypeTab extends Component {
   productColumns = ["Product Type ID", "Description"];
 
-  state = { clearSearch: false };
-
-  async componentDidMount() {
-    if (
-      this.props.productType.list.length > 0 &&
-      this.props.productType.meta.isFiltered === false
-    ) {
-      return;
-    }
-
-    await this.fetchAll();
-  }
-
-  fetchAll = async () => {
-    this.setState({ isLoading: true, clearSearch: true });
-
-    const res = await api.productType.fetchAll();
-    const paginationInfo = getPaginationInfo(res.headers.link);
-    const list = res.data;
-    const productType = {
-      list,
-      paginationInfo,
-      isFiltered: false
-    };
-
-    this.props.loadProductType(productType);
-    this.setState({ isLoading: false });
+  state = {
+    clearSearch: false,
+    serachQuery: ""
   };
 
-  onRefreshClick = async () => {
-    await this.fetchAll();
+  onListClick = () => {
+    this.setState({ clearSearch: true, serachQuery: "" });
   };
 
   onSearchSubmit = async id => {
-    this.setState({ isLoading: true, clearSearch: false });
-
-    const res = await api.productType.searchByIdAndGetAll(id);
-    const paginationInfo = getPaginationInfo(res.headers.link);
-    const list = res.data;
-    const productType = {
-      list,
-      paginationInfo,
-      isFiltered: true
-    };
-
-    this.props.loadProductType(productType);
-    this.setState({ isLoading: false });
+    this.setState({ clearSearch: false, serachQuery: id });
   };
 
   onCreateNewClick = () => {
@@ -91,9 +51,19 @@ class ProductTypeTab extends Component {
     console.log(row);
   };
 
+  getApiPromise = () => {
+    const { serachQuery } = this.state;
+
+    if (serachQuery.length === 0) {
+      return api.productType.fetchByPages();
+    }
+
+    return api.productType.searchByIdAndGetByPages(serachQuery);
+  };
+
   render() {
-    const { isLoading, clearSearch } = this.state;
-    const { classes, productType } = this.props;
+    const { clearSearch } = this.state;
+    const { classes } = this.props;
 
     return (
       <Fragment>
@@ -103,9 +73,9 @@ class ProductTypeTab extends Component {
             variant="raised"
             color="default"
             size="small"
-            onClick={this.onRefreshClick}
+            onClick={this.onListClick}
           >
-            Refresh
+            List
           </Button>
 
           <Button
@@ -125,14 +95,12 @@ class ProductTypeTab extends Component {
         </div>
 
         <div className={classes.wrapper}>
-          <SimpleDatagrid
+          <ApiAutoFetchDatagrid
+            datasourcePromise={this.getApiPromise}
             actions={["del", "edit"]}
             onEdit={this.onEdit}
             onDelete={this.onDelete}
-            data={productType}
             headers={this.productColumns}
-            isLoading={isLoading}
-            afterDataFetch={this.props.loadProductType}
           />
         </div>
       </Fragment>
@@ -140,14 +108,6 @@ class ProductTypeTab extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const selector = getProductTypeSelector();
-  return {
-    productType: selector(state)
-  };
-}
-
-let component = withStyles(styles, { withTheme: true })(ProductTypeTab);
-component = connect(mapStateToProps, { loadProductType })(component);
+const component = withStyles(styles, { withTheme: true })(ProductTypeTab);
 
 export default withRouter(component);

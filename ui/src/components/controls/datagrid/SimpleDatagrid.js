@@ -60,10 +60,11 @@ class SimpleDatagrid extends Component {
 
   initialize = props => {
     if (props.data.list.length === 0) {
+      this.setState({ currentPageData: [] });
       return;
     }
 
-    this.goToPage(1);
+    this.goToPage(1, props);
 
     const totalPages = Math.ceil(props.data.list.length / props.rowsPerPage);
 
@@ -86,8 +87,8 @@ class SimpleDatagrid extends Component {
     this.goToPage(this.state.currentPageNumber - 1);
   };
 
-  goToPage = pageNum => {
-    const { data, rowsPerPage } = this.props;
+  goToPage = (pageNum, props = this.props) => {
+    const { data, rowsPerPage } = props;
 
     const startIdx = (pageNum - 1) * rowsPerPage;
 

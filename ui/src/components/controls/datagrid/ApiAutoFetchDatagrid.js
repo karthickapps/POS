@@ -47,7 +47,35 @@ const styles = theme => ({
 });
 
 class ApiAutoFetchDatagrid extends Component {
-  state = {};
+  state = {
+    data: {
+      list: [],
+      paginationInfo: {}
+    },
+    isLoading: false
+  };
+
+  async componentDidMount() {
+    this.init();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.init(nextProps);
+  }
+
+  init = async (props = this.props) => {
+    this.setState({ isLoading: true });
+
+    const res = await props.datasourcePromise();
+    const paginationInfo = getPaginationInfo(res.headers.link);
+    const list = res.data;
+    const data = {
+      list,
+      paginationInfo
+    };
+
+    this.setState({ isLoading: false, data });
+  };
 
   onFirst = () => {
     this.fetch("first");
@@ -66,7 +94,9 @@ class ApiAutoFetchDatagrid extends Component {
   };
 
   fetch = async action => {
-    const url = this.props.data.paginationInfo[action];
+    this.setState({ isLoading: true });
+
+    const url = this.state.data.paginationInfo[action];
     const res = await axios.get(url);
     const paginationInfo = getPaginationInfo(res.headers.link);
     const list = res.data;
@@ -74,7 +104,8 @@ class ApiAutoFetchDatagrid extends Component {
       list,
       paginationInfo
     };
-    this.props.afterDataFetch(data);
+
+    this.setState({ isLoading: false, data });
   };
 
   renderHeader = () => (
@@ -135,7 +166,7 @@ class ApiAutoFetchDatagrid extends Component {
 
   renderBody = () => (
     <TableBody>
-      {this.props.data.list.map((row, idx) => {
+      {this.state.data.list.map((row, idx) => {
         const keys = Object.keys(row);
         return (
           // eslint-disable-next-line react/no-array-index-key
@@ -149,7 +180,8 @@ class ApiAutoFetchDatagrid extends Component {
   );
 
   renderNoRecordsMessage = () => {
-    const { isLoading, data } = this.props;
+    const { isLoading } = this.props;
+    const { data } = this.state;
 
     return (
       <Message
@@ -162,7 +194,8 @@ class ApiAutoFetchDatagrid extends Component {
   };
 
   renderFooter = () => {
-    const { data, rowsPerPage } = this.props;
+    const { rowsPerPage } = this.props;
+    const { data } = this.state;
 
     const paginationActions = {};
     paginationActions.onFirst = this.onFirst;
@@ -190,7 +223,8 @@ class ApiAutoFetchDatagrid extends Component {
   };
 
   render() {
-    const { classes, isLoading } = this.props;
+    const { classes } = this.props;
+    const { isLoading } = this.state;
 
     return (
       <div className={classes.wrapper}>

@@ -1,12 +1,9 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
-import { connect } from "react-redux";
 import Container from "../controls/Container";
 import Form from "../controls/Form";
 import CustomTextField from "../controls/CustomTextField";
-import { loadProductType } from "../../actions/productType";
-import { getProductTypeDataForDropdownSelector } from "../../selectors";
 import Dropdown from "../controls/dropdown/Dropdown";
 import CircularLoader from "../controls/loader/CircularLoader";
 import api from "../../api";
@@ -36,12 +33,11 @@ class AddNewProduct extends Component {
     const list = res.data;
     const productType = {
       list,
-      paginationInfo,
-      isFiltered: false
+      paginationInfo
     };
 
-    this.props.loadProductType(productType);
-    this.setState({ isLoading: false });
+    // eslint-disable-next-line react/no-unused-state
+    this.setState({ isLoading: false, productType });
   }
 
   onCancelClick = () => {
@@ -53,7 +49,7 @@ class AddNewProduct extends Component {
   };
 
   render() {
-    const { classes, productType } = this.props;
+    const { classes } = this.props;
     const { data, errors, isLoading } = this.state;
 
     return (
@@ -81,14 +77,6 @@ class AddNewProduct extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const selector = getProductTypeDataForDropdownSelector();
-  return {
-    productType: selector(state)
-  };
-}
-
-let component = withStyles(styles, { withTheme: true })(AddNewProduct);
-component = connect(mapStateToProps, { loadProductType })(component);
+const component = withStyles(styles, { withTheme: true })(AddNewProduct);
 
 export default withRouter(component);
