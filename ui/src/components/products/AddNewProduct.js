@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as equal from "fast-deep-equal";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
@@ -64,14 +65,6 @@ class AddNewProduct extends Component {
     });
   };
 
-  // productType
-  // onProductTypeDropdownChange = productType => {
-  //   this.setState({
-  //     data: { ...this.state.data, productType },
-  //     errors: { ...this.state.errors, productType: "" }
-  //   });
-  // };
-
   onProductTypeDropdownChange = value => {
     const productType = value === null ? "" : value;
 
@@ -82,7 +75,11 @@ class AddNewProduct extends Component {
   };
 
   onCancelClick = () => {
-    this.props.history.push("/products");
+    const isDirty = !equal(this.initialData, this.state.data);
+
+    if (isDirty === false) {
+      this.props.history.goBack();
+    }
   };
 
   onSubmit = async e => {

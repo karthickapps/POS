@@ -6,48 +6,32 @@ import CustomTextField from "../textfields/CustomTextField";
 import SelectWrapped from "./SelectWrapped";
 import styles from "./styles";
 
-class Dropdown extends React.Component {
-  // state = {
-  //   selectedValue: null
-  // };
+const Dropdown = props => {
+  const { classes, datasource, ...rest } = props;
 
-  // handleChange = value => {
-  //   const valueToSet = value === null ? "" : value;
-
-  //   this.setState({
-  //     selectedValue: valueToSet
-  //   });
-
-  //   this.props.onChange(valueToSet);
-  // };
-
-  render() {
-    const { classes, datasource, ...rest } = this.props;
-
-    return (
-      <CustomTextField
-        {...rest}
-        fullWidth
-        // value={this.state.selectedValue}
-        // onChange={this.handleChange}
-        name="react-select-chip-label"
-        InputLabelProps={{
-          shrink: true
-        }}
-        InputProps={{
-          inputComponent: SelectWrapped,
-          inputProps: {
-            classes,
-            instanceId: "react-select-chip-label",
-            id: "react-select-chip-label",
-            simpleValue: true,
-            options: datasource
-          }
-        }}
-      />
-    );
-  }
-}
+  return (
+    <CustomTextField
+      {...rest}
+      fullWidth
+      // value={this.state.selectedValue}
+      // onChange={this.handleChange}
+      name="react-select-chip-label"
+      InputLabelProps={{
+        shrink: true
+      }}
+      InputProps={{
+        inputComponent: SelectWrapped,
+        inputProps: {
+          classes,
+          instanceId: "react-select-chip-label",
+          id: "react-select-chip-label",
+          simpleValue: true,
+          options: datasource
+        }
+      }}
+    />
+  );
+};
 
 Dropdown.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
