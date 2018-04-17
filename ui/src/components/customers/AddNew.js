@@ -4,7 +4,7 @@ import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
 import Form from "../controls/Form";
 import { isValueExists, isValidEmail } from "../../utils";
-import CustomTextField from "../controls/CustomTextField";
+import CustomTextField from "../controls/textfields/CustomTextField";
 
 // eslint-disable-next-line
 const styles = theme => ({

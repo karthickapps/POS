@@ -78,7 +78,8 @@ const isValueExists = (object, keysToIgnore = []) => {
   for (let idx = 0; idx < keys.length; idx++) {
     const key = keys[idx];
     const value = object[key];
-    if (!fn(value) && value.length === 0) errors[key] = "Required field";
+    if ((!fn(key) && !value) || (!fn(key) && value.length === 0))
+      errors[key] = "Required field";
   }
 
   return errors;

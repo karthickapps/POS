@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
 import Form from "../controls/Form";
-import CustomTextField from "../controls/CustomTextField";
+import CustomTextField from "../controls/textfields/CustomTextField";
 import { isValueExists } from "../../utils";
 import api from "../../api";
 import Message from "../controls/Message";

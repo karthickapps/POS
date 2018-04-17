@@ -3,7 +3,7 @@ import { withStyles } from "material-ui/styles";
 import { InputAdornment } from "material-ui/Input";
 import IconButton from "material-ui/IconButton";
 import Search from "material-ui-icons/Search";
-import CustomTextField from "./CustomTextField";
+import CustomTextField from "./textfields/CustomTextField";
 
 // eslint-disable-next-line
 const styles = theme => ({

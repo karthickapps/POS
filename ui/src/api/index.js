@@ -22,4 +22,6 @@ const auth = {
 
 const productType = apiBuilder("productType");
 
-export default { auth, productType };
+const product = apiBuilder("product");
+
+export default { auth, productType, product };
