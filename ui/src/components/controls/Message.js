@@ -66,6 +66,12 @@ class Message extends Component {
       isError
     } = this.props;
 
+    if (show === true) {
+      setTimeout(() => {
+        this.props.onCloseClick();
+      }, 3000);
+    }
+
     let headerClass = classes.header;
     let messageContainerClass = classes.message;
     let errorClose = classes.close;

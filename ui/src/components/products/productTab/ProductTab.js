@@ -1,10 +1,13 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Searchbox from "../../controls/Searchbox";
 import api from "../../../api";
 import ApiAutoFetchDatagrid from "../../controls/datagrid/ApiAutoFetchDatagrid";
+import YesNo from "../../controls/dialog/YesNo";
+import CircularLoader from "../../controls/loader/CircularLoader";
+import Message from "../../controls/Message";
 
 const styles = theme => ({
   leftIcon: {
@@ -27,7 +30,12 @@ class ProductTab extends Component {
 
   state = {
     clearSearch: false,
-    serachQuery: ""
+    serachQuery: "",
+    showConfirmDeleteDialog: false,
+    isLoading: false,
+    message: "",
+    showMessage: false,
+    isError: false
   };
 
   onListClick = () => {
@@ -46,8 +54,48 @@ class ProductTab extends Component {
     this.props.history.push(`products/edit/${row.id}`);
   };
 
-  onDelete = row => {
-    console.log(row);
+  onDelete = itemToDelete => {
+    this.setState({ showConfirmDeleteDialog: true, itemToDelete });
+  };
+
+  onConfirmDelete = async () => {
+    const { id } = this.state.itemToDelete;
+
+    try {
+      this.setState({ isLoading: true });
+
+      const res = await api.product.delete(id);
+
+      if (res.status === 204) {
+        this.setState({
+          isLoading: false,
+          isError: false,
+          showMessage: true,
+          message: "Deleted successfully.",
+          showConfirmDeleteDialog: false
+        });
+      } else {
+        throw new Error(
+          `Couldn't delete the record. The status code is ${res.status}`
+        );
+      }
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+        isError: false,
+        showMessage: true,
+        message: error.message,
+        showConfirmDeleteDialog: false
+      });
+    }
+  };
+
+  onMessageCloseClick = () => {
+    this.setState({ showMessage: false });
+  };
+
+  onCancelConfirmDelete = () => {
+    this.setState({ showConfirmDeleteDialog: false });
   };
 
   getApiPromise = () => {
@@ -61,11 +109,25 @@ class ProductTab extends Component {
   };
 
   render() {
-    const { clearSearch } = this.state;
+    const {
+      clearSearch,
+      showConfirmDeleteDialog,
+      isLoading,
+      message,
+      showMessage,
+      isError
+    } = this.state;
     const { classes } = this.props;
 
     return (
-      <Fragment>
+      <div className={classes.wrapper}>
+        <CircularLoader isLoading={isLoading} />
+        <YesNo
+          open={showConfirmDeleteDialog}
+          message="Are you sure wan't to delete the selected item"
+          onOk={this.onConfirmDelete}
+          onCancel={this.onCancelConfirmDelete}
+        />
         <div>
           <Button
             className={classes.button}
@@ -92,6 +154,16 @@ class ProductTab extends Component {
             onSubmit={this.onSearchSubmit}
           />
         </div>
+
+        <Message
+          style={{ width: "98%" }}
+          title="Message"
+          message={message}
+          show={showMessage}
+          isError={isError}
+          onCloseClick={this.onMessageCloseClick}
+        />
+
         <div className={classes.wrapper}>
           <ApiAutoFetchDatagrid
             datasourcePromise={this.getApiPromise}
@@ -101,7 +173,7 @@ class ProductTab extends Component {
             headers={this.productColumns}
           />
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
