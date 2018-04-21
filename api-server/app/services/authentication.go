@@ -23,7 +23,7 @@ func Login(userid string, password string) (token domain.UserToken, err error) {
 	defer engine.CloseConnection()
 
 	var resultSet = &models.User{}
-	if err = engine.FindById(userid, resultSet); err != nil {
+	if err, _ = engine.FindById(userid, resultSet); err != nil {
 		return
 	}
 

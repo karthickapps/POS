@@ -13,16 +13,17 @@ import (
 )
 
 const (
-	GET  = "GET"
-	PUT  = "PUT"
-	POST = "POST"
-	DEL  = "DEL"
+	GET           = "GET"
+	PUT           = "PUT"
+	POST          = "POST"
+	DEL           = "DEL"
+	UpdatedFailed = "UpdatedFailed"
 )
 
 // CRUD Handler to register the routes dyanmically.
 type CrudHandler struct {
 	// The model object
-	Model interface{}
+	GetModel func() interface{}
 
 	// This func results the address of the resultset variable to fill the result.
 	// This should initialize a new instance every request or every time the method
@@ -61,9 +62,7 @@ func (crudHandler *CrudHandler) RegisterRoutes(route string, verbs []string) {
 // GET  /:id
 func (crudHandler *CrudHandler) GET(c echo.Context) (err error) {
 	id := c.Param("id")
-
 	engine := sqlengine.Default()
-
 	dest := crudHandler.GetResultSetPtr()
 
 	// Destroy the variable. Dont know whether its required or not
@@ -71,13 +70,14 @@ func (crudHandler *CrudHandler) GET(c echo.Context) (err error) {
 		dest = nil
 	}()
 
-	if err = engine.FindById(id, dest); err != nil {
+	var count int64
+	if err, count = engine.FindById(id, dest); err != nil {
 		return
 	}
 
-	slice := reflect.ValueOf(dest).Elem().Elem()
+	slice := reflect.ValueOf(dest).Elem()
 
-	if len := slice.Len(); len == 0 {
+	if count == 0 {
 		return c.JSON(http.StatusOK, slice)
 	}
 
@@ -96,10 +96,13 @@ func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
 	query := sqlengine.Query{}
 	query.DataSet = dest
 
-	id := "%" + c.QueryParam("q") + "%"
+	q := c.QueryParam("q")
 
-	query.Condition = "id like ?"
-	query.Args = []interface{}{id}
+	if q != "" {
+		id := "%" + q + "%"
+		query.Condition = "id like ?"
+		query.Args = []interface{}{id}
+	}
 
 	var count int64
 
@@ -121,50 +124,96 @@ func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
 
 // POST /
 func (crudHandler *CrudHandler) POST(c echo.Context) (err error) {
-	if err = c.Bind(crudHandler.Model); err != nil {
+	model := crudHandler.GetModel()
+
+	// Destroy the variable. Dont know whether its required or not
+	defer func() {
+		model = nil
+	}()
+
+	if err = c.Bind(model); err != nil {
 		return
 	}
-	if err = utils.SetFieldsForCreated(crudHandler.Model, c.(*custom.Context).UserID); err != nil {
+
+	if err = utils.SetFieldsForCreated(model, c.(*custom.Context).UserID); err != nil {
 		return
 	}
-	if err = c.Validate(crudHandler.Model); err != nil {
+
+	if err = c.Validate(model); err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	engine := sqlengine.Default()
-	if err = engine.Create(crudHandler.Model); err != nil {
+	if err = engine.Create(model); err != nil {
 		return
 	}
 
-	return c.JSON(http.StatusCreated, crudHandler.Model)
+	return c.JSON(http.StatusCreated, model)
 }
 
 // PUT /:id
 func (crudHandler *CrudHandler) PUT(c echo.Context) (err error) {
-	if err = c.Bind(crudHandler.Model); err != nil {
-		return
-	}
-	if err = c.Validate(crudHandler.Model); err != nil {
-		return
-	}
-	if err = utils.SetFieldsForUpdated(crudHandler.Model, c.(*custom.Context).UserID); err != nil {
+	current := crudHandler.GetModel()
+	prev := crudHandler.GetModel()
+	userId := c.(*custom.Context).UserID
+
+	defer func() {
+		current = nil
+		prev = nil
+	}()
+
+	// Bind the posted data to the 'current' variable to read the form data
+	if err = c.Bind(current); err != nil {
 		return
 	}
 
+	// Id in the form data
+	postedId := reflect.ValueOf(current).Elem().FieldByName("ID").Interface().(string)
+	// Id passed in the url
+	paramId := c.Param("id")
+
+	if postedId != paramId {
+		return errors.New("Invalid data. The ID field cannot be altered in the update request.")
+	}
+
 	engine := sqlengine.Default()
+
+	var count int64
+	err, count = engine.FindById(postedId, prev)
+
+	// Check whether the data us already present or not.
+	// This is required since if the data is not present GORM inserts
+	// new record which is the way we want here.
+	// TODO Needs to do allow this in a diff way for user to modify the
+	// PK if they want.
+	if err != nil || count == 0 {
+		return errors.New("Invalid entry for update")
+	}
+
+	if err = utils.SetFieldsForUpdated(prev, current, userId); err != nil {
+		return
+	}
+
 	query := sqlengine.Query{}
-	query.DataSet = crudHandler.Model
+	query.DataSet = current
 
 	if err = engine.Update(query); err != nil {
 		return
 	}
 
-	return c.JSON(http.StatusCreated, crudHandler.Model)
+	return c.JSON(http.StatusCreated, current)
 }
 
 // DEL /:id
 func (crudHandler *CrudHandler) DEL(c echo.Context) (err error) {
+	model := crudHandler.GetModel()
+
+	// Destroy the variable. Dont know whether its required or not
+	defer func() {
+		model = nil
+	}()
+
 	id := c.Param("id")
 
 	if len := len(id); len == 0 {
@@ -173,7 +222,7 @@ func (crudHandler *CrudHandler) DEL(c echo.Context) (err error) {
 	}
 
 	engine := sqlengine.Default()
-	if err = engine.DeleteById(id, crudHandler.Model); err != nil {
+	if err = engine.DeleteById(id, model); err != nil {
 		return
 	}
 

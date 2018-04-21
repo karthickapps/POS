@@ -9,9 +9,11 @@ import (
 func SetProductRoutes(e *echo.Group) {
 	p := crud.CrudHandler{}
 	p.EchoGroup = e
-	p.Model = &models.Product{}
+	p.GetModel = func() interface{} {
+		return new(models.Product)
+	}
 	p.GetResultSetPtr = func() interface{} {
-		return &[]models.Product{}
+		return new([]models.Product)
 	}
 	p.Register("/product")
 }

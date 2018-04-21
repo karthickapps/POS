@@ -180,7 +180,7 @@ func (engine *SqlEngine) FetchAll(query Query) (err error) {
 	return
 }
 
-func (engine *SqlEngine) FindById(id interface{}, result interface{}) (err error) {
+func (engine *SqlEngine) FindById(id interface{}, result interface{}) (err error, noOfRowsReturned int64) {
 	if err = engine.OpenConnection(); err != nil {
 		return
 	}
@@ -188,7 +188,9 @@ func (engine *SqlEngine) FindById(id interface{}, result interface{}) (err error
 
 	db := engine.Db
 
-	db.Where("id = ?", id).Find(result)
+	res := db.Where("id = ?", id).Find(result)
+
+	noOfRowsReturned = res.RowsAffected
 
 	return
 }

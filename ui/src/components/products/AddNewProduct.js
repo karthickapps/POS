@@ -11,6 +11,7 @@ import api from "../../api";
 import NumberTextField from "../controls/textfields/NumberTextField";
 import { isValueExists } from "../../utils";
 import Message from "../controls/Message";
+import Prompt from "../controls/dialog/Prompt";
 
 // eslint-disable-next-line
 const styles = theme => ({
@@ -36,7 +37,9 @@ class AddNewProduct extends Component {
     errors: {},
     isLoading: false,
     productTypeIds: [],
-    showMessage: false
+    showMessage: false,
+    isEdit: false,
+    showMessageDialog: false
   };
 
   constructor(props) {
@@ -49,13 +52,31 @@ class AddNewProduct extends Component {
   async componentDidMount() {
     this.setState({ isLoading: true });
 
-    const res = await api.productType.fetchAll();
-    const productTypeIds = res.data.map(d => ({
-      value: d.id,
-      label: d.id
-    }));
+    try {
+      const stateToUpdate = {};
 
-    this.setState({ isLoading: false, productTypeIds });
+      const res = await api.productType.fetchAll();
+      const productTypeIds = res.data.map(d => ({
+        value: d.id,
+        label: d.id
+      }));
+
+      stateToUpdate.productTypeIds = productTypeIds;
+      stateToUpdate.isLoading = false;
+
+      const { id } = this.props.match.params;
+
+      if (id) {
+        const res2 = await api.product.fetchById(id);
+        const productToEdit = res2.data;
+        stateToUpdate.data = productToEdit;
+        stateToUpdate.isEdit = true;
+      }
+
+      this.setState({ ...stateToUpdate });
+    } catch (error) {
+      this.showError(error);
+    }
   }
 
   onChange = e => {
@@ -77,9 +98,12 @@ class AddNewProduct extends Component {
   onCancelClick = () => {
     const isDirty = !equal(this.initialData, this.state.data);
 
-    if (isDirty === false) {
-      this.props.history.goBack();
+    if (isDirty === true && this.state.isEdit === false) {
+      this.clearForm();
+      return;
     }
+
+    this.props.history.goBack();
   };
 
   onSubmit = async e => {
@@ -95,18 +119,40 @@ class AddNewProduct extends Component {
     try {
       this.state.data.costPrice = Number(this.state.data.costPrice);
       this.state.data.sellingPrice = Number(this.state.data.sellingPrice);
-      const res = await api.product.createNew(this.state.data);
-      if (res.status === 201) {
-        this.showMessage("Saved successfully");
-        this.clearForm();
+
+      if (this.state.isEdit === false) {
+        this.createNew(this.state.data);
+      } else {
+        this.update(this.state.data);
       }
     } catch (error) {
       this.showError(error);
     }
   };
 
-  clearForm = () => {
-    this.setState({ data: this.initialData });
+  createNew = async data => {
+    const res = await api.product.createNew(data);
+    if (res.status === 201) {
+      this.showMessage("Saved successfully");
+      this.clearForm();
+    }
+  };
+
+  update = async data => {
+    const res = await api.product.update(this.props.match.params.id, data);
+
+    if (res.status === 201) {
+      this.clearForm(true);
+    } else {
+      throw new Error(`Unable to update. The status code is ${res.status}`);
+    }
+  };
+
+  clearForm = (canShowMessageDialog = false) => {
+    this.setState({
+      data: this.initialData,
+      showMessageDialog: canShowMessageDialog
+    });
 
     if (this.idRef) {
       this.idRef.focus();
@@ -133,8 +179,14 @@ class AddNewProduct extends Component {
     this.setState({
       showMessage: true,
       message: error.message,
-      isError: true
+      isError: true,
+      isLoading: false
     });
+  };
+
+  onMessageDialogCloseClick = () => {
+    this.setState({ showMessageDialog: false });
+    this.props.history.goBack();
   };
 
   render() {
@@ -146,11 +198,18 @@ class AddNewProduct extends Component {
       productTypeIds,
       showMessage,
       isError,
-      message
+      message,
+      isEdit,
+      showMessageDialog
     } = this.state;
 
     return (
-      <Container title="New product">
+      <Container title={isEdit ? "Edit Product" : "New Product"}>
+        <Prompt
+          message="The product you entered was saved successfully."
+          open={showMessageDialog}
+          handleClose={this.onMessageDialogCloseClick}
+        />
         <CircularLoader isLoading={isLoading} />
         <Message
           title="Message"
@@ -176,6 +235,7 @@ class AddNewProduct extends Component {
             label="Product Id"
             helperText="This should be unique"
             onChange={this.onChange}
+            disabled={isEdit}
           />
 
           <Dropdown
