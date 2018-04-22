@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router";
 import customer from "../customers";
+import expense from "../expense";
 import product from "../products";
 import NotFound from "../notFound/NotFound";
 
@@ -12,6 +13,24 @@ const Routes = () => (
     <Route exact path="/customers" component={customer.Customers} />
     <Route exact path="/customers/new" component={customer.AddNew} />
     <Route exact path="/customers/edit/:id" component={customer.AddNew} />
+
+    {/* Expense */}
+    <Route exact path="/expense" component={expense.Expense} />
+    <Route exact path="/expense/new" component={expense.AddNewExpense} />
+    <Route exact path="/expense/edit/:id" component={expense.AddNewExpense} />
+
+    {/* Expense Type */}
+    <Route exact path="/expensetypes" component={expense.Expense} />
+    <Route
+      exact
+      path="/expensetypes/new"
+      component={expense.AddNewExpenseType}
+    />
+    <Route
+      exact
+      path="/expensetypes/edit/:id"
+      component={expense.AddNewExpenseType}
+    />
 
     {/* Product */}
     <Route exact path="/products" component={product.Products} />

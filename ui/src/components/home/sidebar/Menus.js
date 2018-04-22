@@ -29,12 +29,14 @@ class Menus extends Component {
           <SidebarMenu text="Sale" icon={<ViewModule />} />
 
           <ListSubheader>MASTER</ListSubheader>
+
           <SidebarMenu
             isSelected={this.isSelected("customers")}
             onClick={() => this.onMenuClick("/customers")}
             text="Customers"
             icon={<GroupAdd />}
           />
+
           <SidebarMenu
             isSelected={
               this.isSelected("products") || this.isSelected("producttypes")
@@ -43,7 +45,16 @@ class Menus extends Component {
             text="Products"
             icon={<More />}
           />
-          <SidebarMenu text="Expense" icon={<LocalAtm />} />
+
+          <SidebarMenu
+            isSelected={
+              this.isSelected("expense") || this.isSelected("expensetypes")
+            }
+            onClick={() => this.onMenuClick("/expense")}
+            text="Expense"
+            icon={<LocalAtm />}
+          />
+
           <SidebarMenu text="Recievings" icon={<NoteAdd />} />
 
           <ListSubheader>REPORTS</ListSubheader>

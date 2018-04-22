@@ -22,8 +22,12 @@ const auth = {
 
 const productType = apiBuilder("producttypes");
 
+const expenseType = apiBuilder("expensetypes");
+
+const expense = apiBuilder("expense");
+
 const product = apiBuilder("products");
 
 const customer = apiBuilder("customers");
 
-export default { auth, productType, product, customer };
+export default { auth, productType, product, customer, expense, expenseType };

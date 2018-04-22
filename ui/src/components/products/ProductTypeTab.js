@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
-import Searchbox from "../../controls/Searchbox";
-import api from "../../../api";
-import ApiAutoFetchDatagrid from "../../controls/datagrid/ApiAutoFetchDatagrid";
-import Message from "../../controls/Message";
-import CircularLoader from "../../controls/loader/CircularLoader";
-import YesNo from "../../controls/dialog/YesNo";
+import Searchbox from "../controls/Searchbox";
+import api from "../../api";
+import ApiAutoFetchDatagrid from "../controls/datagrid/ApiAutoFetchDatagrid";
+import Message from "../controls/Message";
+import CircularLoader from "../controls/loader/CircularLoader";
+import YesNo from "../controls/dialog/YesNo";
 
 const styles = theme => ({
   leftIcon: {

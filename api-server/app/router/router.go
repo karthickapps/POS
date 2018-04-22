@@ -18,6 +18,10 @@ func Init(e *echo.Group) {
 
 	SetProductRoutes(e)
 
+	SetExpenseRoutes(e)
+
+	SetExpenseTypeRoutes(e)
+
 	SetCustomerRoutes(e)
 }
 

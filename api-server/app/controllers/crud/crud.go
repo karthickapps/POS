@@ -203,7 +203,8 @@ func (crudHandler *CrudHandler) Update(c echo.Context) (err error) {
 	}
 
 	// Id in the form data
-	postedId := reflect.ValueOf(current).Elem().FieldByName("ID").Interface().(string)
+	postedId := reflect.ValueOf(current).Elem().FieldByName("ID").Interface()
+	postedId = fmt.Sprintf("%v", postedId)
 	// Id passed in the url
 	paramId := c.Param("id")
 

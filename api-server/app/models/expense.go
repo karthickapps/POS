@@ -7,7 +7,7 @@ type Expense struct {
 	Description   string    `json:"description" gorm:"not null;varchar(1000)" validate:"required"`
 	Amount        float64   `json:"amount" gorm:"not null" validate:"required"`
 	SpentAt       time.Time `json:"spentAt" gorm:"not null" validate:"required"`
-	ExpenseTypeID string    `json:"expenseTypeId" gorm:"not null" validate:"required" sql:"type:varchar REFERENCES expense_types(id)"`
+	ExpenseTypeID string    `json:"expenseType" gorm:"not null" validate:"required" sql:"type:varchar REFERENCES expense_types(id)"`
 	Base
 
 	// Navigation properties

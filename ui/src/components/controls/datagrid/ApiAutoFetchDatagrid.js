@@ -205,7 +205,7 @@ class ApiAutoFetchDatagrid extends Component {
   };
 
   renderFooter = () => {
-    const { rowsPerPage } = this.props;
+    const { rowsPerPage, headers } = this.props;
     const { data } = this.state;
 
     const paginationActions = {};
@@ -222,7 +222,7 @@ class ApiAutoFetchDatagrid extends Component {
       <TableFooter>
         <TableRow>
           <CustomTablePagination
-            colSpan={6}
+            colSpan={headers.length + 1}
             count={parseInt(data.paginationInfo.count, 10)}
             rowsPerPage={parseInt(rowsPerPage, 10)}
             page={parseInt(data.paginationInfo.current, 10)}

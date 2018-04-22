@@ -13,7 +13,7 @@ const styles = theme => ({
       width: "calc(100vw - 20px)"
     },
     [theme.breakpoints.up("md")]: {
-      width: "100%"
+      width: "calc(100vw - 210px)"
     },
     [theme.breakpoints.up("lg")]: {
       width: "100%"

@@ -3,8 +3,8 @@ import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import CustomTabs from "../controls/Tabs";
 import TabContainer from "../controls/TabContainer";
-import ProductTab from "./ProductTab";
-import ProductTypeTab from "./ProductTypeTab";
+import ExpenseTab from "./ExpenseTab";
+import ExpenseTypeTab from "./ExpenseTypeTab";
 
 const styles = theme => ({
   root: {
@@ -25,13 +25,13 @@ const styles = theme => ({
   }
 });
 
-class Products extends Component {
+class Expense extends Component {
   state = {
     value: 0
   };
 
   componentWillMount() {
-    if (this.props.history.location.pathname === "/products") {
+    if (this.props.history.location.pathname === "/expense") {
       this.setState({ value: 0 });
     } else {
       this.setState({ value: 1 });
@@ -40,9 +40,9 @@ class Products extends Component {
 
   handleChange = (event, value) => {
     if (value === 0) {
-      this.props.history.push("/products");
+      this.props.history.push("/expense");
     } else {
-      this.props.history.push("/producttypes");
+      this.props.history.push("/expensetypes");
     }
     this.setState({ value });
   };
@@ -57,16 +57,16 @@ class Products extends Component {
           <CustomTabs
             onChange={this.handleChange}
             value={value}
-            items={["Products", "Product Types"]}
+            items={["Expense", "Expense Types"]}
           />
           {value === 0 && (
             <TabContainer>
-              <ProductTab />
+              <ExpenseTab />
             </TabContainer>
           )}
           {value === 1 && (
             <TabContainer>
-              <ProductTypeTab />
+              <ExpenseTypeTab />
             </TabContainer>
           )}
         </div>
@@ -75,4 +75,4 @@ class Products extends Component {
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(Products));
+export default withRouter(withStyles(styles, { withTheme: true })(Expense));
