@@ -36,31 +36,33 @@ type CrudHandler struct {
 
 // Default method registers all the crud routes
 func (crudHandler *CrudHandler) Register(route string) {
-	crudHandler.EchoGroup.GET(route, crudHandler.GETAll)
-	crudHandler.EchoGroup.GET(route+"/:id", crudHandler.GET)
-	crudHandler.EchoGroup.POST(route, crudHandler.POST)
-	crudHandler.EchoGroup.PUT(route+"/:id", crudHandler.PUT)
-	crudHandler.EchoGroup.DELETE(route+"/:id", crudHandler.DEL)
+	crudHandler.EchoGroup.GET(route, crudHandler.FetchByPages)
+	crudHandler.EchoGroup.GET(route+"/all", crudHandler.FetchAll)
+	crudHandler.EchoGroup.GET(route+"/:id", crudHandler.FetchById)
+	crudHandler.EchoGroup.POST(route, crudHandler.CreateNew)
+	crudHandler.EchoGroup.PUT(route+"/:id", crudHandler.Update)
+	crudHandler.EchoGroup.DELETE(route+"/:id", crudHandler.Delete)
 }
 
 // Registers the selective routes passed in verbs params
 func (crudHandler *CrudHandler) RegisterRoutes(route string, verbs []string) {
 	for _, v := range verbs {
 		if v == GET {
-			crudHandler.EchoGroup.GET(route, crudHandler.GETAll)
-			crudHandler.EchoGroup.GET(route+"/:id", crudHandler.GET)
+			crudHandler.EchoGroup.GET(route, crudHandler.FetchByPages)
+			crudHandler.EchoGroup.GET(route+"/all", crudHandler.FetchAll)
+			crudHandler.EchoGroup.GET(route+"/:id", crudHandler.FetchById)
 		} else if v == POST {
-			crudHandler.EchoGroup.POST(route, crudHandler.POST)
+			crudHandler.EchoGroup.POST(route, crudHandler.CreateNew)
 		} else if v == PUT {
-			crudHandler.EchoGroup.PUT(route+"/:id", crudHandler.PUT)
+			crudHandler.EchoGroup.PUT(route+"/:id", crudHandler.Update)
 		} else if v == DEL {
-			crudHandler.EchoGroup.DELETE(route+"/:id", crudHandler.DEL)
+			crudHandler.EchoGroup.DELETE(route+"/:id", crudHandler.Delete)
 		}
 	}
 }
 
 // GET  /:id
-func (crudHandler *CrudHandler) GET(c echo.Context) (err error) {
+func (crudHandler *CrudHandler) FetchById(c echo.Context) (err error) {
 	id := c.Param("id")
 	engine := sqlengine.Default()
 	dest := crudHandler.GetResultSetPtr()
@@ -84,8 +86,40 @@ func (crudHandler *CrudHandler) GET(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, slice.Index(0).Interface())
 }
 
+func (crudHandler *CrudHandler) FetchAll(c echo.Context) (err error) {
+	query := sqlengine.Query{}
+	query.DataSet = crudHandler.GetResultSetPtr()
+
+	// Destroy the variable. Dont know whether its required or not
+	defer func() {
+		query.DataSet = nil
+	}()
+
+	q := c.QueryParam("q")
+	if q != "" {
+		id := "%" + c.QueryParam("q") + "%"
+		query.Condition = "id like ?"
+		query.Args = []interface{}{id}
+	}
+
+	var count int64
+
+	engine := sqlengine.Default()
+	if count, err = engine.Count(query); err != nil {
+		return
+	}
+
+	query.PageNo, query.PerPage = utils.GetPageInfoFromQs(c, count)
+
+	if err = engine.FetchAll(query); err != nil {
+		return
+	}
+
+	return c.JSON(http.StatusOK, query.DataSet)
+}
+
 // GET ?per_page=10&page=2
-func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
+func (crudHandler *CrudHandler) FetchByPages(c echo.Context) (err error) {
 	dest := crudHandler.GetResultSetPtr()
 
 	// Destroy the variable. Dont know whether its required or not
@@ -113,7 +147,7 @@ func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
 
 	query.PageNo, query.PerPage = utils.GetPageInfoFromQs(c, count)
 
-	if err = engine.FetchAll(query); err != nil {
+	if err = engine.FetchByPages(query); err != nil {
 		return
 	}
 
@@ -123,7 +157,7 @@ func (crudHandler *CrudHandler) GETAll(c echo.Context) (err error) {
 }
 
 // POST /
-func (crudHandler *CrudHandler) POST(c echo.Context) (err error) {
+func (crudHandler *CrudHandler) CreateNew(c echo.Context) (err error) {
 	model := crudHandler.GetModel()
 
 	// Destroy the variable. Dont know whether its required or not
@@ -153,7 +187,7 @@ func (crudHandler *CrudHandler) POST(c echo.Context) (err error) {
 }
 
 // PUT /:id
-func (crudHandler *CrudHandler) PUT(c echo.Context) (err error) {
+func (crudHandler *CrudHandler) Update(c echo.Context) (err error) {
 	current := crudHandler.GetModel()
 	prev := crudHandler.GetModel()
 	userId := c.(*custom.Context).UserID
@@ -206,7 +240,7 @@ func (crudHandler *CrudHandler) PUT(c echo.Context) (err error) {
 }
 
 // DEL /:id
-func (crudHandler *CrudHandler) DEL(c echo.Context) (err error) {
+func (crudHandler *CrudHandler) Delete(c echo.Context) (err error) {
 	model := crudHandler.GetModel()
 
 	// Destroy the variable. Dont know whether its required or not
@@ -222,6 +256,7 @@ func (crudHandler *CrudHandler) DEL(c echo.Context) (err error) {
 	}
 
 	engine := sqlengine.Default()
+
 	if err = engine.DeleteById(id, model); err != nil {
 		return
 	}

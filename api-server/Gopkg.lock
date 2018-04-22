@@ -26,6 +26,7 @@
   name = "github.com/jinzhu/gorm"
   packages = [
     ".",
+    "dialects/postgres",
     "dialects/sqlite"
   ]
   revision = "6ed508ec6a4ecb3531899a69cbc746ccf65a4166"
@@ -58,6 +59,16 @@
   version = "0.2.4"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/lib/pq"
+  packages = [
+    ".",
+    "hstore",
+    "oid"
+  ]
+  revision = "d34b9ff171c21ad295489235aec8b6626023cd04"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -74,27 +85,6 @@
   packages = ["."]
   revision = "6c771bb9887719704b210e87e934f08be014bdb1"
   version = "v1.6.0"
-
-[[projects]]
-  branch = "material-node-ts"
-  name = "github.com/sfkshan/pos"
-  packages = [
-    "api-server/app/controllers",
-    "api-server/app/controllers/resources",
-    "api-server/app/controllers/resources/responsecodes",
-    "api-server/app/models",
-    "api-server/app/router",
-    "api-server/app/server",
-    "api-server/app/server/custom",
-    "api-server/app/services",
-    "api-server/app/services/domain",
-    "api-server/app/services/sqlengine",
-    "api-server/app/utils",
-    "api-server/config",
-    "api-server/db/migrations",
-    "api-server/db/seed"
-  ]
-  revision = "4aca950d1ec62c325347ee593cf0ef275eff6ff3"
 
 [[projects]]
   branch = "master"
@@ -138,6 +128,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bba1fe562924cb298d75ef4bc10bf60348ec5416b96613db7759425e8d749b56"
+  inputs-digest = "5f170e6c137a32b2fc58d9d70a2481287b680278392b7396c8fe7b73362ae734"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -66,15 +66,21 @@ class ApiAutoFetchDatagrid extends Component {
   init = async (props = this.props) => {
     this.setState({ isLoading: true });
 
-    const res = await props.datasourcePromise();
-    const paginationInfo = getPaginationInfo(res.headers.link);
-    const list = res.data;
-    const data = {
-      list,
-      paginationInfo
-    };
+    try {
+      const res = await props.datasourcePromise();
 
-    this.setState({ isLoading: false, data });
+      const paginationInfo = getPaginationInfo(res.headers.link);
+      const list = res.data;
+      const data = {
+        list,
+        paginationInfo
+      };
+
+      this.setState({ isLoading: false, data });
+    } catch (error) {
+      // TODO show error
+      this.setState({ isLoading: false, data: { list: [] } });
+    }
   };
 
   onFirst = () => {
@@ -94,18 +100,23 @@ class ApiAutoFetchDatagrid extends Component {
   };
 
   fetch = async action => {
-    this.setState({ isLoading: true });
+    try {
+      this.setState({ isLoading: true });
 
-    const url = this.state.data.paginationInfo[action];
-    const res = await axios.get(url);
-    const paginationInfo = getPaginationInfo(res.headers.link);
-    const list = res.data;
-    const data = {
-      list,
-      paginationInfo
-    };
+      const url = this.state.data.paginationInfo[action];
+      const res = await axios.get(url);
+      const paginationInfo = getPaginationInfo(res.headers.link);
+      const list = res.data;
+      const data = {
+        list,
+        paginationInfo
+      };
 
-    this.setState({ isLoading: false, data });
+      this.setState({ isLoading: false, data });
+    } catch (error) {
+      this.props.onError(error.message, true);
+      this.setState({ isLoading: false, data: {} });
+    }
   };
 
   renderHeader = () => (

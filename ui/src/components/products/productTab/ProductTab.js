@@ -39,7 +39,7 @@ class ProductTab extends Component {
   };
 
   onListClick = () => {
-    this.setState({ clearSearch: true, serachQuery: "" });
+    this.setState({ clearSearch: true, serachQuery: "", showMessage: false });
   };
 
   onSearchSubmit = async id => {
@@ -58,7 +58,7 @@ class ProductTab extends Component {
     this.setState({ showConfirmDeleteDialog: true, itemToDelete });
   };
 
-  onConfirmDelete = async () => {
+  onConfirmDeleteClick = async () => {
     const { id } = this.state.itemToDelete;
 
     try {
@@ -67,26 +67,14 @@ class ProductTab extends Component {
       const res = await api.product.delete(id);
 
       if (res.status === 204) {
-        this.setState({
-          isLoading: false,
-          isError: false,
-          showMessage: true,
-          message: "Deleted successfully.",
-          showConfirmDeleteDialog: false
-        });
+        this.showMessage("Deleted successfully.");
       } else {
         throw new Error(
           `Couldn't delete the record. The status code is ${res.status}`
         );
       }
     } catch (error) {
-      this.setState({
-        isLoading: false,
-        isError: false,
-        showMessage: true,
-        message: error.message,
-        showConfirmDeleteDialog: false
-      });
+      this.showMessage(error.message, true);
     }
   };
 
@@ -94,8 +82,18 @@ class ProductTab extends Component {
     this.setState({ showMessage: false });
   };
 
-  onCancelConfirmDelete = () => {
+  onCancelConfirmDeleteClick = () => {
     this.setState({ showConfirmDeleteDialog: false });
+  };
+
+  showMessage = (message, isError = false) => {
+    this.setState({
+      showMessage: true,
+      isError,
+      message,
+      isLoading: false,
+      showConfirmDeleteDialog: false
+    });
   };
 
   getApiPromise = () => {
@@ -125,8 +123,8 @@ class ProductTab extends Component {
         <YesNo
           open={showConfirmDeleteDialog}
           message="Are you sure wan't to delete the selected item"
-          onOk={this.onConfirmDelete}
-          onCancel={this.onCancelConfirmDelete}
+          onOk={this.onConfirmDeleteClick}
+          onCancel={this.onCancelConfirmDeleteClick}
         />
         <div>
           <Button
@@ -162,6 +160,7 @@ class ProductTab extends Component {
           show={showMessage}
           isError={isError}
           onCloseClick={this.onMessageCloseClick}
+          autoClose={!isError}
         />
 
         <div className={classes.wrapper}>

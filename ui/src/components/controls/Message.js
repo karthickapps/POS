@@ -63,10 +63,11 @@ class Message extends Component {
       style,
       show,
       onCloseClick,
-      isError
+      isError,
+      autoClose
     } = this.props;
 
-    if (show === true) {
+    if (show === true && autoClose === true) {
       setTimeout(() => {
         this.props.onCloseClick();
       }, 3000);

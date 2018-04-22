@@ -4,7 +4,10 @@ import (
 	"errors"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	_ "github.com/lib/pq"
+
 	"github.com/sfkshan/pos/api-server/config"
 )
 
@@ -25,14 +28,22 @@ func Default() (e *SqlEngine) {
 // Creates a new engine with the path given in parameters
 func Create(dbpath string) (e *SqlEngine) {
 	e = &SqlEngine{
-		DbPath: config.DbPath,
+		DbPath: config.DbPath + ";foreign keys=True",
 	}
+	return
+}
+
+// Opens the db connection.
+func (engine *SqlEngine) OpenNgConnection() (err error) {
+	engine.Db, err = gorm.Open("postgres", "host=localhost port=5432 user=mozzie dbname=pos password=mozzie@18 sslmode=disable")
+	engine.Db.LogMode(true)
 	return
 }
 
 // Opens the db connection.
 func (engine *SqlEngine) OpenConnection() (err error) {
 	engine.Db, err = gorm.Open("sqlite3", engine.DbPath)
+	engine.Db.Exec("PRAGMA foreign_keys = ON")
 	engine.Db.LogMode(true)
 	return
 }
@@ -109,7 +120,15 @@ func (engine *SqlEngine) DeleteById(id string, model interface{}) (err error) {
 
 	db := engine.Db
 	response := db.Where("id = ?", id).Delete(model)
-	if err = response.Error; err != nil {
+
+	err = response.Error
+
+	if err != nil && err.Error() == "FOREIGN KEY constraint failed" {
+		err = errors.New("FOREIGN_KEY_CONSTRAINT")
+		return
+	}
+
+	if err != nil {
 		return
 	}
 

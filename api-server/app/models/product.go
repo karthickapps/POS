@@ -5,9 +5,9 @@ type Product struct {
 	Description   string  `json:"description" gorm:"not null;varchar(1000)" validate:"required"`
 	CostPrice     float64 `json:"costPrice" gorm:"not null" validate:"required"`
 	SellingPrice  float64 `json:"sellingPrice" gorm:"not null" validate:"required"`
-	ProductTypeID string  `json:"productType" gorm:"not null" sql:"type:varchar REFERENCES product_types(id)" validate:"required"`
+	ProductTypeID string  `json:"productType" gorm:"not null" sql:"type:varchar REFERENCES product_types(id) ON DELETE RESTRICT" validate:"required"`
 	Base
 
 	// Navigation properties
-	ProductType ProductType `json:"-" gorm:"foreign_key:ProductTypeID" validate:"-"`
+	ProductType ProductType `json:"-" gorm:"foreignkey:ProductTypeID" validate:"-"`
 }

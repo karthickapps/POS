@@ -17,6 +17,8 @@ func Init(e *echo.Group) {
 	SetProductTypeRoutes(e)
 
 	SetProductRoutes(e)
+
+	SetCustomerRoutes(e)
 }
 
 func jwtMiddlewares(e *echo.Group) {

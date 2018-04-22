@@ -6,14 +6,14 @@ import (
 	"github.com/sfkshan/pos/api-server/app/models"
 )
 
-func SetProductRoutes(e *echo.Group) {
+func SetCustomerRoutes(e *echo.Group) {
 	p := crud.CrudHandler{}
 	p.EchoGroup = e
 	p.GetModel = func() interface{} {
-		return new(models.Product)
+		return new(models.Customer)
 	}
 	p.GetResultSetPtr = func() interface{} {
-		return new([]models.Product)
+		return new([]models.Customer)
 	}
-	p.Register("/products")
+	p.Register("/customers")
 }

@@ -11,6 +11,7 @@ const Routes = () => (
     {/* Customer */}
     <Route exact path="/customers" component={customer.Customers} />
     <Route exact path="/customers/new" component={customer.AddNew} />
+    <Route exact path="/customers/edit/:id" component={customer.AddNew} />
 
     {/* Product */}
     <Route exact path="/products" component={product.Products} />
@@ -18,15 +19,15 @@ const Routes = () => (
     <Route exact path="/products/edit/:id" component={product.AddNewProduct} />
 
     {/* Product Type */}
-    <Route exact path="/productType" component={product.Products} />
+    <Route exact path="/producttypes" component={product.Products} />
     <Route
       exact
-      path="/productType/new"
+      path="/producttypes/new"
       component={product.AddNewProductType}
     />
     <Route
       exact
-      path="/productType/edit/:id"
+      path="/producttypes/edit/:id"
       component={product.AddNewProductType}
     />
 

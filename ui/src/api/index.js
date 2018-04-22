@@ -20,8 +20,10 @@ const auth = {
   }
 };
 
-const productType = apiBuilder("productType");
+const productType = apiBuilder("producttypes");
 
-const product = apiBuilder("product");
+const product = apiBuilder("products");
 
-export default { auth, productType, product };
+const customer = apiBuilder("customers");
+
+export default { auth, productType, product, customer };

@@ -42,7 +42,7 @@ class Products extends Component {
     if (value === 0) {
       this.props.history.push("/products");
     } else {
-      this.props.history.push("/productType");
+      this.props.history.push("/producttypes");
     }
     this.setState({ value });
   };

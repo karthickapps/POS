@@ -121,9 +121,9 @@ class AddNewProduct extends Component {
       this.state.data.sellingPrice = Number(this.state.data.sellingPrice);
 
       if (this.state.isEdit === false) {
-        this.createNew(this.state.data);
+        await this.createNew(this.state.data);
       } else {
-        this.update(this.state.data);
+        await this.update(this.state.data);
       }
     } catch (error) {
       this.showError(error);
@@ -132,9 +132,14 @@ class AddNewProduct extends Component {
 
   createNew = async data => {
     const res = await api.product.createNew(data);
+
     if (res.status === 201) {
       this.showMessage("Saved successfully");
       this.clearForm();
+    } else {
+      throw new Error(
+        `Unable to create the record. The status code is ${res.status}`
+      );
     }
   };
 
@@ -217,6 +222,7 @@ class AddNewProduct extends Component {
           show={showMessage}
           isError={isError}
           onCloseClick={this.onMessageCloseClick}
+          autoClose={!isError}
         />
 
         <Form

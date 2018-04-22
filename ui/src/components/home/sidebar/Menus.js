@@ -37,7 +37,7 @@ class Menus extends Component {
           />
           <SidebarMenu
             isSelected={
-              this.isSelected("products") || this.isSelected("productType")
+              this.isSelected("products") || this.isSelected("producttypes")
             }
             onClick={() => this.onMenuClick("/products")}
             text="Products"

@@ -14,7 +14,7 @@ const Container = props => (
   <div className={props.classes.root}>
     <Title title={props.title} />
     <br />
-    {props.children}
+    <div>{props.children}</div>
   </div>
 );
 

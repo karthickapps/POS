@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as equal from "fast-deep-equal";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Container from "../controls/Container";
@@ -7,6 +8,8 @@ import CustomTextField from "../controls/textfields/CustomTextField";
 import { isValueExists } from "../../utils";
 import api from "../../api";
 import Message from "../controls/Message";
+import Prompt from "../controls/dialog/Prompt";
+import CircularLoader from "../controls/loader/CircularLoader";
 
 // eslint-disable-next-line
 const styles = theme => ({
@@ -24,8 +27,34 @@ class AddNewProductType extends Component {
   state = {
     data: this.initialData,
     showMessage: false,
-    errors: {}
+    errors: {},
+    showMessageDialog: false,
+    isLoading: false,
+    isEdit: false
   };
+
+  async componentDidMount() {
+    try {
+      const { id } = this.props.match.params;
+
+      if (!id) {
+        return;
+      }
+
+      this.setState({ isLoading: true });
+
+      const stateToUpdate = {};
+      const res = await api.productType.fetchById(id);
+
+      stateToUpdate.data = res.data;
+      stateToUpdate.isLoading = false;
+      stateToUpdate.isEdit = true;
+
+      this.setState({ ...stateToUpdate });
+    } catch (error) {
+      this.showMessage(error.message, true);
+    }
+  }
 
   onChange = e => {
     this.setState({
@@ -35,8 +64,14 @@ class AddNewProductType extends Component {
   };
 
   onCancelClick = () => {
-    this.clearForm();
-    this.onMessageCloseClick();
+    const isDirty = !equal(this.initialData, this.state.data);
+
+    if (isDirty === true && this.state.isEdit === false) {
+      this.clearForm();
+      return;
+    }
+
+    this.props.history.goBack();
   };
 
   onSubmit = async e => {
@@ -50,18 +85,47 @@ class AddNewProductType extends Component {
     }
 
     try {
-      const res = await api.productType.createNew(this.state.data);
-      if (res.status === 201) {
-        this.showMessage("Saved successfully");
-        this.clearForm();
+      if (this.state.isEdit === true) {
+        await this.update();
+      } else {
+        await this.createNew();
       }
     } catch (error) {
-      this.showError(error);
+      this.showMessage(error.message, true);
     }
   };
 
-  clearForm = () => {
-    this.setState({ data: this.initialData });
+  createNew = async () => {
+    const res = await api.productType.createNew(this.state.data);
+
+    if (res.status === 201) {
+      this.showMessage("Saved successfully");
+      this.clearForm();
+    } else {
+      throw new Error(
+        `Unable to create the record. The status code is ${res.status}`
+      );
+    }
+  };
+
+  update = async () => {
+    const res = await api.productType.update(
+      this.props.match.params.id,
+      this.state.data
+    );
+
+    if (res.status === 201) {
+      this.clearForm(true);
+    } else {
+      throw new Error(`Unable to update. The status code is ${res.status}`);
+    }
+  };
+
+  clearForm = (canShowMessageDialog = false) => {
+    this.setState({
+      data: this.initialData,
+      showMessageDialog: canShowMessageDialog
+    });
 
     if (this.idRef) {
       this.idRef.focus();
@@ -76,37 +140,49 @@ class AddNewProductType extends Component {
     });
   };
 
-  showMessage = message => {
+  showMessage = (message, isError = false) => {
     this.setState({
       showMessage: true,
       message,
-      isError: false
+      isError,
+      isLoading: false
     });
   };
 
-  showError = error => {
-    this.setState({
-      showMessage: true,
-      message: error.message,
-      isError: true
-    });
+  onMessageDialogCloseClick = () => {
+    this.setState({ showMessageDialog: false });
+    this.props.history.goBack();
   };
 
   render() {
-    // https://stackoverflow.com/questions/29852998/getting-query-parameters-from-react-router-hash-fragment/43630848#43630848
-    console.log(this.props.match.params);
-
-    const { data, errors, showMessage, isError, message } = this.state;
+    const {
+      data,
+      errors,
+      showMessage,
+      isError,
+      message,
+      showMessageDialog,
+      isLoading,
+      isEdit
+    } = this.state;
 
     return (
-      <Container title="New product type">
+      <Container title={isEdit ? "Edit product type" : "New product type"}>
         <Message
           title="Message"
           message={message}
           show={showMessage}
           isError={isError}
+          autoClose={!isError}
           onCloseClick={this.onMessageCloseClick}
         />
+
+        <Prompt
+          message="The product you entered was saved successfully."
+          open={showMessageDialog}
+          handleClose={this.onMessageDialogCloseClick}
+        />
+        <CircularLoader isLoading={isLoading} />
 
         <Form
           id="productType"
@@ -123,6 +199,7 @@ class AddNewProductType extends Component {
             label="Product type Id"
             helperText="This should be unique"
             onChange={this.onChange}
+            disabled={isEdit}
           />
           <br />
 
