@@ -30,4 +30,14 @@ const product = apiBuilder("products");
 
 const customer = apiBuilder("customers");
 
-export default { auth, productType, product, customer, expense, expenseType };
+const vendor = apiBuilder("vendors");
+
+export default {
+  auth,
+  productType,
+  product,
+  customer,
+  expense,
+  expenseType,
+  vendor
+};

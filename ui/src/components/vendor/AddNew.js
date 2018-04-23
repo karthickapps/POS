@@ -50,7 +50,7 @@ class AddNew extends Component {
       this.setState({ isLoading: true });
 
       const stateToUpdate = {};
-      const res = await api.customer.fetchById(id);
+      const res = await api.vendor.fetchById(id);
 
       stateToUpdate.data = res.data;
       stateToUpdate.isLoading = false;
@@ -118,7 +118,7 @@ class AddNew extends Component {
   };
 
   createNew = async data => {
-    const res = await api.customer.createNew(data);
+    const res = await api.vendor.createNew(data);
 
     if (res.status === 201) {
       this.showMessage("Saved successfully");
@@ -131,7 +131,7 @@ class AddNew extends Component {
   };
 
   update = async data => {
-    const res = await api.customer.update(this.props.match.params.id, data);
+    const res = await api.vendor.update(this.props.match.params.id, data);
 
     if (res.status === 201) {
       this.clearForm(true);
@@ -225,9 +225,9 @@ class AddNew extends Component {
     } = this.state;
 
     return (
-      <Container title={isEdit ? "Edit customer" : "New customer"}>
+      <Container title={isEdit ? "Edit Vendor" : "New Vendor"}>
         <Prompt
-          message="The customer you entered was saved successfully."
+          message="The vendor you entered was saved successfully."
           open={showMessageDialog}
           handleClose={this.onMessageDialogCloseClick}
         />
@@ -242,7 +242,7 @@ class AddNew extends Component {
         />
 
         <Form
-          id="customer"
+          id="vendor"
           onSubmit={this.onSubmit}
           onCancel={this.onCancelClick}
         >
@@ -250,7 +250,7 @@ class AddNew extends Component {
             error={!!errors.id}
             name="id"
             value={data.id}
-            label="Customer Id"
+            label="Vendor Id"
             helperText="This should be unique (can give mobile number)"
             onChange={this.onChange}
             disabled={isEdit}
@@ -260,7 +260,7 @@ class AddNew extends Component {
             error={!!errors.name}
             name="name"
             value={data.name}
-            label="Customer Name"
+            label="Vendor Name"
             margin="normal"
             onChange={this.onChange}
           />

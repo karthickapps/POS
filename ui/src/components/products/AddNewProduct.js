@@ -29,7 +29,8 @@ class AddNewProduct extends Component {
     description: "",
     costPrice: "",
     sellingPrice: "",
-    productType: ""
+    productType: "",
+    qty: ""
   };
 
   state = {
@@ -119,6 +120,7 @@ class AddNewProduct extends Component {
     try {
       this.state.data.costPrice = Number(this.state.data.costPrice);
       this.state.data.sellingPrice = Number(this.state.data.sellingPrice);
+      this.state.data.qty = Number(this.state.data.qty);
 
       if (this.state.isEdit === false) {
         await this.createNew(this.state.data);
@@ -259,6 +261,14 @@ class AddNewProduct extends Component {
             name="description"
             value={data.description}
             label="Description"
+            onChange={this.onChange}
+          />
+
+          <NumberTextField
+            error={!!errors.qty}
+            name="qty"
+            value={data.qty}
+            label="Qty"
             onChange={this.onChange}
           />
 

@@ -3,11 +3,17 @@ import { Switch, Route } from "react-router";
 import customer from "../customers";
 import expense from "../expense";
 import product from "../products";
+import vendor from "../vendor";
 import NotFound from "../notFound/NotFound";
 
 const Routes = () => (
   <Switch style={{ overflow: "auto" }}>
     <Route exact path="/" component={() => <div />} />
+
+    {/* Vendor */}
+    <Route exact path="/vendors" component={vendor.Vendors} />
+    <Route exact path="/vendors/new" component={vendor.AddNew} />
+    <Route exact path="/vendors/edit/:id" component={vendor.AddNew} />
 
     {/* Customer */}
     <Route exact path="/customers" component={customer.Customers} />

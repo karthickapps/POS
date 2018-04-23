@@ -4,6 +4,7 @@ import { withRouter } from "react-router";
 import ListSubheader from "material-ui/List/ListSubheader";
 import ViewModule from "material-ui-icons/ViewModule";
 import GroupAdd from "material-ui-icons/GroupAdd";
+import SupervisorAccount from "material-ui-icons/SupervisorAccount";
 import NoteAdd from "material-ui-icons/NoteAdd";
 import LocalGroceryStore from "material-ui-icons/LocalGroceryStore";
 import Assessment from "material-ui-icons/Assessment";
@@ -35,6 +36,13 @@ class Menus extends Component {
             onClick={() => this.onMenuClick("/customers")}
             text="Customers"
             icon={<GroupAdd />}
+          />
+
+          <SidebarMenu
+            isSelected={this.isSelected("vendors")}
+            onClick={() => this.onMenuClick("/vendors")}
+            text="Vendors"
+            icon={<SupervisorAccount />}
           />
 
           <SidebarMenu

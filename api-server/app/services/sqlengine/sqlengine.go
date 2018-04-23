@@ -63,6 +63,10 @@ func (engine *SqlEngine) Create(data interface{}) (err error) {
 	db := engine.Db
 	res := db.Create(data)
 
+	if err = res.Error; err != nil {
+		return
+	}
+
 	if count := res.RowsAffected; count == 0 {
 		return errors.New("Duplicate entry")
 	}

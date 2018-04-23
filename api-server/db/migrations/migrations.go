@@ -21,6 +21,7 @@ func Migrate() {
 
 	db.AutoMigrate(&models.User{})
 	db.AutoMigrate(&models.Customer{})
+	db.AutoMigrate(&models.Vendor{})
 	db.AutoMigrate(&models.ProductType{})
 
 	db.AutoMigrate(&models.Product{})

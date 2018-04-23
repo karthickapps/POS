@@ -2,12 +2,13 @@ import React, { Component } from "react";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
+import Container from "../controls/Container";
 import Searchbox from "../controls/Searchbox";
-import api from "../../api";
-import ApiAutoFetchDatagrid from "../controls/datagrid/ApiAutoFetchDatagrid";
-import YesNo from "../controls/dialog/YesNo";
-import CircularLoader from "../controls/loader/CircularLoader";
 import Message from "../controls/Message";
+import ApiAutoFetchDatagrid from "../controls/datagrid/ApiAutoFetchDatagrid";
+import api from "../../api";
+import CircularLoader from "../controls/loader/CircularLoader";
+import YesNo from "../controls/dialog/YesNo";
 
 const styles = theme => ({
   leftIcon: {
@@ -20,29 +21,22 @@ const styles = theme => ({
     fontSize: 20
   },
   wrapper: {
-    marginTop: 20,
-    position: "relative"
+    position: "relative",
+    margin: "20px 5px 5px 5px"
   }
 });
 
-class ProductTab extends Component {
-  productColumns = [
-    "ID",
-    "Description",
-    "Qty",
-    "Cost price",
-    "Selling price",
-    "Type"
-  ];
+class Vendors extends Component {
+  vendorColumns = ["Id", "Name", "Description", "Address", "Mobile", "Email"];
 
   state = {
     clearSearch: false,
     serachQuery: "",
-    showConfirmDeleteDialog: false,
-    isLoading: false,
     message: "",
     showMessage: false,
-    isError: false
+    isError: false,
+    isLoading: false,
+    showConfirmDeleteDialog: false
   };
 
   onListClick = () => {
@@ -54,11 +48,11 @@ class ProductTab extends Component {
   };
 
   onCreateNewClick = () => {
-    this.props.history.push("products/new");
+    this.props.history.push("Vendors/new");
   };
 
   onEdit = row => {
-    this.props.history.push(`products/edit/${row.id}`);
+    this.props.history.push(`Vendors/edit/${row.id}`);
   };
 
   onDelete = itemToDelete => {
@@ -71,7 +65,7 @@ class ProductTab extends Component {
     try {
       this.setState({ isLoading: true });
 
-      const res = await api.product.delete(id);
+      const res = await api.vendor.delete(id);
 
       if (res.status === 204) {
         this.showMessage("Deleted successfully.");
@@ -85,14 +79,6 @@ class ProductTab extends Component {
     }
   };
 
-  onMessageCloseClick = () => {
-    this.setState({ showMessage: false });
-  };
-
-  onCancelConfirmDeleteClick = () => {
-    this.setState({ showConfirmDeleteDialog: false });
-  };
-
   showMessage = (message, isError = false) => {
     this.setState({
       showMessage: true,
@@ -103,29 +89,37 @@ class ProductTab extends Component {
     });
   };
 
+  onMessageCloseClick = () => {
+    this.setState({ showMessage: false });
+  };
+
+  onCancelConfirmDeleteClick = () => {
+    this.setState({ showConfirmDeleteDialog: false });
+  };
+
   getApiPromise = () => {
     const { serachQuery } = this.state;
 
     if (serachQuery.length === 0) {
-      return api.product.fetchByPages();
+      return api.vendor.fetchByPages();
     }
 
-    return api.product.searchByIdAndGetByPages(serachQuery);
+    return api.vendor.searchByIdAndGetByPages(serachQuery);
   };
 
   render() {
+    const { classes } = this.props;
     const {
       clearSearch,
-      showConfirmDeleteDialog,
-      isLoading,
       message,
       showMessage,
-      isError
+      isError,
+      isLoading,
+      showConfirmDeleteDialog
     } = this.state;
-    const { classes } = this.props;
 
     return (
-      <div className={classes.wrapper}>
+      <Container title="Vendors">
         <CircularLoader isLoading={isLoading} />
         <YesNo
           open={showConfirmDeleteDialog}
@@ -133,6 +127,7 @@ class ProductTab extends Component {
           onOk={this.onConfirmDeleteClick}
           onCancel={this.onCancelConfirmDeleteClick}
         />
+
         <div>
           <Button
             className={classes.button}
@@ -153,6 +148,7 @@ class ProductTab extends Component {
           >
             Create New
           </Button>
+
           <Searchbox
             clear={clearSearch}
             onChange={this.onSearchChange}
@@ -169,19 +165,18 @@ class ProductTab extends Component {
           onCloseClick={this.onMessageCloseClick}
           autoClose={!isError}
         />
-
         <div className={classes.wrapper}>
           <ApiAutoFetchDatagrid
             datasourcePromise={this.getApiPromise}
             actions={["del", "edit"]}
             onEdit={this.onEdit}
             onDelete={this.onDelete}
-            headers={this.productColumns}
+            headers={this.vendorColumns}
           />
         </div>
-      </div>
+      </Container>
     );
   }
 }
 
-export default withRouter(withStyles(styles, { withTheme: true })(ProductTab));
+export default withRouter(withStyles(styles, { withTheme: true })(Vendors));
