@@ -63,7 +63,12 @@ class Menus extends Component {
             icon={<LocalAtm />}
           />
 
-          <SidebarMenu text="Recievings" icon={<NoteAdd />} />
+          <SidebarMenu
+            isSelected={this.isSelected("receivings")}
+            onClick={() => this.onMenuClick("/receivings")}
+            text="Recievings"
+            icon={<NoteAdd />}
+          />
 
           <ListSubheader>REPORTS</ListSubheader>
           <SidebarMenu text="Todays Sales" icon={<Assessment />} />

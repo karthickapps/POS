@@ -2,6 +2,7 @@ import React from "react";
 import { Switch, Route } from "react-router";
 import customer from "../customers";
 import expense from "../expense";
+import receivings from "../receivings";
 import product from "../products";
 import vendor from "../vendor";
 import NotFound from "../notFound/NotFound";
@@ -9,6 +10,10 @@ import NotFound from "../notFound/NotFound";
 const Routes = () => (
   <Switch style={{ overflow: "auto" }}>
     <Route exact path="/" component={() => <div />} />
+
+    {/* Receivings */}
+    <Route exact path="/receivings" component={receivings.Receivings} />
+    <Route exact path="/receivings/new" component={receivings.AddNew} />
 
     {/* Vendor */}
     <Route exact path="/vendors" component={vendor.Vendors} />

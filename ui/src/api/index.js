@@ -32,6 +32,8 @@ const customer = apiBuilder("customers");
 
 const vendor = apiBuilder("vendors");
 
+const receiving = apiBuilder("receivings");
+
 export default {
   auth,
   productType,
@@ -39,5 +41,6 @@ export default {
   customer,
   expense,
   expenseType,
-  vendor
+  vendor,
+  receiving
 };
