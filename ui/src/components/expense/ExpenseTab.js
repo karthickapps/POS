@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as moment from "moment";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
@@ -170,6 +171,9 @@ class ExpenseTab extends Component {
             onEdit={this.onEdit}
             onDelete={this.onDelete}
             headers={this.expenseColumns}
+            transformers={{
+              spentAt: value => moment(value).format("DD-MM-YYYY")
+            }}
           />
         </div>
       </div>

@@ -18,6 +18,38 @@ func AddProductTypes() {
 		fmt.Println("Couldn't connect database")
 		return
 	}
+	db := engine.Db
+	defer db.Close()
+
+	stationery := newProductType("stationery", "stationery")
+	db.Create(stationery)
+
+	printing := newProductType("printing", "printing")
+	db.CreateTable(printing)
+
+	misc := newProductType("misc", "misc")
+	db.CreateTable(misc)
+}
+
+func newProductType(id string, desc string) (p *models.ProductType) {
+	p = new(models.ProductType)
+	p.ID = id
+	p.Description = desc
+	p.UpdatedBy = "admin"
+	p.CreatedBy = "admin"
+	p.CreatedAt = time.Now()
+	p.UpdatedAt = time.Now()
+	return
+}
+
+func AddRandomProducts() {
+	engine := sqlengine.Default()
+	err := engine.OpenConnection()
+
+	if err != nil {
+		fmt.Println("Couldn't connect database")
+		return
+	}
 
 	db := engine.Db
 	defer db.Close()

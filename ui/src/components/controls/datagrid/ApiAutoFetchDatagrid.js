@@ -135,13 +135,20 @@ class ApiAutoFetchDatagrid extends Component {
   renderRow = row => {
     const keys = Object.keys(row);
 
+    const renderValue = (key, val) => {
+      if (this.props.transformers && this.props.transformers[key]) {
+        return this.props.transformers[key](val);
+      }
+      return val;
+    };
+
     return keys.map((k, idx) => {
       if (this.props.actions.includes("sel") && idx === 0) {
         return (
           // eslint-disable-next-line react/no-array-index-key
           <TableCell key={`${keys[idx]}${idx}`}>
             <Button color="primary" onClick={() => this.props.onSelect(row)}>
-              {row[k]}
+              {renderValue(k, row[k])}
             </Button>
           </TableCell>
         );
@@ -149,7 +156,9 @@ class ApiAutoFetchDatagrid extends Component {
 
       return (
         // eslint-disable-next-line react/no-array-index-key
-        <TableCell key={`${keys[idx]}${idx}`}>{row[k]}</TableCell>
+        <TableCell key={`${keys[idx]}${idx}`}>
+          {renderValue(k, row[k])}
+        </TableCell>
       );
     });
   };
