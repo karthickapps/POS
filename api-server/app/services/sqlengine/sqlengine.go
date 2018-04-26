@@ -28,7 +28,7 @@ func Default() (e *SqlEngine) {
 // Creates a new engine with the path given in parameters
 func Create(dbpath string) (e *SqlEngine) {
 	e = &SqlEngine{
-		DbPath: config.DbPath + ";foreign keys=True",
+		DbPath: dbpath,
 	}
 	return
 }
