@@ -39,7 +39,7 @@ class Searchbox extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, placeholder } = this.props;
 
     return (
       <form onSubmit={this.onSubmit} className={classes.root}>
@@ -47,7 +47,7 @@ class Searchbox extends Component {
           onChange={this.onChange}
           value={this.state.id}
           style={{ width: 200 }}
-          placeholder="Enter ID"
+          placeholder={placeholder !== undefined ? placeholder : "Enter ID"}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">

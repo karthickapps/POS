@@ -25,12 +25,12 @@ const styles = theme => ({
 
 class AddNew extends Component {
   initialData = {
-    productId: "",
-    vendorId: "",
-    qty: "",
-    price: "",
-    paid: "",
-    date: ""
+    productId: "pen",
+    vendorId: "mrlabs",
+    qty: "1",
+    price: "100",
+    paid: "100",
+    date: new Date()
   };
 
   state = {

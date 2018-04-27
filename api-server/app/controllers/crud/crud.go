@@ -34,6 +34,8 @@ type CrudHandler struct {
 	EchoGroup *echo.Group
 }
 
+var engine = sqlengine.Default()
+
 // Default method registers all the crud routes
 func (crudHandler *CrudHandler) Register(route string) {
 	crudHandler.EchoGroup.GET(route, crudHandler.FetchByPages)
@@ -64,7 +66,7 @@ func (crudHandler *CrudHandler) RegisterRoutes(route string, verbs []string) {
 // GET  /:id
 func (crudHandler *CrudHandler) FetchById(c echo.Context) (err error) {
 	id := c.Param("id")
-	engine := sqlengine.Default()
+
 	dest := crudHandler.GetResultSetPtr()
 
 	// Destroy the variable. Dont know whether its required or not
@@ -104,7 +106,6 @@ func (crudHandler *CrudHandler) FetchAll(c echo.Context) (err error) {
 
 	var count int64
 
-	engine := sqlengine.Default()
 	if count, err = engine.Count(query); err != nil {
 		return
 	}
@@ -140,7 +141,6 @@ func (crudHandler *CrudHandler) FetchByPages(c echo.Context) (err error) {
 
 	var count int64
 
-	engine := sqlengine.Default()
 	if count, err = engine.Count(query); err != nil {
 		return
 	}
@@ -178,7 +178,6 @@ func (crudHandler *CrudHandler) CreateNew(c echo.Context) (err error) {
 		return
 	}
 
-	engine := sqlengine.Default()
 	if err = engine.Create(model); err != nil {
 		return
 	}
@@ -211,8 +210,6 @@ func (crudHandler *CrudHandler) Update(c echo.Context) (err error) {
 	if postedId != paramId {
 		return errors.New("Invalid data. The ID field cannot be altered in the update request.")
 	}
-
-	engine := sqlengine.Default()
 
 	var count int64
 	err, count = engine.FindById(postedId, prev)
@@ -255,8 +252,6 @@ func (crudHandler *CrudHandler) Delete(c echo.Context) (err error) {
 		err = errors.New("Id parameter is required")
 		return
 	}
-
-	engine := sqlengine.Default()
 
 	if err = engine.DeleteById(id, model); err != nil {
 		return

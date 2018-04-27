@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as moment from "moment";
 import Button from "material-ui/Button";
 import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
@@ -27,7 +28,15 @@ const styles = theme => ({
 });
 
 class Receivings extends Component {
-  customerColumns = ["Id", "Name", "Description", "Address", "Mobile", "Email"];
+  receivingsColumns = [
+    "Order Id",
+    "Product",
+    "Vendor",
+    "Qty",
+    "Price",
+    "Paid",
+    "Date"
+  ];
 
   state = {
     clearSearch: false,
@@ -52,7 +61,7 @@ class Receivings extends Component {
   };
 
   onEdit = row => {
-    this.props.history.push(`customers/edit/${row.id}`);
+    this.props.history.push(`receivings/edit/${row.id}`);
   };
 
   onDelete = itemToDelete => {
@@ -65,7 +74,7 @@ class Receivings extends Component {
     try {
       this.setState({ isLoading: true });
 
-      const res = await api.customer.delete(id);
+      const res = await api.receiving.delete(id);
 
       if (res.status === 204) {
         this.showMessage("Deleted successfully.");
@@ -101,10 +110,10 @@ class Receivings extends Component {
     const { serachQuery } = this.state;
 
     if (serachQuery.length === 0) {
-      return api.customer.fetchByPages();
+      return api.receiving.fetchByPages();
     }
 
-    return api.customer.searchByIdAndGetByPages(serachQuery);
+    return api.receiving.searchByIdAndGetByPages(serachQuery);
   };
 
   render() {
@@ -119,7 +128,7 @@ class Receivings extends Component {
     } = this.state;
 
     return (
-      <Container title="Customers">
+      <Container title="Receivings">
         <CircularLoader isLoading={isLoading} />
         <YesNo
           open={showConfirmDeleteDialog}
@@ -150,6 +159,7 @@ class Receivings extends Component {
           </Button>
 
           <Searchbox
+            placeholder="Vendor ID"
             clear={clearSearch}
             onChange={this.onSearchChange}
             onSubmit={this.onSearchSubmit}
@@ -168,10 +178,13 @@ class Receivings extends Component {
         <div className={classes.wrapper}>
           <ApiAutoFetchDatagrid
             datasourcePromise={this.getApiPromise}
-            actions={["del", "edit"]}
+            actions={["del", "edit", "sel"]}
             onEdit={this.onEdit}
             onDelete={this.onDelete}
-            headers={this.customerColumns}
+            headers={this.receivingsColumns}
+            transformers={{
+              date: value => moment(value).format("DD-MM-YYYY")
+            }}
           />
         </div>
       </Container>

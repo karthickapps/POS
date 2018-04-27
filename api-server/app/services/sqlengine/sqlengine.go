@@ -48,6 +48,20 @@ func (engine *SqlEngine) OpenConnection() (err error) {
 	return
 }
 
+func (engine *SqlEngine) OpenTransaction() (err error) {
+	var db *gorm.DB
+	db, err = gorm.Open("sqlite3", engine.DbPath)
+	db.Exec("PRAGMA foreign_keys = ON")
+	db.LogMode(true)
+
+	engine.Db = db.Begin()
+
+	if engine.Db.Error != nil {
+		return err
+	}
+	return
+}
+
 // Closes the opened connection
 func (engine *SqlEngine) CloseConnection() (err error) {
 	err = engine.Db.Close()
