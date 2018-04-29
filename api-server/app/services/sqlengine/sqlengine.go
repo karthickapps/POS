@@ -2,6 +2,7 @@ package sqlengine
 
 import (
 	"errors"
+	"os"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -19,9 +20,16 @@ type SqlEngine struct {
 
 // Gets the default engine with the path set in config
 func Default() (e *SqlEngine) {
-	e = &SqlEngine{
-		DbPath: config.DbPath,
+	if path := os.Getenv("DB_PATH"); path != "" {
+		e = &SqlEngine{
+			DbPath: path,
+		}
+	} else {
+		e = &SqlEngine{
+			DbPath: config.DbPath,
+		}
 	}
+
 	return
 }
 

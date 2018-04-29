@@ -68,7 +68,7 @@ func runInTransaction(tx *gorm.DB) {
 }
 
 func initializeDb() (db *sqlengine.SqlEngine) {
-	engine := sqlengine.Create("../../pos.db")
+	engine := sqlengine.Default()
 
 	if err := engine.OpenConnection(); err != nil {
 		assertIns.Error(err)

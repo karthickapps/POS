@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import classNames from "classnames";
 import axios from "axios";
 import { withStyles } from "material-ui/styles";
 import { LinearProgress } from "material-ui/Progress";
@@ -43,6 +44,23 @@ const styles = theme => ({
     height: "100%",
     width: "100%",
     zIndex: 100
+  },
+  gridEdit: {
+    border: "none",
+    minWidth: "29px",
+    overflow: "hidden",
+    outline: 0,
+    lineHeight: 1,
+    "&:focus": {
+      outline: 0,
+      backgroundColor: "#f3f9fd",
+      borderRadius: "1px",
+      boxShadow: "0 0 0 2px #f3f9fd, 0 0 0 4px #cdd4d9"
+    }
+  },
+  gridNumberEdit: {
+    textAlign: "right",
+    width: "20px"
   }
 });
 
@@ -132,15 +150,15 @@ class ApiAutoFetchDatagrid extends Component {
     </TableHead>
   );
 
+  renderCellValue = (key, val) => {
+    if (this.props.transformers && this.props.transformers[key]) {
+      return this.props.transformers[key](val);
+    }
+    return val;
+  };
+
   renderRow = row => {
     const keys = Object.keys(row);
-
-    const renderValue = (key, val) => {
-      if (this.props.transformers && this.props.transformers[key]) {
-        return this.props.transformers[key](val);
-      }
-      return val;
-    };
 
     return keys.map((k, idx) => {
       if (this.props.actions.includes("sel") && idx === 0) {
@@ -148,8 +166,24 @@ class ApiAutoFetchDatagrid extends Component {
           // eslint-disable-next-line react/no-array-index-key
           <TableCell key={`${keys[idx]}${idx}`}>
             <Button color="primary" onClick={() => this.props.onSelect(row)}>
-              {renderValue(k, row[k])}
+              {this.renderCellValue(k, row[k])}
             </Button>
+          </TableCell>
+        );
+      }
+
+      if (keys[idx] === "price") {
+        return (
+          // eslint-disable-next-line react/no-array-index-key
+          <TableCell key={`${keys[idx]}${idx}`}>
+            <input
+              type="text"
+              value={this.renderCellValue(k, row[k])}
+              className={classNames(
+                this.props.classes.gridEdit,
+                this.props.classes.gridNumberEdit
+              )}
+            />
           </TableCell>
         );
       }
@@ -157,7 +191,7 @@ class ApiAutoFetchDatagrid extends Component {
       return (
         // eslint-disable-next-line react/no-array-index-key
         <TableCell key={`${keys[idx]}${idx}`}>
-          {renderValue(k, row[k])}
+          {this.renderCellValue(k, row[k])}
         </TableCell>
       );
     });
