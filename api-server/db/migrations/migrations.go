@@ -34,4 +34,5 @@ func Migrate() {
 	db.AutoMigrate(&models.CreditHistory{})
 	db.AutoMigrate(&models.CreditHeader{})
 	db.AutoMigrate(&models.Receiving{})
+	db.AutoMigrate(&models.TransactionId{})
 }

@@ -19,5 +19,9 @@ func TestGetTransId(t *testing.T) {
 		return
 	}
 
-	assertIns.Equal("290418", transId)
+	assertIns.Equal("2904187", transId)
+}
+
+func initalize() {
+	//
 }
