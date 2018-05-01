@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Hidden from "material-ui/Hidden";
 import Drawer from "material-ui/Drawer";
@@ -18,6 +19,11 @@ const styles = theme => ({
     height: "calc(100vh - 1px)",
     borderBottom: "1px solid #e0e0e0"
   },
+  drawerPaper2: {
+    width: drawerWidth,
+    height: "calc(100vh - 1px)",
+    borderBottom: "1px solid #e0e0e0"
+  },
   logo: {
     height: "64px",
     background: "#3f51b5"
@@ -34,10 +40,10 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
-  render() {
-    const { classes, theme, mobileOpen, handleDrawerToggle } = this.props;
+  renderMenus = () => {
+    const { classes } = this.props;
 
-    const drawer = (
+    return (
       <div>
         <div className={classes.logo}>
           <div className={classes.logoContainer}>
@@ -49,39 +55,88 @@ class Sidebar extends Component {
         <Menus />
       </div>
     );
+  };
+
+  renderPermamentDrawer = () => {
+    const { classes } = this.props;
+
+    if (this.props.history.location.pathname === "/sale") {
+      return null;
+    }
 
     return (
-      <Fragment>
-        <Hidden mdUp>
-          <Drawer
-            variant="temporary"
-            anchor={theme.direction === "rtl" ? "right" : "left"}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper
-            }}
-            ModalProps={{
-              keepMounted: true // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
+      <Drawer
+        variant="permanent"
+        open
+        classes={{
+          paper: classes.drawerPaper
+        }}
+      >
+        {this.renderMenus()}
+      </Drawer>
+    );
+  };
 
-        {/* This is the default div shown in large screen 
-          It has logo and PointOfSale text which will be hidden 
-          in large screen */}
+  renderSlidingDrawer = () => {
+    const { classes, theme, mobileOpen, handleDrawerToggle } = this.props;
+
+    return (
+      <Drawer
+        variant="temporary"
+        anchor={theme.direction === "rtl" ? "right" : "left"}
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        classes={{
+          paper: classes.drawerPaper
+        }}
+        ModalProps={{
+          keepMounted: true // Better open performance on mobile.
+        }}
+      >
+        {this.renderMenus()}
+      </Drawer>
+    );
+  };
+
+  renderSlidingDrawerForSale = () => {
+    const { classes, theme, mobileOpen, handleDrawerToggle } = this.props;
+
+    const isSale = this.props.history.location.pathname === "/sale";
+
+    if (isSale === false) {
+      return null;
+    }
+
+    return (
+      <Drawer
+        variant="temporary"
+        anchor={theme.direction === "rtl" ? "right" : "left"}
+        open={mobileOpen}
+        onClose={handleDrawerToggle}
+        classes={{
+          paper: classes.drawerPaper2
+        }}
+        ModalProps={{
+          keepMounted: true // Better open performance on mobile.
+        }}
+      >
+        {this.renderMenus()}
+      </Drawer>
+    );
+  };
+
+  render() {
+    return (
+      <Fragment>
+        {/* MEDIUM SCREENS */}
+        <Hidden mdUp>{this.renderSlidingDrawer()}</Hidden>
+
+        {/* For sale */}
+        {this.renderSlidingDrawerForSale()}
+
+        {/* Default - LARGER SCREENS */}
         <Hidden smDown implementation="css">
-          <Drawer
-            variant="permanent"
-            open
-            classes={{
-              paper: classes.drawerPaper
-            }}
-          >
-            {drawer}
-          </Drawer>
+          {this.renderPermamentDrawer()}
         </Hidden>
       </Fragment>
     );
@@ -92,4 +147,6 @@ Sidebar.defaultProps = {
   mobileOpen: false
 };
 
-export default withStyles(styles, { withTheme: true })(Sidebar);
+const component = withStyles(styles, { withTheme: true })(Sidebar);
+
+export default withRouter(component);

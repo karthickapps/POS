@@ -27,7 +27,12 @@ class Menus extends Component {
     return (
       <Fragment>
         <List>
-          <SidebarMenu text="Sale" icon={<ViewModule />} />
+          <SidebarMenu
+            isSelected={this.isSelected("sale")}
+            onClick={() => this.onMenuClick("/sale")}
+            text="Sale"
+            icon={<ViewModule />}
+          />
 
           <ListSubheader>MASTER</ListSubheader>
 

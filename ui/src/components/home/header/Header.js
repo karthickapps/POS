@@ -1,4 +1,6 @@
 import React, { Component, Fragment } from "react";
+import classNames from "classnames";
+import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
@@ -17,12 +19,28 @@ const styles = theme => ({
       width: `calc(100% - ${drawerWidth}px)`
     }
   },
+  appBarFullWidth: {
+    width: "100%"
+  },
   flex: {
     flex: 1
   },
   navIconHide: {
     [theme.breakpoints.up("md")]: {
       display: "none"
+    }
+  },
+  navIconShow: {
+    display: "block"
+  },
+  logo: {
+    background: "#3f51b5"
+  },
+  logoContainer: {
+    color: "white",
+    "&:only-child > span": {
+      padding: "4px 0px 0px 10px",
+      fontWeight: "lighter"
     }
   }
 });
@@ -33,18 +51,34 @@ class Header extends Component {
   render() {
     const { classes, handleDrawerToggle } = this.props;
 
+    const isSale = this.props.history.location.pathname === "/sale";
+
+    const navIconClass =
+      isSale === true ? classes.navIconShow : classes.navIconHide;
+
+    const appBarClass =
+      isSale === true ? classes.appBarFullWidth : classes.appBar;
+
     return (
       <Fragment>
-        <AppBar className={classes.appBar}>
+        <AppBar className={appBarClass}>
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerToggle}
-              className={classes.navIconHide}
-            >
-              <MenuIcon />
-            </IconButton>
+            {/* Collapse button. Clicking this opens the drawer */}
+            <div className={classNames(classes.logo, navIconClass)}>
+              <div className={classes.logoContainer}>
+                <IconButton
+                  style={{ margin: 0 }}
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerToggle}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <span>Point Of Sale</span>
+              </div>
+            </div>
+
+            {/* This is the right side menu - Logout, My Profile */}
             <div className={classes.flex}>
               <Menus />
             </div>
@@ -55,4 +89,6 @@ class Header extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Header);
+const component = withStyles(styles, { withTheme: true })(Header);
+
+export default withRouter(component);

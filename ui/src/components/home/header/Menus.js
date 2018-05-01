@@ -43,6 +43,7 @@ class Menus extends Component {
 
     return (
       <Fragment>
+        {/* This is right corner menu [logout, my profile] */}
         <IconButton
           className={classes.menuLeft}
           aria-owns={open ? "menu-appbar" : null}

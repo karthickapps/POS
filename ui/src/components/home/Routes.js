@@ -5,11 +5,15 @@ import expense from "../expense";
 import receivings from "../receivings";
 import product from "../products";
 import vendor from "../vendor";
+import sale from "../sale";
 import NotFound from "../notFound/NotFound";
 
 const Routes = () => (
   <Switch style={{ overflow: "auto" }}>
     <Route exact path="/" component={() => <div />} />
+
+    {/* Sale */}
+    <Route exact path="/sale" component={sale} />
 
     {/* Receivings */}
     <Route exact path="/receivings" component={receivings.Receivings} />
