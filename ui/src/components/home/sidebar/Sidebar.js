@@ -34,14 +34,8 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
-  state = { mobileOpen: false };
-
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
-  };
-
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, mobileOpen, handleDrawerToggle } = this.props;
 
     const drawer = (
       <div>
@@ -62,8 +56,8 @@ class Sidebar extends Component {
           <Drawer
             variant="temporary"
             anchor={theme.direction === "rtl" ? "right" : "left"}
-            open={this.state.mobileOpen}
-            onClose={this.handleDrawerToggle}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
             classes={{
               paper: classes.drawerPaper
             }}
@@ -74,6 +68,10 @@ class Sidebar extends Component {
             {drawer}
           </Drawer>
         </Hidden>
+
+        {/* This is the default div shown in large screen 
+          It has logo and PointOfSale text which will be hidden 
+          in large screen */}
         <Hidden smDown implementation="css">
           <Drawer
             variant="permanent"
@@ -89,5 +87,9 @@ class Sidebar extends Component {
     );
   }
 }
+
+Sidebar.defaultProps = {
+  mobileOpen: false
+};
 
 export default withStyles(styles, { withTheme: true })(Sidebar);
