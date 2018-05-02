@@ -28,6 +28,7 @@ const styles = theme => ({
 class ProductTab extends Component {
   productColumns = [
     "ID",
+    "Name",
     "Description",
     "Qty",
     "Cost price",

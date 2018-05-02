@@ -2,3 +2,8 @@ export const USER_LOGGED_IN = "USER_LOGGED_IN";
 export const USER_LOGGED_OUT = "USER_LOGGED_OUT";
 
 export const LOAD_PRODUCT_TYPE = "LOAD_PRODUCT_TYPE";
+
+export const ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART";
+export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";
+export const REMOVE_ITEM_TO_CART = "REMOVE_ITEM_TO_CART";
+export const EMPTY_CART = "EMPTY_CART";

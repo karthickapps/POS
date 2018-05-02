@@ -26,6 +26,7 @@ const styles = theme => ({
 class AddNewProduct extends Component {
   initialData = {
     id: "",
+    name: "",
     description: "",
     costPrice: "",
     sellingPrice: "",
@@ -244,6 +245,14 @@ class AddNewProduct extends Component {
             helperText="This should be unique"
             onChange={this.onChange}
             disabled={isEdit}
+          />
+
+          <CustomTextField
+            error={!!errors.name}
+            name="name"
+            value={data.name}
+            label="Name"
+            onChange={this.onChange}
           />
 
           <Dropdown

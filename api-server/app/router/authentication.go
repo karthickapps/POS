@@ -2,10 +2,10 @@ package router
 
 import (
 	"github.com/labstack/echo"
-	"github.com/sfkshan/pos/api-server/app/controllers"
+	authController "github.com/sfkshan/pos/api-server/app/controllers/authentication"
 )
 
 func SetAuthenticationRoutes(e *echo.Group) {
-	e.POST("/login", controllers.Login)
-	e.GET("/logout", controllers.Logout)
+	e.POST("/login", authController.Login)
+	e.GET("/logout", authController.Logout)
 }

@@ -225,6 +225,23 @@ func (engine *SqlEngine) FetchAll(query Query) (err error) {
 	return
 }
 
+func (engine *SqlEngine) Try(query Query) (err error) {
+	if err = engine.OpenConnection(); err != nil {
+		return
+	}
+	defer engine.CloseConnection()
+
+	db := engine.Db
+
+	if query.Condition != nil {
+		db.Where("id like ?", "%pe%").Or("name like ?", "%pe%").Find(query.DataSet)
+	} else {
+		db.Find(query.DataSet)
+	}
+
+	return
+}
+
 func (engine *SqlEngine) FindById(id interface{}, result interface{}) (err error, noOfRowsReturned int64) {
 	if err = engine.OpenConnection(); err != nil {
 		return

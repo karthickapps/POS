@@ -20,19 +20,20 @@ func AddProducts() {
 	db := engine.Db
 	defer db.Close()
 
-	pen := newProduct("pen", 100, 10, 12)
+	pen := newProduct("pen_cm", "Camelin fountain pen", 100, 10, 12)
 	db.Create(pen)
 
-	pencil := newProduct("pencil", 100, 10, 12)
+	pencil := newProduct("pencil_ap", "apsara pencil hb", 100, 10, 12)
 	db.Create(pencil)
 
-	paper := newProduct("paper", 100, 10, 12)
+	paper := newProduct("a4_paper", "A4 paper bundle", 100, 10, 12)
 	db.Create(paper)
 }
 
-func newProduct(id string, qty int64, cp float64, sp float64) (p *models.Product) {
+func newProduct(id string, name string, qty int64, cp float64, sp float64) (p *models.Product) {
 	p = new(models.Product)
 	p.ID = id
+	p.Name = name
 	p.Description = "description"
 	p.ProductTypeID = "stationery"
 	p.Qty = qty

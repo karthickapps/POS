@@ -3,10 +3,12 @@ import { USER_LOGGED_OUT } from "./types";
 
 import auth from "./reducers/auth";
 import productType from "./reducers/productType";
+import cart from "./reducers/cart";
 
 const appReducer = combineReducers({
   auth,
-  productType
+  productType,
+  cart
 });
 
 const rootReducer = (state, action) => {

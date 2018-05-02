@@ -27,6 +27,7 @@ const expenseType = apiBuilder("expensetypes");
 const expense = apiBuilder("expense");
 
 const product = apiBuilder("products");
+product.Search = id => axios.get(`/api/products/search?q=${id}`);
 
 const customer = apiBuilder("customers");
 
