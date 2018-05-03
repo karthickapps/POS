@@ -30,4 +30,21 @@ const getProductTypeDataForDropdownSelector = () =>
     }
   );
 
-export { getProductTypeSelector, getProductTypeDataForDropdownSelector };
+const getCartItemsArraySelector = createSelector(
+  state => state.cart,
+  cart => {
+    const keys = Object.keys(cart);
+    const cartArray = [];
+    for (let i = 0; i < keys.length; i++) {
+      cartArray.push(cart[keys[i]]);
+    }
+
+    return cartArray;
+  }
+);
+
+export {
+  getProductTypeSelector,
+  getProductTypeDataForDropdownSelector,
+  getCartItemsArraySelector
+};

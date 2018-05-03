@@ -13,7 +13,7 @@ const styles = theme => ({
 
 class AutoSuggestWithApiDatasource extends Component {
   state = {
-    hideSuggestions: false
+    hideSuggestions: true
   };
 
   renderOptions = () => {
@@ -32,16 +32,44 @@ class AutoSuggestWithApiDatasource extends Component {
     ));
   };
 
+  renderNoData = () => {
+    const { classes, width } = this.props;
+
+    return (
+      <Paper
+        elevation={4}
+        className={classes.ddItem}
+        style={{ width, zIndex: 1000 }}
+      >
+        <List component="nav">
+          <ListItem>
+            <ListItemText>
+              <span style={{ fontSize: "0.95rem" }}>No records available</span>
+            </ListItemText>
+          </ListItem>
+        </List>
+      </Paper>
+    );
+  };
+
   renderSuggestions = () => {
     const { hideSuggestions } = this.state;
-    const { classes, width, datasource } = this.props;
+    const { classes, width, datasource, searchText } = this.props;
 
-    if (!datasource || datasource.length === 0 || hideSuggestions === true) {
+    if (hideSuggestions === true || !searchText || searchText.length < 3) {
       return null;
     }
 
+    if (!datasource || datasource.length === 0) {
+      return this.renderNoData();
+    }
+
     return (
-      <Paper elevation={4} className={classes.ddItem} style={{ width }}>
+      <Paper
+        elevation={4}
+        className={classes.ddItem}
+        style={{ width, zIndex: 1000 }}
+      >
         <List component="nav">{this.renderOptions()}</List>
       </Paper>
     );
@@ -63,11 +91,12 @@ class AutoSuggestWithApiDatasource extends Component {
   };
 
   render() {
-    const { width, onChange, searchText } = this.props;
+    const { width, onChange, searchText, onKeyDown } = this.props;
 
     return (
       <div>
         <CustomTextField
+          onKeyDown={onKeyDown}
           value={searchText}
           onChange={onChange}
           placeholder="Enter Product Id or Barcode"

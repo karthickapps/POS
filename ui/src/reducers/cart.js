@@ -9,13 +9,14 @@ import {
 export default function cart(state = {}, action = {}) {
   switch (action.type) {
     case ADD_ITEM_TO_CART:
-      return update(state, {
-        $set: { [action.data.id]: action.data }
-      });
+      return {
+        ...state,
+        [action.data.id]: action.data
+      };
 
     case UPDATE_CART_ITEM:
       return update(state, {
-        $set: { [action.data.id]: action.data }
+        [action.data.id]: { $set: action.data }
       });
 
     case REMOVE_ITEM_TO_CART:

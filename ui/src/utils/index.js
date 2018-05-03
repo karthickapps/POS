@@ -115,6 +115,8 @@ const getPaginationInfo = linkHeaderString => {
   return paginationInfo;
 };
 
+const sleep = async ms => new Promise(resolve => setTimeout(resolve, ms));
+
 export {
   styled,
   setAuthorizationHeader,
@@ -123,5 +125,6 @@ export {
   invertShowHide,
   isValueExists,
   isValidEmail,
-  getPaginationInfo
+  getPaginationInfo,
+  sleep
 };
