@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import Header from "./header/Header";
 import Sidebar from "./sidebar/Sidebar";
@@ -30,14 +31,20 @@ class Home extends Component {
     const { classes } = this.props;
     const { mobileOpen } = this.state;
 
+    const shouldRenderMobileMenu =
+      this.props.history.location.pathname === "/sale";
+
     return (
       <div className={classes.root}>
-        <Header handleDrawerToggle={this.handleDrawerToggle} />
+        <Header
+          shouldRenderMobileMenu={shouldRenderMobileMenu}
+          handleDrawerToggle={this.handleDrawerToggle}
+        />
         <Sidebar
           mobileOpen={mobileOpen}
           handleDrawerToggle={this.handleDrawerToggle}
         />
-        <MainContainer>
+        <MainContainer shouldRenderMobileMenu={shouldRenderMobileMenu}>
           <Routes />
         </MainContainer>
       </div>
@@ -45,4 +52,6 @@ class Home extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Home);
+const component = withStyles(styles, { withTheme: true })(Home);
+
+export default withRouter(component);

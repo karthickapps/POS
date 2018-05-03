@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import classNames from "classnames";
-import { withRouter } from "react-router";
 import { withStyles } from "material-ui/styles";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
@@ -49,15 +48,17 @@ class Header extends Component {
   state = {};
 
   render() {
-    const { classes, handleDrawerToggle } = this.props;
-
-    const isSale = this.props.history.location.pathname === "/sale";
+    const { classes, handleDrawerToggle, shouldRenderMobileMenu } = this.props;
 
     const navIconClass =
-      isSale === true ? classes.navIconShow : classes.navIconHide;
+      shouldRenderMobileMenu === true
+        ? classes.navIconShow
+        : classes.navIconHide;
 
     const appBarClass =
-      isSale === true ? classes.appBarFullWidth : classes.appBar;
+      shouldRenderMobileMenu === true
+        ? classes.appBarFullWidth
+        : classes.appBar;
 
     return (
       <Fragment>
@@ -89,6 +90,4 @@ class Header extends Component {
   }
 }
 
-const component = withStyles(styles, { withTheme: true })(Header);
-
-export default withRouter(component);
+export default withStyles(styles, { withTheme: true })(Header);

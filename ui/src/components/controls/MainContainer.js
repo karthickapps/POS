@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withStyles } from "material-ui";
 import Paper from "material-ui/Paper";
+import classNames from "classnames";
 
 const styles = theme => ({
   container: {
@@ -22,6 +23,9 @@ const styles = theme => ({
     overflowX: "auto",
     overflowY: "auto",
     borderRadius: "0px"
+  },
+  fullWidthContainer: {
+    width: "100%"
   }
 });
 
@@ -29,11 +33,18 @@ class MainContainer extends Component {
   state = {};
 
   render() {
-    const { classes, children } = this.props;
+    const { classes, children, shouldRenderMobileMenu } = this.props;
+
+    let containerClass = "";
+
+    containerClass =
+      shouldRenderMobileMenu === true
+        ? classNames(classes.paper, classes.fullWidthContainer)
+        : classes.paper;
 
     return (
       <main className={classes.container}>
-        <Paper className={classes.paper} elevation={4}>
+        <Paper className={containerClass} elevation={4}>
           {children}
         </Paper>
       </main>
