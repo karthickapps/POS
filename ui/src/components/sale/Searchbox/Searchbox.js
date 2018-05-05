@@ -59,7 +59,6 @@ class SearchBox extends Component {
       this.props.updateCartItem(obj);
     } else {
       const obj = this.constructCartObjForAddNew(item);
-      console.log(obj);
       this.props.addItemsToCart(obj);
     }
   };

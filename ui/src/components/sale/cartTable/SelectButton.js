@@ -1,8 +1,8 @@
 import React from "react";
 import { Button } from "material-ui";
 
-const SelectButton = ({ text }) => (
-  <Button style={{ textTransform: "none", padding: 0 }}>
+const SelectButton = ({ text, onClick }) => (
+  <Button style={{ textTransform: "none", padding: 0 }} onClick={onClick}>
     <p
       style={{
         width: 150,

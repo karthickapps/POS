@@ -10,6 +10,7 @@ import SelectButton from "./SelectButton";
 import * as cartActions from "../../../actions/cart";
 import { getCartItemsArraySelector } from "../../../selectors";
 import YesNo from "../../controls/dialog/YesNo";
+import EditCartItem from "../editCartItem/EditCartItem";
 
 const styles = theme => ({
   root: {
@@ -22,8 +23,18 @@ const styles = theme => ({
 });
 
 class CartTable extends Component {
+  initialCartItem = {
+    id: "",
+    name: "",
+    qty: "",
+    price: "",
+    discount: ""
+  };
+
   state = {
-    showConfirmDeleteDialog: false
+    showConfirmDeleteDialog: false,
+    showEditDialog: false,
+    itemToEdit: this.initialCartItem
   };
 
   renderEmptyCartButton = () => {
@@ -86,7 +97,10 @@ class CartTable extends Component {
         {cartArray.map(n => (
           <TableRow className={classes.row} key={n.id}>
             <CustomTableCell style={{ width: 150 }}>
-              <SelectButton text={n.name} />
+              <SelectButton
+                text={n.name}
+                onClick={() => this.onProductItemClick(n)}
+              />
             </CustomTableCell>
             <CustomTableCell numeric>{n.sellingPrice}</CustomTableCell>
             <CustomTableCell numeric>{n.qty}</CustomTableCell>
@@ -100,6 +114,7 @@ class CartTable extends Component {
     );
   };
 
+  // Empty cart dialog
   onConfirmDeleteClick = () => {
     this.props.emptyCart();
     this.setState({ showConfirmDeleteDialog: false });
@@ -109,8 +124,55 @@ class CartTable extends Component {
     this.setState({ showConfirmDeleteDialog: false });
   };
 
+  // Edit cart item dialog
+  onProductItemClick = itemToEdit => {
+    this.setState({ itemToEdit, showEditDialog: true });
+  };
+
+  onCancelEditItemClick = () => {
+    this.setState({ showEditDialog: false, itemToEdit: this.initialCartItem });
+  };
+
+  onSaveItemClick = () => {
+    const clone = {};
+
+    Object.assign(clone, this.state.itemToEdit);
+    clone.sellingPrice = clone.price - clone.discount;
+    clone.totalPrice = clone.sellingPrice * clone.qty;
+
+    this.props.updateCartItem(clone);
+    this.setState({ showEditDialog: false, itemToEdit: this.initialCartItem });
+  };
+
+  onChange = e => {
+    const { itemToEdit } = this.state;
+
+    let { qty, discount } = itemToEdit;
+
+    if (e.target.name === "discount") {
+      discount = e.target.value;
+    } else {
+      qty = e.target.value;
+    }
+
+    if (discount > itemToEdit.price) {
+      // eslint-disable-next-line
+      discount = itemToEdit.discount;
+    }
+
+    const sellingPrice = itemToEdit.price - discount;
+    const totalPrice = sellingPrice * qty;
+
+    itemToEdit.qty = qty;
+    itemToEdit.discount = discount;
+    itemToEdit.sellingPrice = sellingPrice;
+    itemToEdit.totalPrice = totalPrice;
+
+    this.setState({ itemToEdit });
+  };
+
   render() {
-    const { showConfirmDeleteDialog } = this.state;
+    const { showConfirmDeleteDialog, showEditDialog, itemToEdit } = this.state;
     const { classes } = this.props;
 
     return (
@@ -120,6 +182,14 @@ class CartTable extends Component {
           message="Are you sure wan't to empty the cart?"
           onOk={this.onConfirmDeleteClick}
           onCancel={this.onCancelConfirmDeleteClick}
+        />
+
+        <EditCartItem
+          open={showEditDialog}
+          item={itemToEdit}
+          onSave={this.onSaveItemClick}
+          onCancel={this.onCancelEditItemClick}
+          onChange={this.onChange}
         />
 
         <Table className={classes.table}>

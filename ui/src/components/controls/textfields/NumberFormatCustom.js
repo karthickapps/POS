@@ -18,7 +18,7 @@ function NumberFormatCustom(props) {
         });
       }}
       thousandSeparator
-      prefix="$"
+      prefix=""
     />
   );
 }
