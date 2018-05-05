@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withStyles } from "material-ui/styles";
-import CartTable from "../cartTable/CartTable";
-import SearchBox from "../Searchbox/Searchbox";
+import CartTable from "./cartTable/CartTable";
+import SearchBox from "./searchbox/Searchbox";
 
 // eslint-disable-next-line
 const styles = theme => ({});

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from "material-ui/styles";
 import styles from "./styles";
 import PosSection from "./posSection/PosSection";
-import GridItem from "./productsGrid/GridItem";
+import GridItem from "./displaySection/GridItem";
 
 class Sale extends Component {
   render() {

@@ -7,9 +7,9 @@ import Table, { TableBody, TableHead, TableRow } from "material-ui/Table";
 import CustomTableCell from "./CustomTableCell";
 import NoItemsTableCell from "./NoItemsTableCell";
 import SelectButton from "./SelectButton";
-import * as cartActions from "../../../actions/cart";
-import { getCartItemsArraySelector } from "../../../selectors";
-import YesNo from "../../controls/dialog/YesNo";
+import * as cartActions from "../../../../actions/cart";
+import { getCartItemsArraySelector } from "../../../../selectors";
+import YesNo from "../../../controls/dialog/YesNo";
 import EditCartItem from "../editCartItem/EditCartItem";
 
 const styles = theme => ({

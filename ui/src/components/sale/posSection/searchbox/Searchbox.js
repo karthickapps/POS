@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import AutoSuggestWithApiDatasource from "../../controls/autoSuggestWithApiDatasource";
-import Message from "../../controls/Message";
-import api from "../../../api";
-import { sleep } from "../../../utils";
-import { addItemsToCart, updateCartItem } from "../../../actions/cart";
+import AutoSuggestWithApiDatasource from "../../../controls/autoSuggest/AutoSuggestWithApiDatasource";
+import Message from "../../../controls/Message";
+import api from "../../../../api";
+import { sleep } from "../../../../utils";
+import { addItemsToCart, updateCartItem } from "../../../../actions/cart";
 
 class SearchBox extends Component {
   state = {
