@@ -1,10 +1,8 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
-import AutoSuggestWithApiDatasource from "../../../controls/autoSuggest/AutoSuggestWithApiDatasource";
 import Message from "../../../controls/Message";
 import api from "../../../../api";
 import { sleep } from "../../../../utils";
-import { addItemsToCart, updateCartItem } from "../../../../actions/cart";
+import AutoSuggestWithApiDatasource from "../../../controls/autoSuggest/AutoSuggestWithApiDatasource";
 
 class SearchBox extends Component {
   state = {
@@ -119,15 +117,4 @@ class SearchBox extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    cartObj: state.cart
-  };
-}
-
-const mapDispatchToProps = {
-  addItemsToCart,
-  updateCartItem
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchBox);
+export default SearchBox;

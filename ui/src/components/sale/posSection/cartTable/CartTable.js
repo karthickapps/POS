@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import { Paper, IconButton } from "material-ui";
 import DeleteIcon from "material-ui-icons/Delete";
@@ -7,8 +6,6 @@ import Table, { TableBody, TableHead, TableRow } from "material-ui/Table";
 import CustomTableCell from "./CustomTableCell";
 import NoItemsTableCell from "./NoItemsTableCell";
 import SelectButton from "./SelectButton";
-import * as cartActions from "../../../../actions/cart";
-import { getCartItemsArraySelector } from "../../../../selectors";
 import YesNo from "../../../controls/dialog/YesNo";
 import EditCartItem from "../editCartItem/EditCartItem";
 
@@ -173,7 +170,7 @@ class CartTable extends Component {
 
   render() {
     const { showConfirmDeleteDialog, showEditDialog, itemToEdit } = this.state;
-    const { classes } = this.props;
+    const { classes, cartObj, updateCartItem } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -185,6 +182,8 @@ class CartTable extends Component {
         />
 
         <EditCartItem
+          cartObj={cartObj}
+          updateCartItem={updateCartItem}
           open={showEditDialog}
           item={itemToEdit}
           onSave={this.onSaveItemClick}
@@ -201,19 +200,4 @@ class CartTable extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    cartArray: getCartItemsArraySelector(state),
-    cartObj: state.cart
-  };
-}
-
-const mapDispatchToProps = {
-  removeItemFromCart: cartActions.removeItemFromCart,
-  updateCartItem: cartActions.updateCartItem,
-  emptyCart: cartActions.emptyCart
-};
-
-const component = withStyles(styles, { withTheme: true })(CartTable);
-
-export default connect(mapStateToProps, mapDispatchToProps)(component);
+export default withStyles(styles, { withTheme: true })(CartTable);

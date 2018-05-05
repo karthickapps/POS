@@ -11,6 +11,9 @@ const Footer = ({ item, classes }) => (
     <FooterPriceLabel price={item.price * item.qty} title="Net Price" />
     <br />
     <br />
+    <FooterPriceLabel price={item.discount * item.qty} title="Total Discount" />
+    <br />
+    <br />
     <FooterPriceLabel price={item.totalPrice} title="Selling Price" />
   </div>
 );

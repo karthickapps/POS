@@ -1,9 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { connect } from "react-redux";
 import FormDialog from "../../../controls/dialog/FormDialog";
 import CustomTextField from "../../../controls/textfields/CustomTextField";
 import NumberTextField from "../../../controls/textfields/NumberTextField";
-import { updateCartItem } from "../../../../actions/cart";
 import { isValueExists } from "../../../../utils";
 import Footer from "./Footer";
 
@@ -91,10 +89,4 @@ class EditCartItem extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    cartObj: state.cart
-  };
-}
-
-export default connect(mapStateToProps, { updateCartItem })(EditCartItem);
+export default EditCartItem;
