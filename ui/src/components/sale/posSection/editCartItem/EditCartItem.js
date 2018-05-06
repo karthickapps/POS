@@ -30,13 +30,18 @@ class EditCartItem extends Component {
     this.props.onSave();
   };
 
+  onCancel = () => {
+    this.setState({ errors: {} });
+    this.props.onCancel();
+  };
+
   render() {
     const { errors } = this.state;
-    const { onCancel, open, item } = this.props;
+    const { open, item } = this.props;
 
     return (
       <Fragment>
-        <FormDialog onSave={this.onSave} onCancel={onCancel} open={open}>
+        <FormDialog onSave={this.onSave} onCancel={this.onCancel} open={open}>
           <CustomTextField
             error={!!errors.id}
             name="id"

@@ -3,7 +3,7 @@ import { withStyles } from "material-ui";
 
 const styles = () => ({
   root: {
-    marginTop: "10px"
+    marginTop: "25px"
   }
 });
 

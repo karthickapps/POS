@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import { withStyles } from "material-ui/styles";
 import { Paper, IconButton } from "material-ui";
 import DeleteIcon from "material-ui-icons/Delete";
-import Table, { TableBody, TableHead, TableRow } from "material-ui/Table";
+import Table, {
+  TableBody,
+  TableHead,
+  TableRow,
+  TableFooter
+} from "material-ui/Table";
 import CustomTableCell from "./CustomTableCell";
 import NoItemsTableCell from "./NoItemsTableCell";
 import SelectButton from "./SelectButton";
@@ -16,6 +21,15 @@ const styles = theme => ({
   },
   deleteIcon: {
     color: "#949494"
+  },
+  footerTableCell: {
+    fontSize: "14px",
+    padding: "5px",
+    fontWeight: "bold",
+    color: "black"
+  },
+  footerRow: {
+    backgroundColor: theme.palette.background.default
   }
 });
 
@@ -75,7 +89,7 @@ class CartTable extends Component {
         <CustomTableCell numeric>Price</CustomTableCell>
         <CustomTableCell numeric>Qty</CustomTableCell>
         <CustomTableCell numeric>Total</CustomTableCell>
-        <CustomTableCell numeric style={{ width: 30 }}>
+        <CustomTableCell numeric style={{ width: 30, paddingRight: "5px" }}>
           {this.renderEmptyCartButton()}
         </CustomTableCell>
       </TableRow>
@@ -102,13 +116,49 @@ class CartTable extends Component {
             <CustomTableCell numeric>{n.sellingPrice}</CustomTableCell>
             <CustomTableCell numeric>{n.qty}</CustomTableCell>
             <CustomTableCell numeric>{n.totalPrice}</CustomTableCell>
-            <CustomTableCell numeric style={{ width: 30 }}>
+            <CustomTableCell numeric style={{ width: 30, paddingRight: "5px" }}>
               {this.deleteCartItem(n)}
             </CustomTableCell>
           </TableRow>
         ))}
       </TableBody>
     );
+  };
+
+  renderFooterRowOne = () => {
+    const { classes } = this.props;
+
+    return (
+      <TableRow className={classes.footerRow}>
+        <CustomTableCell className={classes.footerTableCell} numeric>
+          Total
+        </CustomTableCell>
+        <CustomTableCell className={classes.footerTableCell} numeric>
+          20
+        </CustomTableCell>
+        <CustomTableCell className={classes.footerTableCell} numeric>
+          20
+        </CustomTableCell>
+        <CustomTableCell
+          numeric
+          className={classes.footerTableCell}
+          style={{ color: "#b53f3f", fontSize: "18px" }}
+        >
+          2000
+        </CustomTableCell>
+        <CustomTableCell numeric className={classes.footerTableCell} />
+      </TableRow>
+    );
+  };
+
+  renderFooter = () => {
+    const { cartArray } = this.props;
+
+    if (cartArray.length === 0) {
+      return null;
+    }
+
+    return <TableFooter>{this.renderFooterRowOne()}</TableFooter>;
   };
 
   // Empty cart dialog
@@ -143,8 +193,11 @@ class CartTable extends Component {
 
   onChange = e => {
     const { itemToEdit } = this.state;
+    const clone = {};
 
-    let { qty, discount } = itemToEdit;
+    Object.assign(clone, itemToEdit);
+
+    let { qty, discount } = clone;
 
     if (e.target.name === "discount") {
       discount = e.target.value;
@@ -152,20 +205,20 @@ class CartTable extends Component {
       qty = e.target.value;
     }
 
-    if (discount > itemToEdit.price) {
+    if (discount > clone.price) {
       // eslint-disable-next-line
-      discount = itemToEdit.discount;
+      discount = clone.discount;
     }
 
-    const sellingPrice = itemToEdit.price - discount;
+    const sellingPrice = clone.price - discount;
     const totalPrice = sellingPrice * qty;
 
-    itemToEdit.qty = qty;
-    itemToEdit.discount = discount;
-    itemToEdit.sellingPrice = sellingPrice;
-    itemToEdit.totalPrice = totalPrice;
+    clone.qty = qty === "" ? "" : Number(qty);
+    clone.discount = discount === "" ? "" : Number(discount);
+    clone.sellingPrice = sellingPrice === "" ? "" : Number(sellingPrice);
+    clone.totalPrice = totalPrice === "" ? "" : Number(totalPrice);
 
-    this.setState({ itemToEdit });
+    this.setState({ itemToEdit: clone });
   };
 
   render() {
@@ -194,6 +247,7 @@ class CartTable extends Component {
         <Table className={classes.table}>
           {this.renderHeader()}
           {this.renderBody()}
+          {this.renderFooter()}
         </Table>
       </Paper>
     );

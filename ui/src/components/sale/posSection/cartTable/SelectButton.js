@@ -5,6 +5,8 @@ const SelectButton = ({ text, onClick }) => (
   <Button style={{ textTransform: "none", padding: 0 }} onClick={onClick}>
     <p
       style={{
+        textAlign: "left",
+        paddingLeft: "8px",
         width: 150,
         overflowWrap: "break-word"
       }}
