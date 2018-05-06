@@ -43,8 +43,27 @@ const getCartItemsArraySelector = createSelector(
   }
 );
 
+const getTotalSelector = createSelector(
+  state => state.cart,
+  cart => {
+    const keys = Object.keys(cart);
+    const total = {
+      qty: 0,
+      price: 0
+    };
+
+    for (let i = 0; i < keys.length; i++) {
+      total.qty += cart[keys[i]].qty;
+      total.price += cart[keys[i]].totalPrice;
+    }
+
+    return total;
+  }
+);
+
 export {
   getProductTypeSelector,
   getProductTypeDataForDropdownSelector,
-  getCartItemsArraySelector
+  getCartItemsArraySelector,
+  getTotalSelector
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "material-ui";
 
-const SelectButton = ({ text, onClick }) => (
+const LightButton = ({ text, onClick }) => (
   <Button style={{ textTransform: "none", padding: 0 }} onClick={onClick}>
     <p
       style={{
@@ -16,4 +16,4 @@ const SelectButton = ({ text, onClick }) => (
   </Button>
 );
 
-export default SelectButton;
+export default LightButton;

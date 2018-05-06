@@ -5,7 +5,10 @@ import CartTable from "./cartTable";
 import SearchBox from "./searchbox";
 import Footer from "./footer";
 import * as cartActions from "../../../actions/cart";
-import { getCartItemsArraySelector } from "../../../selectors";
+import {
+  getCartItemsArraySelector,
+  getTotalSelector
+} from "../../../selectors";
 
 // eslint-disable-next-line
 const styles = theme => ({});
@@ -20,7 +23,8 @@ class PosSection extends Component {
       updateCartItem,
       cartArray,
       removeItemFromCart,
-      emptyCart
+      emptyCart,
+      total
     } = this.props;
 
     return (
@@ -36,6 +40,7 @@ class PosSection extends Component {
           removeItemFromCart={removeItemFromCart}
           updateCartItem={updateCartItem}
           emptyCart={emptyCart}
+          total={total}
         />
         <Footer />
       </Fragment>
@@ -46,6 +51,7 @@ class PosSection extends Component {
 function mapStateToProps(state) {
   return {
     cartArray: getCartItemsArraySelector(state),
+    total: getTotalSelector(state),
     cartObj: state.cart
   };
 }

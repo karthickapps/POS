@@ -7,3 +7,6 @@ export const ADD_ITEM_TO_CART = "ADD_ITEM_TO_CART";
 export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";
 export const REMOVE_ITEM_TO_CART = "REMOVE_ITEM_TO_CART";
 export const EMPTY_CART = "EMPTY_CART";
+
+export const UPDATE_DISCOUNT = "UPDATE_DISCOUNT";
+export const UPDATE_TAX = "UPDATE_TAX";
