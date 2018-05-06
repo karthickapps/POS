@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import { Paper } from "material-ui";
 import Table from "material-ui/Table";
@@ -7,6 +8,13 @@ import EditCartItem from "../editCartItem/EditCartItem";
 import CartHeader from "./cartHeader";
 import CartBody from "./cartBody";
 import CartFooter from "./cartFooter";
+import * as cartActions from "../../../../actions/cart";
+import * as billingActions from "../../../../actions/billing";
+
+import {
+  getCartItemsArraySelector,
+  getTotalSelector
+} from "../../../../selectors";
 
 const styles = theme => ({
   root: {
@@ -64,6 +72,7 @@ class CartTable extends Component {
   // Empty cart dialog
   onConfirmDeleteClick = () => {
     this.props.emptyCart();
+    this.props.resetBilling();
     this.setState({ showConfirmDeleteDialog: false });
   };
 
@@ -72,6 +81,9 @@ class CartTable extends Component {
   };
 
   onDeleteCartItemClick = row => {
+    const { billing } = this.props;
+    const discount = billing.discount - row.discount;
+    this.props.updateDiscount({ discount });
     this.props.removeItemFromCart(row);
   };
 
@@ -89,19 +101,39 @@ class CartTable extends Component {
   };
 
   onSaveItemClick = () => {
+    const { itemToEdit } = this.state;
+
     const clone = {};
 
-    Object.assign(clone, this.state.itemToEdit);
+    Object.assign(clone, itemToEdit);
     clone.sellingPrice = clone.price - clone.discount;
     clone.totalPrice = clone.sellingPrice * clone.qty;
 
+    this.updateDiscount(clone);
     this.props.updateCartItem(clone);
     this.setState({ showEditDialog: false, itemToEdit: this.initialCartItem });
   };
 
+  updateDiscount = updatedCartItem => {
+    const { cartObj, billing } = this.props;
+
+    const isDiscountChanged =
+      cartObj[updatedCartItem.id].discount !== updatedCartItem.discount;
+
+    if (isDiscountChanged === false) {
+      return;
+    }
+
+    const oldDiscount = cartObj[updatedCartItem.id].discount;
+    const newDiscount = updatedCartItem.discount;
+    const discount = billing.discount - oldDiscount + newDiscount;
+
+    this.props.updateDiscount({ discount });
+  };
+
   render() {
     const { showConfirmDeleteDialog, showEditDialog, itemToEdit } = this.state;
-    const { classes, cartObj, cartArray, updateCartItem, total } = this.props;
+    const { classes, cartObj, cartArray, total, billing } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -114,7 +146,6 @@ class CartTable extends Component {
 
         <EditCartItem
           cartObj={cartObj}
-          updateCartItem={updateCartItem}
           open={showEditDialog}
           item={itemToEdit}
           onSave={this.onSaveItemClick}
@@ -133,10 +164,29 @@ class CartTable extends Component {
             onProductItemSelect={this.onProductItemClick}
           />
         </Table>
-        <CartFooter total={total} />
+        <CartFooter total={total} billing={billing} />
       </Paper>
     );
   }
 }
 
-export default withStyles(styles, { withTheme: true })(CartTable);
+function mapStateToProps(state) {
+  return {
+    cartArray: getCartItemsArraySelector(state),
+    total: getTotalSelector(state),
+    cartObj: state.cart,
+    billing: state.billing
+  };
+}
+
+const mapDispatchToProps = {
+  emptyCart: cartActions.emptyCart,
+  removeItemFromCart: cartActions.removeItemFromCart,
+  updateCartItem: cartActions.updateCartItem,
+  updateDiscount: billingActions.updateDiscount,
+  resetBilling: billingActions.resetBilling
+};
+
+const component = withStyles(styles, { withTheme: true })(CartTable);
+
+export default connect(mapStateToProps, mapDispatchToProps)(component);

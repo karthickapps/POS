@@ -1,28 +1,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
-import { withStyles } from "material-ui/styles";
 import FooterTableCell from "./FooterTableCell";
 import FooterTableRow from "./FooterTableRow";
+import LinkButton from "../controls/LinkButton";
 
-const styles = () => ({
-  root: {
-    backgroundColor: "white",
-    borderTop: "1px solid #e0e0e0"
-  }
-});
-
-const TaxDiscountRow = () => (
+const TaxDiscountRow = ({ billing }) => (
   <FooterTableRow>
     <FooterTableCell numeric style={{ width: "150px" }}>
-      <a href="">Discount</a>
+      <LinkButton text="Discount" />
     </FooterTableCell>
-    <FooterTableCell numeric>20000</FooterTableCell>
+    <FooterTableCell numeric>{billing.discount}</FooterTableCell>
     <FooterTableCell numeric />
     <FooterTableCell style={{ paddingLeft: "15px" }}>
-      <a href="">Tax</a>
+      <LinkButton text="Tax" />
     </FooterTableCell>
-    <FooterTableCell numeric>200000000</FooterTableCell>
+    <FooterTableCell numeric>{billing.tax}</FooterTableCell>
   </FooterTableRow>
 );
 
-export default withStyles(styles)(TaxDiscountRow);
+export default TaxDiscountRow;

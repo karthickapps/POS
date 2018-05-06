@@ -8,7 +8,7 @@ class CartFooter extends Component {
   state = {};
 
   render() {
-    const { total } = this.props;
+    const { total, billing } = this.props;
 
     if (total.qty === 0) {
       return null;
@@ -18,8 +18,8 @@ class CartFooter extends Component {
       <Table style={{ marginTop: "50px" }}>
         <TableBody>
           <TotalRow total={total} />
-          <TaxDiscountRow />
-          <TotalPayableRow />
+          <TaxDiscountRow billing={billing} />
+          <TotalPayableRow totalPayablePrice={total.price - billing.tax} />
         </TableBody>
       </Table>
     );

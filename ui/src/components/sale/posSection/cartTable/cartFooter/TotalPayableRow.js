@@ -9,7 +9,7 @@ const styles = () => ({
   }
 });
 
-const TotalPayableRow = ({ classes }) => (
+const TotalPayableRow = ({ classes, totalPayablePrice }) => (
   <FooterTableRow className={classes.root}>
     <FooterTableCell numeric style={{ width: "150px" }} />
     <FooterTableCell numeric />
@@ -17,7 +17,7 @@ const TotalPayableRow = ({ classes }) => (
     <FooterTableCell style={{ paddingLeft: "15px" }}>
       Total Payable
     </FooterTableCell>
-    <FooterTableCell numeric>200000000</FooterTableCell>
+    <FooterTableCell numeric>{totalPayablePrice}</FooterTableCell>
   </FooterTableRow>
 );
 

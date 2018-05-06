@@ -1,8 +1,10 @@
 import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
 import Message from "../../../controls/Message";
 import api from "../../../../api";
 import { sleep } from "../../../../utils";
 import AutoSuggestWithApiDatasource from "../../../controls/autoSuggest/AutoSuggestWithApiDatasource";
+import { updateCartItem, addItemsToCart } from "../../../../actions/cart";
 
 class SearchBox extends Component {
   state = {
@@ -49,15 +51,15 @@ class SearchBox extends Component {
   };
 
   updateCart = item => {
-    const { cartObj } = this.props;
-    const existingItem = cartObj[item.id];
+    const { cart, dispatch } = this.props;
+    const existingItem = cart[item.id];
 
     if (existingItem) {
       const obj = this.constructCartObjForUpdate(existingItem);
-      this.props.updateCartItem(obj);
+      dispatch(updateCartItem(obj));
     } else {
       const obj = this.constructCartObjForAddNew(item);
-      this.props.addItemsToCart(obj);
+      dispatch(addItemsToCart(obj));
     }
   };
 
@@ -117,4 +119,8 @@ class SearchBox extends Component {
   }
 }
 
-export default SearchBox;
+const mapStateToProps = ({ cart }) => ({
+  cart
+});
+
+export default connect(mapStateToProps)(SearchBox);

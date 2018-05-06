@@ -10,3 +10,4 @@ export const EMPTY_CART = "EMPTY_CART";
 
 export const UPDATE_DISCOUNT = "UPDATE_DISCOUNT";
 export const UPDATE_TAX = "UPDATE_TAX";
+export const RESET_BILLING = "RESET_BILLING";
