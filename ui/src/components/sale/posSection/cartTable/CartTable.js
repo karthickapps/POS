@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import currency from "currency.js";
 import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import { Paper } from "material-ui";
@@ -9,12 +10,7 @@ import CartHeader from "./cartHeader";
 import CartBody from "./cartBody";
 import CartFooter from "./cartFooter";
 import * as cartActions from "../../../../actions/cart";
-import * as billingActions from "../../../../actions/billing";
-
-import {
-  getCartItemsArraySelector,
-  getTotalSelector
-} from "../../../../selectors";
+import { getCartItemsArraySelector } from "../../../../selectors";
 
 const styles = theme => ({
   root: {
@@ -53,18 +49,14 @@ class CartTable extends Component {
       qty = e.target.value;
     }
 
-    if (discount > clone.price) {
-      // eslint-disable-next-line
-      discount = clone.discount;
-    }
-
-    const sellingPrice = clone.price - discount;
-    const totalPrice = sellingPrice * qty;
+    const sellingPrice = currency(clone.price).subtract(discount);
+    const totalPrice = currency(sellingPrice).multiply(qty);
 
     clone.qty = qty === "" ? "" : Number(qty);
-    clone.discount = discount === "" ? "" : Number(discount);
-    clone.sellingPrice = sellingPrice === "" ? "" : Number(sellingPrice);
-    clone.totalPrice = totalPrice === "" ? "" : Number(totalPrice);
+    clone.discount = discount === "" ? "" : discount;
+
+    clone.sellingPrice = sellingPrice.toString();
+    clone.totalPrice = totalPrice.toString();
 
     this.setState({ itemToEdit: clone });
   };
@@ -72,7 +64,6 @@ class CartTable extends Component {
   // Empty cart dialog
   onConfirmDeleteClick = () => {
     this.props.emptyCart();
-    this.props.resetBilling();
     this.setState({ showConfirmDeleteDialog: false });
   };
 
@@ -81,9 +72,6 @@ class CartTable extends Component {
   };
 
   onDeleteCartItemClick = row => {
-    const { billing } = this.props;
-    const discount = billing.discount - row.discount;
-    this.props.updateDiscount({ discount });
     this.props.removeItemFromCart(row);
   };
 
@@ -106,34 +94,14 @@ class CartTable extends Component {
     const clone = {};
 
     Object.assign(clone, itemToEdit);
-    clone.sellingPrice = clone.price - clone.discount;
-    clone.totalPrice = clone.sellingPrice * clone.qty;
 
-    this.updateDiscount(clone);
-    this.props.updateCartItem(clone);
+    this.props.updateCartItem(itemToEdit);
     this.setState({ showEditDialog: false, itemToEdit: this.initialCartItem });
-  };
-
-  updateDiscount = updatedCartItem => {
-    const { cartObj, billing } = this.props;
-
-    const isDiscountChanged =
-      cartObj[updatedCartItem.id].discount !== updatedCartItem.discount;
-
-    if (isDiscountChanged === false) {
-      return;
-    }
-
-    const oldDiscount = cartObj[updatedCartItem.id].discount;
-    const newDiscount = updatedCartItem.discount;
-    const discount = billing.discount - oldDiscount + newDiscount;
-
-    this.props.updateDiscount({ discount });
   };
 
   render() {
     const { showConfirmDeleteDialog, showEditDialog, itemToEdit } = this.state;
-    const { classes, cartObj, cartArray, total, billing } = this.props;
+    const { classes, cartObj, cartArray } = this.props;
 
     return (
       <Paper className={classes.root}>
@@ -164,7 +132,7 @@ class CartTable extends Component {
             onProductItemSelect={this.onProductItemClick}
           />
         </Table>
-        <CartFooter total={total} billing={billing} />
+        <CartFooter summary={cartObj.summary} cartArray={cartArray} />
       </Paper>
     );
   }
@@ -173,18 +141,14 @@ class CartTable extends Component {
 function mapStateToProps(state) {
   return {
     cartArray: getCartItemsArraySelector(state),
-    total: getTotalSelector(state),
-    cartObj: state.cart,
-    billing: state.billing
+    cartObj: state.cart
   };
 }
 
 const mapDispatchToProps = {
   emptyCart: cartActions.emptyCart,
   removeItemFromCart: cartActions.removeItemFromCart,
-  updateCartItem: cartActions.updateCartItem,
-  updateDiscount: billingActions.updateDiscount,
-  resetBilling: billingActions.resetBilling
+  updateCartItem: cartActions.updateCartItem
 };
 
 const component = withStyles(styles, { withTheme: true })(CartTable);

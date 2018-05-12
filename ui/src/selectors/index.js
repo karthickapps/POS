@@ -31,7 +31,7 @@ const getProductTypeDataForDropdownSelector = () =>
   );
 
 const getCartItemsArraySelector = createSelector(
-  state => state.cart,
+  state => state.cart.items,
   cart => {
     const keys = Object.keys(cart);
     const cartArray = [];

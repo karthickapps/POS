@@ -5,12 +5,20 @@ import { withStyles } from "material-ui";
 const styles = () => ({
   root: {
     textDecoration: "none",
-    borderBottom: "0.5px dotted #541b8a"
+    borderBottom: "0.5px dotted #541b8a",
+    outline: "none"
   }
 });
 
 const LinkButton = ({ classes, text, onClick }) => (
-  <a href="" className={classes.root} onClick={onClick}>
+  <a
+    href=""
+    className={classes.root}
+    onClick={e => {
+      e.preventDefault();
+      onClick();
+    }}
+  >
     {text}
   </a>
 );

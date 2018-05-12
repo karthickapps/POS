@@ -1,4 +1,5 @@
 import React from "react";
+import currency from "currency.js";
 import { withStyles } from "material-ui/styles";
 import FooterPriceLabel from "./FooterPriceLabel";
 
@@ -8,13 +9,26 @@ const styles = () => ({
 
 const Footer = ({ item, classes }) => (
   <div className={classes.root}>
-    <FooterPriceLabel price={item.price * item.qty} title="Net Price" />
+    <FooterPriceLabel
+      price={currency(item.price)
+        .multiply(item.qty)
+        .toString()}
+      title="Net Price"
+    />
     <br />
     <br />
-    <FooterPriceLabel price={item.discount * item.qty} title="Total Discount" />
+    <FooterPriceLabel
+      price={currency(item.discount)
+        .multiply(item.qty)
+        .toString()}
+      title="Total Discount"
+    />
     <br />
     <br />
-    <FooterPriceLabel price={item.totalPrice} title="Selling Price" />
+    <FooterPriceLabel
+      price={currency(item.totalPrice).toString()}
+      title="Selling Price"
+    />
   </div>
 );
 

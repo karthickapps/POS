@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
+import currency from "currency.js";
 import FormDialog from "../../../controls/dialog/FormDialog";
 import CustomTextField from "../../../controls/textfields/CustomTextField";
 import NumberTextField from "../../../controls/textfields/NumberTextField";
-import { isValueExists } from "../../../../utils";
 import Footer from "./Footer";
 
 class EditCartItem extends Component {
@@ -19,10 +19,25 @@ class EditCartItem extends Component {
   };
 
   onSave = () => {
-    const errors = isValueExists(this.props.item);
+    const { item } = this.props;
 
-    if (Object.keys(errors).length > 0) {
-      this.setState({ errors });
+    if (currency(item.discount).value > currency(item.price).value) {
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          discount: "Enter the discount value lesser than cost price."
+        }
+      });
+      return;
+    }
+
+    if (item.qty === 0) {
+      this.setState({
+        errors: {
+          ...this.state.errors,
+          qty: "Qty should be greater than 0."
+        }
+      });
       return;
     }
 
@@ -40,56 +55,56 @@ class EditCartItem extends Component {
     const { open, item } = this.props;
 
     return (
-      <Fragment>
-        <FormDialog onSave={this.onSave} onCancel={this.onCancel} open={open}>
-          <CustomTextField
-            error={!!errors.id}
-            name="id"
-            value={item.id}
-            label="Product Id"
+      <FormDialog onSave={this.onSave} onCancel={this.onCancel} open={open}>
+        <CustomTextField
+          error={!!errors.id}
+          name="id"
+          value={item.id}
+          label="Product Id"
+          onChange={this.onChange}
+          disabled={true}
+        />
+
+        <CustomTextField
+          error={!!errors.name}
+          name="name"
+          value={item.name}
+          label="Name"
+          onChange={this.onChange}
+          disabled={true}
+        />
+
+        <div style={{ display: "flex" }}>
+          <NumberTextField
+            error={!!errors.qty}
+            name="qty"
+            value={item.qty}
+            label="Qty"
+            onChange={this.onChange}
+            helperText={errors.qty}
+          />
+
+          <NumberTextField
+            error={!!errors.price}
+            name="price"
+            value={item.price}
+            label="Unit Price"
             onChange={this.onChange}
             disabled={true}
           />
 
-          <CustomTextField
-            error={!!errors.name}
-            name="name"
-            value={item.name}
-            label="Name"
+          <NumberTextField
+            error={!!errors.discount}
+            name="discount"
+            value={item.discount}
+            label="Discount"
             onChange={this.onChange}
-            disabled={true}
+            helperText={errors.discount}
           />
+        </div>
 
-          <div style={{ display: "flex" }}>
-            <NumberTextField
-              error={!!errors.qty}
-              name="qty"
-              value={item.qty}
-              label="Qty"
-              onChange={this.onChange}
-            />
-
-            <NumberTextField
-              error={!!errors.price}
-              name="price"
-              value={item.price}
-              label="Unit Price"
-              onChange={this.onChange}
-              disabled={true}
-            />
-
-            <NumberTextField
-              error={!!errors.discount}
-              name="discount"
-              value={item.discount}
-              label="Discount"
-              onChange={this.onChange}
-            />
-          </div>
-
-          <Footer item={item} />
-        </FormDialog>
-      </Fragment>
+        <Footer item={item} />
+      </FormDialog>
     );
   }
 }

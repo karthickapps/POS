@@ -1993,6 +1993,10 @@ csstype@^2.0.0, csstype@^2.2.0:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.4.2.tgz#158e36c69566bf968da63d0ba14eda1c20e8643a"
 
+currency.js@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/currency.js/-/currency.js-1.1.3.tgz#fe7aacb356be224c6c6bcff5dfc66cf309c7f2ce"
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"

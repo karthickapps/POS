@@ -1,31 +1,286 @@
-import update from "immutability-helper";
+import currency from "currency.js";
 import {
   ADD_ITEM_TO_CART,
-  REMOVE_ITEM_TO_CART,
+  REMOVE_ITEM_FROM_CART,
   UPDATE_CART_ITEM,
-  EMPTY_CART
+  EMPTY_CART,
+  UPDATE_DISCOUNT_ON_TOTAL,
+  UPDATE_DISCOUNT_ON_ITEMS,
+  UPDATE_TAX
 } from "../types";
 
-export default function cart(state = {}, action = {}) {
+const cloneObj = state => {
+  const clone = {
+    items: {},
+    summary: {}
+  };
+
+  Object.assign(clone.items, state.items);
+  Object.assign(clone.summary, state.summary);
+
+  return clone;
+};
+
+const setCartItem = (state, item) => {
+  // eslint-disable-next-line no-param-reassign
+  state.items[item.id] = {};
+
+  const newItem = state.items[item.id];
+  newItem.id = item.id;
+  newItem.name = item.name;
+  newItem.qty = item.qty;
+  newItem.price = currency(item.price).toString();
+  newItem.discount = currency(item.discount).toString();
+  newItem.discountTotal = currency(item.discount)
+    .multiply(item.qty)
+    .toString();
+
+  // This will be the price shown in the cart gridview.
+  newItem.sellingPrice = currency(item.price)
+    .subtract(newItem.discount)
+    .toString();
+
+  // This is the total price on each item in cart gridview.
+  newItem.totalPrice = currency(newItem.sellingPrice)
+    .multiply(item.qty)
+    .toString();
+};
+
+const updateCartItem = (oldState, item) => {
+  const state = cloneObj(oldState);
+  setCartItem(state, item);
+
+  // Subtract the old stuff from state to nullify.
+  const { summary } = state;
+  const oldItem = oldState.items[item.id];
+  const newItem = state.items[item.id];
+
+  summary.noOfInividualItems =
+    summary.noOfInividualItems + newItem.qty - oldItem.qty;
+
+  summary.discountOnItems = currency(summary.discountOnItems)
+    .add(newItem.discountTotal)
+    .subtract(oldItem.discountTotal)
+    .toString();
+
+  summary.netTotal = currency(summary.netTotal)
+    .add(newItem.totalPrice)
+    .subtract(oldItem.totalPrice)
+    .toString();
+
+  const netTotalAfterDiscountOnTotal = currency(summary.netTotal).subtract(
+    summary.discountOnTotal
+  );
+
+  summary.taxAmount = netTotalAfterDiscountOnTotal
+    .multiply(summary.tax * 0.01)
+    .toString();
+
+  summary.payableTotal = netTotalAfterDiscountOnTotal
+    .subtract(summary.taxAmount)
+    .toString();
+
+  return state;
+};
+
+const addItemToCart = (oldState, item) => {
+  const state = cloneObj(oldState);
+
+  setCartItem(state, item);
+
+  // setCartItem adds the new item to the state. So the assignment below holds the new added item.
+  const newItem = state.items[item.id];
+
+  // Summary updates
+  const { summary } = state;
+
+  summary.noOfItems++;
+  summary.noOfInividualItems += newItem.qty;
+
+  summary.discountOnItems = currency(summary.discountOnItems)
+    .add(newItem.discountTotal)
+    .toString();
+
+  // This is the total price after applying discount on items.
+  summary.netTotal = currency(summary.netTotal)
+    .add(newItem.totalPrice)
+    .toString();
+
+  const netTotalAfterDiscountOnTotal = currency(summary.netTotal).subtract(
+    summary.discountOnTotal
+  );
+
+  summary.taxAmount = netTotalAfterDiscountOnTotal
+    .multiply(summary.tax * 0.01)
+    .toString();
+
+  summary.payableTotal = netTotalAfterDiscountOnTotal
+    .subtract(summary.taxAmount)
+    .toString();
+
+  return state;
+};
+
+const removeItemFromCart = (oldState, item) => {
+  const state = cloneObj(oldState);
+  delete state.items[item.id];
+
+  const { summary } = state;
+
+  summary.noOfItems--;
+  summary.noOfInividualItems -= item.qty;
+  summary.discountOnItems = currency(summary.discountOnItems)
+    .subtract(item.discountTotal)
+    .toString();
+  summary.netTotal = currency(summary.netTotal)
+    .subtract(item.totalPrice)
+    .toString();
+
+  const netTotalAfterDiscountOnTotal = currency(summary.netTotal).subtract(
+    summary.discountOnTotal
+  );
+
+  summary.taxAmount = netTotalAfterDiscountOnTotal
+    .multiply(summary.tax * 0.01)
+    .toString();
+
+  summary.payableTotal = netTotalAfterDiscountOnTotal
+    .subtract(summary.taxAmount)
+    .toString();
+
+  return state;
+};
+
+const updateDiscountOnItems = (oldState, discount) => {
+  const state = cloneObj(oldState);
+
+  const { items } = state;
+  const keys = Object.keys(items);
+
+  for (let idx = 0; idx < keys.length; idx++) {
+    const tmp = items[keys[idx]];
+
+    tmp.discount = currency(discount).toString();
+    tmp.discountTotal = currency(discount)
+      .multiply(tmp.qty)
+      .toString();
+
+    tmp.sellingPrice = currency(tmp.price)
+      .subtract(tmp.discount)
+      .toString();
+
+    tmp.totalPrice = currency(tmp.sellingPrice)
+      .multiply(tmp.qty)
+      .toString();
+  }
+
+  const { summary } = state;
+  const oldDiscountOnItems = summary.discountOnItems;
+
+  summary.discountOnItems = currency(discount)
+    .multiply(summary.noOfInividualItems)
+    .toString();
+
+  summary.netTotal = currency(summary.netTotal)
+    .add(oldDiscountOnItems)
+    .subtract(summary.discountOnItems)
+    .toString();
+
+  const netTotalAfterDiscountOnTotal = currency(summary.netTotal).subtract(
+    summary.discountOnTotal
+  );
+
+  summary.taxAmount = netTotalAfterDiscountOnTotal
+    .multiply(summary.tax * 0.01)
+    .toString();
+
+  summary.payableTotal = netTotalAfterDiscountOnTotal
+    .subtract(summary.taxAmount)
+    .toString();
+
+  return state;
+};
+
+const updateDiscountOnTotal = (oldState, discount) => {
+  const state = cloneObj(oldState);
+
+  const { summary } = state;
+
+  summary.discountOnTotal = currency(discount).toString();
+
+  const netTotalAfterDiscountOnTotal = currency(summary.netTotal).subtract(
+    summary.discountOnTotal
+  );
+
+  summary.taxAmount = netTotalAfterDiscountOnTotal
+    .multiply(summary.tax * 0.01)
+    .toString();
+
+  summary.payableTotal = netTotalAfterDiscountOnTotal
+    .subtract(summary.taxAmount)
+    .toString();
+
+  return state;
+};
+
+const updateTax = (oldState, tax) => {
+  const state = cloneObj(oldState);
+
+  const { summary } = state;
+
+  const netTotalAfterDiscountOnTotal = currency(summary.netTotal).subtract(
+    summary.discountOnTotal
+  );
+
+  summary.tax = tax;
+
+  summary.taxAmount = netTotalAfterDiscountOnTotal
+    .multiply(summary.tax * 0.01)
+    .toString();
+
+  summary.payableTotal = netTotalAfterDiscountOnTotal
+    .subtract(summary.taxAmount)
+    .toString();
+
+  return state;
+};
+
+const initialState = {
+  items: {},
+  summary: {
+    noOfItems: 0,
+    noOfInividualItems: 0,
+    tax: "0",
+    taxAmount: "0.00",
+    discountOnTotal: "0.00",
+    discountOnItems: "0.00",
+    netTotal: "0.00", // With discount on items
+    payableTotal: "0.00" // Net - (tax + discount on total)
+  }
+};
+
+export default function cart(state = initialState, action = {}) {
   switch (action.type) {
     case ADD_ITEM_TO_CART:
-      return {
-        ...state,
-        [action.data.id]: action.data
-      };
+      return addItemToCart(state, action.data);
 
     case UPDATE_CART_ITEM:
-      return update(state, {
-        [action.data.id]: { $set: action.data }
-      });
+      return updateCartItem(state, action.data);
 
-    case REMOVE_ITEM_TO_CART:
-      return update(state, {
-        $unset: [action.data.id]
-      });
+    case REMOVE_ITEM_FROM_CART:
+      return removeItemFromCart(state, action.data);
+
+    case UPDATE_DISCOUNT_ON_ITEMS:
+      return updateDiscountOnItems(state, action.data);
+
+    case UPDATE_DISCOUNT_ON_TOTAL:
+      return updateDiscountOnTotal(state, action.data);
+
+    case UPDATE_TAX:
+      return updateTax(state, action.data);
 
     case EMPTY_CART:
-      return {};
+      return initialState;
 
     default:
       return state;

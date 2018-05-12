@@ -8,18 +8,22 @@ class CartFooter extends Component {
   state = {};
 
   render() {
-    const { total, billing } = this.props;
+    const { cartArray, summary } = this.props;
 
-    if (total.qty === 0) {
+    if (summary.noOfItems === 0) {
       return null;
     }
+
+    const totalQtyText = `${summary.noOfItems} (${summary.noOfInividualItems})`;
+    const totalPrice = summary.netTotal;
+    const totalPayablePrice = summary.payableTotal;
 
     return (
       <Table style={{ marginTop: "50px" }}>
         <TableBody>
-          <TotalRow total={total} />
-          <TaxDiscountRow billing={billing} />
-          <TotalPayableRow totalPayablePrice={total.price - billing.tax} />
+          <TotalRow totalQtyText={totalQtyText} totalPrice={totalPrice} />
+          <TaxDiscountRow cartArray={cartArray} summary={summary} />
+          <TotalPayableRow totalPayablePrice={totalPayablePrice} />
         </TableBody>
       </Table>
     );

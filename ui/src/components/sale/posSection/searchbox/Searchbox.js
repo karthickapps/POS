@@ -4,7 +4,7 @@ import Message from "../../../controls/Message";
 import api from "../../../../api";
 import { sleep } from "../../../../utils";
 import AutoSuggestWithApiDatasource from "../../../controls/autoSuggest/AutoSuggestWithApiDatasource";
-import { updateCartItem, addItemsToCart } from "../../../../actions/cart";
+import { addItemToCart, updateCartItem } from "../../../../actions/cart";
 
 class SearchBox extends Component {
   state = {
@@ -51,15 +51,15 @@ class SearchBox extends Component {
   };
 
   updateCart = item => {
-    const { cart, dispatch } = this.props;
+    const { cart } = this.props;
     const existingItem = cart[item.id];
 
     if (existingItem) {
       const obj = this.constructCartObjForUpdate(existingItem);
-      dispatch(updateCartItem(obj));
+      this.props.updateCartItem(obj);
     } else {
       const obj = this.constructCartObjForAddNew(item);
-      dispatch(addItemsToCart(obj));
+      this.props.addItemToCart(obj);
     }
   };
 
@@ -67,18 +67,19 @@ class SearchBox extends Component {
     const clone = {};
     Object.assign(clone, obj);
     clone.qty += 1;
-    clone.sellingPrice = clone.price - clone.discount;
-    clone.totalPrice = clone.sellingPrice * clone.qty;
     return clone;
   };
 
   constructCartObjForAddNew = obj => {
     const clone = {};
     Object.assign(clone, obj);
+
     clone.qty = 1;
-    clone.sellingPrice = clone.price;
+    clone.price = clone.price;
     clone.discount = 0;
+    clone.sellingPrice = clone.price;
     clone.totalPrice = clone.price;
+
     return clone;
   };
 
@@ -120,7 +121,9 @@ class SearchBox extends Component {
 }
 
 const mapStateToProps = ({ cart }) => ({
-  cart
+  cart: cart.items
 });
 
-export default connect(mapStateToProps)(SearchBox);
+export default connect(mapStateToProps, { updateCartItem, addItemToCart })(
+  SearchBox
+);

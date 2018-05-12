@@ -12,7 +12,13 @@ const FormDialog = props => (
     aria-labelledby="alert-dialog-title"
     aria-describedby="alert-dialog-description"
   >
-    <DialogTitle id="alert-dialog-title">Edit Item</DialogTitle>
+    <DialogTitle id="alert-dialog-title">
+      {props.title ? props.title : "Edit Item"}
+      <br />
+      <span style={{ fontSize: "12px", color: "#3f50b5" }}>
+        {props.subtitle ? `(${props.subtitle})` : ""}
+      </span>
+    </DialogTitle>
     <DialogContent>{props.children}</DialogContent>
     <DialogActions>
       <Button onClick={props.onSave} color="primary" autoFocus>
